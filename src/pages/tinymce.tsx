@@ -24,7 +24,7 @@ const TinyMCE: NextPage = () => {
             onInit={(evt, editor) => editorRef.current = editor}
             init={{
               height: 500,
-              menubar: false,
+              menubar: true,
               plugins: [
                 'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
                 'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
