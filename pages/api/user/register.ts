@@ -2,6 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
+
 // Longterm Implimentation:
 // Password checking (Library)
 // 
@@ -14,10 +16,10 @@ type Request = {
 }
 
 type Respnse = {
-
+  error: string,
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
@@ -32,7 +34,7 @@ export default function handler(
 
   //! Check if email already exists
 
-
+  prisma.
 
   //! Hash password
 
