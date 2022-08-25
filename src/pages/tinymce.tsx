@@ -22,6 +22,7 @@ const TinyMCE: NextPage = () => {
           <div className='w-1/2'>
           <Editor
             onInit={(evt, editor: EditorType) => editorRef.current = editor}
+            apiKey={process.env.TINYMCE_API}
             init={{
               height: 500,
               menubar: true,
