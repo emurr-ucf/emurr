@@ -34,8 +34,6 @@ export default async function handler(
 
   //! Check if email already exists
 
-  prisma.
-
   //! Hash password
 
   //! Return token

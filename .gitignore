@@ -16,6 +16,8 @@
 /.next/
 /out/
 
+/websites/dump/
+
 # production
 /build
 

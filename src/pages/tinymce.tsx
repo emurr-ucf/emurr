@@ -2,16 +2,16 @@ import type { NextPage } from 'next'
 import { useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react'
 import Navbar from '../components/Navbar';
+import { Editor as EditorType } from 'tinymce'
 
 const TinyMCE: NextPage = () => {
-  const editorRef = useRef(null);
+  const editorRef = useRef<EditorType>();
   const [site, setSite] = useState("<h1>Everything is Tiny</h1>");
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
+      setSite(editorRef.current.getContent());
     }
-
-    setSite(editorRef.current.getContent());
   };
 
   return (
@@ -21,7 +21,7 @@ const TinyMCE: NextPage = () => {
         <div className="flex w-full justify-center items-center">
           <div className='w-1/2'>
           <Editor
-            onInit={(evt, editor) => editorRef.current = editor}
+            onInit={(evt, editor: EditorType) => editorRef.current = editor}
             init={{
               height: 500,
               menubar: true,
