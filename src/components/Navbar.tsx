@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react'
 import { useState } from 'react'
 import { useTheme } from 'next-themes'
 
-const Navbar = () => {
+export const Navbar = () => {
   const [dark, setDark] = useState(false)
   const [menu, setMenu] = useState(false)
   const {theme, setTheme} = useTheme()
@@ -82,5 +82,3 @@ const Navbar = () => {
   </nav>
   )
 }
-
-export default Navbar
