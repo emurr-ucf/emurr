@@ -14,6 +14,8 @@ const TinyMCE: NextPage = () => {
     }
   };
 
+
+
   return (
     <div className="bg-white dark:bg-slate-800 w-screen h-screen">
       <Navbar />
