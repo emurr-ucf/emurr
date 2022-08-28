@@ -6,7 +6,7 @@ export interface LoginRequestType {
 }
 
 export interface LoginResponseType {
-  error: string,
+  error?: string,
 }
 
 export default function handler(
