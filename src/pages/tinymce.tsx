@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useRef, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react'
-import Navbar from '../components/Navbar';
+import { Navbar } from '../components/Navbar';
 import { Editor as EditorType } from 'tinymce'
 
 const TinyMCE: NextPage = () => {
