@@ -7,8 +7,6 @@
 
 /dist/
 
-/prisma/migrations/*
-
 # testing
 /coverage
 
