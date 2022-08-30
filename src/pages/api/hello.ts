@@ -1,23 +1,47 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { User } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../lib/prisma'
 
-interface HelloRequest {
+interface HelloPostRequest {
+  name: string;
+  email: string;
+}
+
+interface HelloGetRequest {
   name: string;
 }
 
-interface HelloResponse {
-  name: string;
+interface HelloPostResponse {
+  users: User[]
+  error?: string;
+}
+
+interface HelloGetResponse {
   error?: string;
 }
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<HelloResponse>
+  res: NextApiResponse<HelloGetResponse | HelloPostResponse>
 ) {
-  const query = await prisma.post.findMany()
+  if (req.method == "GET") {
 
-  const vars: HelloRequest = req.body;
+    const query = await prisma.user.findMany();
+    res.status(200).json({ users: query });
 
-  res.status(200).json({ name: 'John Doe' })
+  } else if (req.method == "POST") {
+
+    const newUser: HelloPostRequest = req.body;
+
+    if (newUser) {
+      console.log(newUser);
+      return;
+      await prisma.user.create({ data: newUser });
+      res.status(204).json({});
+    } else {
+      res.status(400).json({ error: "Could not create user." })
+    }
+
+  }
 }
