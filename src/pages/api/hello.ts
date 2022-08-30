@@ -35,13 +35,10 @@ export default async function handler(
     const newUser: HelloPostRequest = req.body;
 
     if (newUser) {
-      console.log(newUser);
-      return;
       await prisma.user.create({ data: newUser });
       res.status(204).json({});
     } else {
       res.status(400).json({ error: "Could not create user." })
     }
-
   }
 }
