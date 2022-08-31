@@ -4,8 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../lib/prisma'
 
 interface HelloPostRequest {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
 }
 
