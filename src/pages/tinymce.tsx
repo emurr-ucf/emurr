@@ -18,7 +18,9 @@ const TinyMCE: NextPage = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800 w-screen h-screen">
-      <Navbar />
+      <Navbar 
+        page="tinymce"
+      />
       <div className="w-full h-full flex flex-col justify-center items-center">
         <div className="flex w-full justify-center items-center">
           <div className='w-1/2'>
