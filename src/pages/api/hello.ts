@@ -3,21 +3,20 @@ import { User } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../lib/prisma'
 
-interface HelloPostRequest {
+export interface HelloPostRequest {
   name: string;
   email: string;
 }
 
-interface HelloGetRequest {
+export interface HelloGetRequest {
   name: string;
 }
 
-interface HelloPostResponse {
-  users: User[]
-  error?: string;
+export interface HelloPostResponse {
+  users: User[];
 }
 
-interface HelloGetResponse {
+export interface HelloGetResponse {
   error?: string;
 }
 
