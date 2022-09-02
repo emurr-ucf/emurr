@@ -3,15 +3,15 @@ import { prisma } from '../../../lib/prisma'
 
 // API Inputs.
 export interface RegisterRequestType {
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
 }
 
 // API Outputs.
 export interface RegisterResponseType {
-    error: string,
+    error: string;
 }
 
 export default async function handler (
@@ -23,7 +23,7 @@ export default async function handler (
     // Error: Email already exists.
     const user = await prisma.user.findFirst({
         where: {
-            email: email,
+            email,
         },
     })
     
@@ -60,8 +60,7 @@ export default async function handler (
     
     // Save New User.
     //const userData = req.body;
-    const userData = {firstName:firstName, lastName:lastName, email:email, password:password};
+    const userData = {firstName, lastName, email, password:password};
     const savedUser = await prisma.user.create({data:userData});
     return res.status(200).json({error: ""});
 }
-
