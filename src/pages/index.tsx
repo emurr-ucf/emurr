@@ -2,10 +2,10 @@ import type { NextPage } from 'next'
 import { Navbar } from '../components/Navbar'
 import { Logo } from '../components/Logo'
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
     <>
-      <div className="flex w-screen h-screen bg-amber-50">
+      <div className="w-full h-full bg-amber-50">
         <Navbar 
           page="home"
         />
@@ -80,4 +80,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default HomePage

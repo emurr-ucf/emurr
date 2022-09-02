@@ -4,7 +4,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { Navbar } from '../components/Navbar';
 import { Editor as EditorType } from 'tinymce'
 
-const TinyMCE: NextPage = () => {
+const TinyMCEPage: NextPage = () => {
   const editorRef = useRef<EditorType>();
   const [site, setSite] = useState("<h1>Everything is Tiny</h1>");
   const log = () => {
@@ -56,4 +56,4 @@ const TinyMCE: NextPage = () => {
   )
 }
 
-export default TinyMCE
+export default TinyMCEPage

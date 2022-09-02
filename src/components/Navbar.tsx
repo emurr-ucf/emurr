@@ -7,7 +7,7 @@ export interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   return (
     <>
-      <nav className="sticky top-0 z-50 text-stone-500 border-b border-gray-200 bg-amber-50">
+      <nav className="sticky top-0 z-50 w-full text-stone-500 border-b border-gray-200 bg-amber-50">
         <div className="flex justify-between h-auto w-full py-5 px-10">
           <div className="flex flex-row justify-center items-center">
             <img
