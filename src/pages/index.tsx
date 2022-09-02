@@ -30,16 +30,16 @@ const Home: NextPage = () => {
               Royal Court of House CHDR
             </div>
             <div className="flex justify-center my-10">
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+              <div className="mr-20">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+              <div className="mr-20">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+              <div className="mr-20">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
@@ -51,12 +51,12 @@ const Home: NextPage = () => {
               Knights of House CHDR
             </div>
             <div className="flex justify-center my-10">
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+              <div className="mr-20">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+              <div className="mr-20">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
@@ -65,8 +65,8 @@ const Home: NextPage = () => {
               </div>
             </div>
             <div className="flex justify-center my-10">
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+              <div className="mr-20">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
