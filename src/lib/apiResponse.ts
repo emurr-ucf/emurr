@@ -13,9 +13,11 @@ interface SuccessType {
 export class ApiResponse {
   private errors: ErrorType[];
   private success?: SuccessType;
+  private res: NextApiResponse;
 
-  constructor () {
+  constructor (res: NextApiResponse) {
     this.errors = [];
+    this.res = res;
   }
 
   /**
@@ -38,15 +40,27 @@ export class ApiResponse {
     this.success = { status, message };
   }
 
-  send(res: NextApiResponse) {
+  /**
+   * Checks if there are one or more errors.
+   */
+  get hasError() {
+    return this.errors.length > 0 ? true : false;
+  }
+
+  /**
+   * F
+   * 
+   * @param res - the response from the api.
+   */
+  send() {
     if (this.errors.length > 1) {
-      res.status(400).json(this.errors.map(obj => obj.message));
+      this.res.status(400).json(this.errors.map(obj => obj.message));
     } else if (this.errors.length > 0) {
-      res.status(this.errors[0].status).json(this.errors[0].message);
+      this.res.status(this.errors[0].status).json(this.errors[0].message);
     } else if (this.success) {
-      res.status(this.success.status).json(this.success.message);
+      this.res.status(this.success.status).json(this.success.message);
     } else {
-      res.status(500).json({ message: "No response information was provided." })
+      this.res.status(500).json({ message: "No response information was provided." })
     }
   }
 }
