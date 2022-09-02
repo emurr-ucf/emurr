@@ -1,19 +1,56 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from '../../../lib/prisma';
+import { User } from '@prisma/client';
 
+
+// API Inputs.
 export interface LoginRequestType {
-  name: string,
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
 }
 
+// API Outputs.
 export interface LoginResponseType {
-  error?: string,
+    user?: User;
+    error: string;
 }
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<LoginResponseType>
+export default async function handler (
+    req: NextApiRequest,
+    res: NextApiResponse<LoginResponseType>
 ) {
-  
+    const { email, password } = req.body;
 
-  res.status(200).json({ error: 'John Doe' })
+    // Error: Not all fields are filled out.
+    if(!email || !password) {
+        res.status(400);
+
+        throw new Error("Please add all fields.");
+    }
+
+    // Error: Not a valid email.
+    if((typeof email !== 'string') || (!email.includes('@')) || (!email.includes('.'))) {
+        res.status(400);
+
+        throw new Error("Please input a valid email.");
+    }
+
+    // If all checks are passed.
+
+    //Hash Password.
+
+    // Query the database.
+    const user = await prisma.user.findFirst({
+        where: {
+            email,
+            password,
+        },
+    })
+
+    if(user)
+        return res.status(200).json({error:"", user})
+    else
+        return res.status(200).json({error: "User doesn't exist"})
 }
