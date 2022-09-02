@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { Navbar } from '../components/Navbar'
 
-const About: NextPage = () => {
+const AboutPage: NextPage = () => {
   return (
     <>
       <div className="w-full h-full bg-amber-50">
@@ -316,4 +316,4 @@ const About: NextPage = () => {
   )
 }
 
-export default About
+export default AboutPage

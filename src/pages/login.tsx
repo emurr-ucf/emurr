@@ -1,7 +1,8 @@
 import type { NextPage } from 'next'
+import { Login } from '../components/Login'
 import { Navbar } from '../components/Navbar'
 
-const Login: NextPage = () => {
+const LoginPage: NextPage = () => {
   return (
     <>
       <div className="w-full h-screen bg-amber-50 overflow-y-hidden">
@@ -14,6 +15,10 @@ const Login: NextPage = () => {
               <div className="text-5xl">
                 Editor Login
               </div>
+              <Login />
+              <button className="">
+                test
+              </button>
             </div>
             <div className="mx-10 border-l-2 rounded border-stone-400"></div>
           </div>
@@ -23,4 +28,4 @@ const Login: NextPage = () => {
   )
 }
 
-export default Login
+export default LoginPage
