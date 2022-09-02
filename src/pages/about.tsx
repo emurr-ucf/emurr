@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import { Navbar } from '../components/Navbar'
 
-const Home: NextPage = () => {
+const About: NextPage = () => {
   return (
     <>
       <div className="w-full h-full bg-amber-50">
         <Navbar 
-          page="home"
+          page="about"
         />
         <div className="w-full px-20 text-justify">
           ACT I
@@ -316,4 +316,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default About
