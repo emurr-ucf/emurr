@@ -9,7 +9,6 @@ const Home: NextPage = () => {
         <Navbar 
           page="home"
         />
-
         <div className="flex flex-col w-full px-28 mt-10 text-green-800">
           <div className="text-5xl font-light">
             Welcome to EMURR
@@ -29,17 +28,17 @@ const Home: NextPage = () => {
             <div className="text-2xl text-center font-light">
               Royal Court of House CHDR
             </div>
-            <div className="flex justify-center my-10">
-              <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+            <div className="flex justify-center my-10 gap-10">
+              <div className="gap-10">
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
@@ -50,13 +49,13 @@ const Home: NextPage = () => {
             <div className="text-2xl text-center font-light">
               Knights of House CHDR
             </div>
-            <div className="flex justify-center my-10">
+            <div className="flex justify-center my-10 gap-10">
               <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
@@ -64,9 +63,9 @@ const Home: NextPage = () => {
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
             </div>
-            <div className="flex justify-center my-10">
+            <div className="flex justify-center my-10 gap-10">
               <div>
-                <img src="/images/logo_vert_5.png" className="w-40 h-40 mr-20" />
+                <img src="/images/logo_vert_5.png" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
