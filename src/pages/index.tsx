@@ -5,7 +5,7 @@ import { Logo } from '../components/Logo'
 const Home: NextPage = () => {
   return (
     <>
-      <div className="w-full h-full bg-amber-50">
+      <div className="flex w-screen h-screen bg-amber-50">
         <Navbar 
           page="home"
         />
