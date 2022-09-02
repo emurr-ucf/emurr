@@ -1,18 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from '../../../lib/prisma'
+import { prisma } from '../../../lib/prisma';
+import { User } from '@prisma/client';
+
 
 // API Inputs.
 export interface LoginRequestType {
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
 }
 
 // API Outputs.
 export interface LoginResponseType {
-    user?: Object,
-    error: string,
+    user?: User;
+    error: string;
 }
 
 export default async function handler (
@@ -42,13 +44,13 @@ export default async function handler (
     // Query the database.
     const user = await prisma.user.findFirst({
         where: {
-            email: email,
-            password: password,
+            email,
+            password,
         },
     })
 
     if(user)
-        return res.status(200).json({error:"", user:user})
+        return res.status(200).json({error:"", user})
     else
         return res.status(200).json({error: "User doesn't exist"})
 }
