@@ -9,7 +9,6 @@ const Home: NextPage = () => {
         <Navbar 
           page="home"
         />
-
         <div className="flex flex-col w-full px-28 mt-10 text-green-800">
           <div className="text-5xl font-light">
             Welcome to EMURR
