@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from '../../../lib/prisma';
 import { User } from '@prisma/client';
-
+import comparePass from '../../../lib/comparePassword';
 
 // API Inputs.
 export interface LoginRequestType {
@@ -38,19 +38,20 @@ export default async function handler (
     }
 
     // If all checks are passed.
-
-    //Hash Password.
-
     // Query the database.
     const user = await prisma.user.findFirst({
         where: {
             email,
-            password,
         },
     })
 
-    if(user)
-        return res.status(200).json({error:"", user})
+    if(user){
+        // If inputted password and hasshed password are the same, return user.
+        if(comparePass(password, user.password))
+            return res.status(200).json({error:"", user});
+        else 
+            return res.status(200).json({error: "Incorrect password."}); 
+    }
     else
-        return res.status(200).json({error: "User doesn't exist"})
+        return res.status(200).json({error: "User doesn't exist."})
 }
