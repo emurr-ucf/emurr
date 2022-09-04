@@ -11,9 +11,28 @@ datasource db {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  email     String @unique @db.VarChar(255)
-  password  String @db.VarChar(255)
-  firstName String @db.VarChar(255)
-  lastName  String @db.VarChar(255)
+  id            Int      @id @default(autoincrement())
+  firstName     String   @db.VarChar(255)
+  lastName      String   @db.VarChar(255)
+  email         String   @unique @db.VarChar(255)
+  password      String   @db.VarChar(255)
+  registeredAt  DateTime @default(now())
+  role          Role     @default(EDITOR)
+  writtenPosts  Post[]   @relation("WrittenPosts")
+  favoritePosts Post[]   @relation("FavPosts")
+}
+
+model Post {
+  postId        Int      @id @default(autoincrement())
+  postCreatedAt DateTime @default(now())
+  postUpdatedAt DateTime @updatedAt
+  author        User     @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId      Int
+  favoritedBy   User?    @relation("FavPosts", fields: [favoritedById], references: [id])
+  favoritedById Int?
+}
+
+enum Role {
+  EDITOR
+  ADMIN
 }
