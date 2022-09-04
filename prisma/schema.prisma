@@ -15,6 +15,10 @@ model User {
   firstName     String   @db.VarChar(255)
   lastName      String   @db.VarChar(255)
   email         String   @unique @db.VarChar(255)
+  emailVerified Int      @db.Int
+  emailToken    Int      @db.Int
+  resPassword   Int      @db.Int
+  resPassToken  Int      @db.Int
   password      String   @db.VarChar(255)
   registeredAt  DateTime @default(now())
   role          Role     @default(EDITOR)
