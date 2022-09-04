@@ -20,6 +20,7 @@ model User {
   role          Role     @default(EDITOR)
   writtenPosts  Post[]   @relation("WrittenPosts")
   favoritePosts Post[]   @relation("FavPosts")
+  Tour          Tour[]
 }
 
 model Post {
@@ -30,6 +31,19 @@ model Post {
   authorId      Int
   favoritedBy   User?    @relation("FavPosts", fields: [favoritedById], references: [id])
   favoritedById Int?
+  tour          Tour?    @relation(fields: [tourId], references: [tourId])
+  tourId        Int?
+}
+
+model Tour {
+  tourId          Int      @id @default(autoincrement())
+  tourName        String
+  tourDescription String?
+  tourCreatedAt   DateTime @default(now())
+  tourUpdatedAt   DateTime @updatedAt
+  tourPosts       Post[]
+  tourAuthor      User     @relation(fields: [authorId], references: [id])
+  authorId        Int
 }
 
 enum Role {
