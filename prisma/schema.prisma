@@ -51,6 +51,6 @@ model Tour {
 }
 
 enum Role {
-  EDITOR
+  USER
   ADMIN
 }
