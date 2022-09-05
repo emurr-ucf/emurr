@@ -6,9 +6,9 @@ CREATE TABLE `User` (
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `emailVerified` INTEGER NOT NULL,
-    `emailToken` INTEGER NOT NULL,
+    `emailToken` TEXT NOT NULL,
     `resPassword` INTEGER NOT NULL,
-    `resPassToken` INTEGER NOT NULL,
+    `resPassToken` TEXT NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
