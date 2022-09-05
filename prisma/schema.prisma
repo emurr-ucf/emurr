@@ -16,7 +16,7 @@ model User {
   lastName      String    @db.VarChar(255)
   email         String    @unique @db.VarChar(255)
   password      String    @db.VarChar(255)
-  emailVerified Int       @db.Int // should it be a Boolean
+  emailVerified Boolean   @default(false)
   emailToken    String    @db.VarChar(255)
   resPassword   Int       @db.Int
   resPassToken  String    @db.VarChar(255)

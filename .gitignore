@@ -7,7 +7,7 @@
 
 /dist/
 
-/prisma/migrations/*
+/emurr.code-workspace
 
 # testing
 /coverage
@@ -15,6 +15,8 @@
 # next.js
 /.next/
 /out/
+
+/websites/dump/
 
 # production
 /build
