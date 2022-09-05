@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from '../../../lib/prisma'
+import { prisma } from '../../../lib/prisma';
+import hashPass from '../../../lib/hashPassword';
 
 // API Inputs.
 export interface RegisterRequestType {
@@ -7,6 +8,12 @@ export interface RegisterRequestType {
     lastName: string;
     email: string;
     password: string;
+
+    // Not passed in, created by this endpoint.
+    emailVerified: number;
+    emailToken: number;
+    resPassword: number;
+    resPassToken: number;
 }
 
 // API Outputs.
@@ -55,12 +62,11 @@ export default async function handler (
     }
 
     // If all checks are passed.
-    
     // Hash Password.
-    
+    const hashedPass = hashPass(password);
+
     // Save New User.
-    //const userData = req.body;
-    const userData = {firstName, lastName, email, password:password};
+    const userData = {firstName, lastName, email, password:hashedPass, emailVerified:0, emailToken:0, resPassword:0, resPassToken:0};
     const savedUser = await prisma.user.create({data:userData});
     return res.status(200).json({error: ""});
 }
