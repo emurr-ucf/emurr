@@ -36,7 +36,7 @@ model Post {
   title         String    @db.VarChar(255)
   content       String?
   published     Boolean   @default(false)
-  author        User      @relation("WrittenPosts", fields: [authorId], references: [id])
+  author        User      @relation("WrittenPosts", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      Int // relation scalar field  (used in the `@relation` attribute above)
   favoritedBy   User?     @relation("FavPosts", fields: [favoritedById], references: [id])
   favoritedById Int?
@@ -52,14 +52,14 @@ model Tour {
   tourTitle       String   @db.VarChar(255)
   tourDescription String?
   tourPosts       Post[]
-  tourAuthor      User     @relation(fields: [tourAuthorId], references: [id])
+  tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tourAuthorId    Int
 }
 
 model Comment {
   id              Int    @id @default(autoincrement())
   content         String
-  commentAuthor   User   @relation(fields: [commentAuthorId], references: [id])
+  commentAuthor   User   @relation(fields: [commentAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentAuthorId Int
   commentPost     Post?  @relation(fields: [commentPostId], references: [id])
   commentPostId   Int?
