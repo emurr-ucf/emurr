@@ -9,6 +9,7 @@ const AboutPage: NextPage = () => {
           page="about"
         />
         <div className="w-full px-20 text-justify">
+          CHANGE
           ACT I
           PROLOGUE
           Two households, both alike in dignity,

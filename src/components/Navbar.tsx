@@ -1,3 +1,4 @@
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link'
 
 export interface NavbarProps {
@@ -5,6 +6,41 @@ export interface NavbarProps {
 }
 
 export const Navbar = (props: NavbarProps) => {
+
+  const { data: session, status } = useSession();
+
+  const log = () => {
+    console.log(session);
+  }
+
+  const so = () => {
+    signOut();
+  }
+
+  if (status === "loading") {
+    return (
+      <>
+        <div>Loading...</div>
+      </>
+    )
+  }
+
+  if (status === "authenticated") {
+    return (
+      <>
+        <div className="flex justify-between text-3xl">
+          <button onClick={log} className="bg-stone-300">
+            Log
+          </button>
+          <button onClick={so} className="bg-stone-300">
+            Signout
+          </button>
+        </div>
+      </>
+    )
+  }
+
+
   return (
     <>
       <nav className="sticky top-0 z-50 w-full text-stone-500 border-b border-gray-200 bg-amber-50">
