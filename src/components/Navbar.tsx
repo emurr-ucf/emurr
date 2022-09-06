@@ -17,14 +17,6 @@ export const Navbar = (props: NavbarProps) => {
     signOut();
   }
 
-  if (status === "loading") {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    )
-  }
-
   if (status === "authenticated") {
     return (
       <>

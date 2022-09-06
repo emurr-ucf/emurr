@@ -2,9 +2,22 @@ import type { NextPage } from 'next';
 import { Navbar } from '../components/Navbar';
 import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
+import Router from 'next/router';
 
 const DashboardPage: NextPage = () => {
   const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return (
+      <>
+        <div>Loading...</div>
+      </>
+    )
+  }
+
+  if (status === "unauthenticated") {
+    Router.push("/");
+  }
 
   return (
     <>
