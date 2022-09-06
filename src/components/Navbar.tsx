@@ -7,30 +7,30 @@ export interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   return (
     <>
-      <nav className="sticky top-0 z-50 w-full text-stone-500 border-b border-gray-200 bg-amber-50">
-        <div className="flex justify-between h-auto w-full py-5 px-10">
-          <div className="flex flex-row justify-center items-center">
+      <nav className="sticky top-0 z-50 w-full text-green border-b border-brown bg-background-500">
+        <div className="flex justify-between h-auto w-full py-2 px-10">
+          <div className="flex flex-row justify-center items-center gap-5">
             <img
               src="/images/logo_vert_5.png"
               alt="An SVG of the Emurr Logo"
-              className="w-20 h-20 mr-5"
+              className="w-10 h-10"
             />
-            <div className="text-3xl font-semibold">
+            <div className="text-2xl font-semibold">
               EMURR
             </div>
           </div>
-          <div className="flex flex-row justify-center items-center text-2xl">
-            <div className={`p-2 rounded-md ${props.page === "home" ? "font-semibold text-stone-700" : ""} hover:bg-stone-600 hover:font-normal hover:text-stone-50 transition ease-in-out delay-50`}>
+          <div className="flex flex-row justify-center items-center text-xl">
+            <div className={`p-2 rounded-md ${props.page === "home" ? "font-semibold text-brown" : ""} hover:bg-background-700 hover:font-normal transition ease-in-out delay-50`}>
               <Link href="/">
                 home
               </Link>
             </div>
-            <div className={`p-2 rounded-md ${props.page === "about" ? "font-semibold text-stone-700" : ""} hover:bg-stone-600 hover:font-normal hover:text-stone-50 transition ease-in-out delay-50`}>
+            <div className={`p-2 rounded-md ${props.page === "about" ? "font-semibold text-green" : ""} hover:bg-background-700 hover:font-normal transition ease-in-out delay-50`}>
               <Link href="/about" className="m-5">
                 about
               </Link>
             </div>
-            <div className={`p-2 rounded-md ${props.page === "login" ? "font-semibold text-stone-700" : ""} hover:bg-stone-600 hover:font-normal hover:text-stone-50 transition ease-in-out delay-50`}>
+            <div className={`p-2 rounded-md ${props.page === "login" ? "font-semibold text-green" : ""} hover:bg-background-700 hover:font-normal transition ease-in-out delay-50`}>
               <Link href="/login" className="m-5">
                 login
               </Link>
