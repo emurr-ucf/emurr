@@ -12,6 +12,17 @@ module.exports = {
         '3000': '3000ms',
         '2000': '2000ms',
     },
+    colors: {
+      'brown': '#78685e',
+      'green': '#5c665a',
+      'background': {
+        200: '#FAFAFA',
+        500: '#F6F2EE',
+        700: '#EEE5DD',
+        900: '#E6D7CB'
+      }
+      // ...
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),
