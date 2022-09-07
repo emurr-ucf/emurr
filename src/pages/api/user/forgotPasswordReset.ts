@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from '../../../lib/prisma'
+import hashPass from '../../../lib/hashPassword';
 
 // API Inputs.
 export interface RegisterRequestType {
-    emailToken: string;
+    newPassword: string;
+    resPassToken: string;
 }
 
 // API Outputs.
@@ -15,30 +17,41 @@ export default async function handler (
     req: NextApiRequest,
     res: NextApiResponse<RegisterResponseType>
 ) {
-    const { emailToken } = req.body;
+    const { newPassword, resPassToken } = req.body;
 
     // Error: Token was not sent.
-    if(!emailToken) {
+    if(!resPassToken) {
         res.status(400);
 
         throw new Error("No token was sent.");
     }
 
-    // If All Checks are Passed.
+    // Error: Password was not recieved.
+    if(!newPassword) {
+        res.status(400);
 
-    // Count Email as Verified.
+        throw new Error("No password was recieved.");
+    }
+
+    // If All Checks are Passed.
+    // Hash Password.
+    const hashedPass = hashPass(newPassword);
+
+    // Update Database with New Password.
     const user = await prisma.user.updateMany({
         where: {
-            emailToken,
-            emailVerified:false,
+            resPassToken,
+            resPassword:1,
         },
         data: {
-            emailToken: '',
-            emailVerified:true,
+            password:hashedPass,
+            resPassToken: '',
+            resPassword:0,
         }
     })
+    
     if(user)
         return res.status(200).json({error: ""});
     else
-        return res.status(200).json({error: "Could not verify email."})
+        return res.status(200).json({error: "Could not change password."})
 }

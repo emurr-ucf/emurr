@@ -62,7 +62,7 @@ export default async function handler (
         throw new Error("Please input a valid email.");
     }
 
-    // If all checks are passed.
+    // If All Checks are Passed.
     // Send Verification Email.
     // Creates a Random String.
     const emailTok = generateRandString();
