@@ -20,17 +20,17 @@ export const Navbar = (props: NavbarProps) => {
             </div>
           </div>
           <div className="flex flex-row justify-center items-center text-xl">
-            <div className={`p-2 rounded-md ${props.page === "home" ? "font-semibold text-brown hover:font-semibold" : ""} hover:bg-background-700 hover:font-normal transition ease-in-out delay-50`}>
+            <div className={`p-2 rounded-md ${props.page === "home" ? "font-semibold text-brown hover:font-semibold" : ""} hover:bg-background-700 transition ease-in-out delay-50`}>
               <Link href="/">
                 home
               </Link>
             </div>
-            <div className={`p-2 rounded-md ${props.page === "about" ? "font-semibold text-green-700 hover:font-semibold" : ""} hover:bg-background-700 hover:font-normal transition ease-in-out delay-50`}>
+            <div className={`p-2 rounded-md ${props.page === "about" ? "font-semibold text-green-700 hover:font-semibold" : ""} hover:bg-background-700 transition ease-in-out delay-50`}>
               <Link href="/about" className="m-5">
                 about
               </Link>
             </div>
-            <div className={`p-2 rounded-md ${props.page === "login" ? "font-semibold text-green-700 hover:font-semibold" : ""} hover:bg-background-700 hover:font-normal transition ease-in-out delay-50`}>
+            <div className={`p-2 rounded-md ${props.page === "login" ? "font-semibold text-green-700 hover:font-semibold" : ""} hover:bg-background-700  transition ease-in-out delay-50`}>
               <Link href="/login" className="m-5">
                 login
               </Link>
