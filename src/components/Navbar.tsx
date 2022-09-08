@@ -9,7 +9,7 @@ export const Navbar = (props: NavbarProps) => {
     <>
       <nav className="sticky top-0 z-50  border-b border-brown backdrop-blur-md">
         <div className="flex justify-between h-auto  py-2 px-10">
-          <div className="flex flex-row justify-center items-center">
+          <div className="flex flex-row justify-center items-center gap-4">
             <img
               src="/images/logo_vert_5.png"
               alt="An SVG of the Emurr Logo"
