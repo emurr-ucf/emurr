@@ -49,7 +49,7 @@ export default async function handler (
         // If inputted password and hashed password are the same, continue to next step.
         if(comparePass(password, user.password)) {
             // If Email is Verified Return User.
-            if(user.emailVerified = true)
+            if(user.emailVerified === true)
                 return res.status(200).json({error:"", user});
             
             //Error: Email not verified.

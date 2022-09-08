@@ -7,7 +7,7 @@ interface LoginProps {
 export const Login = (props: LoginProps) => {
   return (
     <>
-      <form action="/api/user/login" method="POST" className="flex flex-col w-64 gap-6">
+      <form action="/api/login" method="POST" className="flex flex-col w-64 gap-6">
         <div className="text-3xl">
           Login
         </div>

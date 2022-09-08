@@ -67,7 +67,7 @@ export default async function handler (
     // Creates a Random String.
     const emailTok = generateRandString();
 
-    // Sends the Verification Email.
+    // Sends the Verification Email. 
     const sgMail = require('@sendgrid/mail')
         sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         const msg = {
