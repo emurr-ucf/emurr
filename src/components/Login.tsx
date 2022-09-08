@@ -8,7 +8,7 @@ export const Login = (props: LoginProps) => {
   return (
     <>
       <form action="/api/login" method="POST" className="flex flex-col w-64 gap-6">
-        <div className="text-3xl text-green-700">
+        <div className="text-3xl ">
           Login
         </div>
         <div className="flex flex-col gap-6">

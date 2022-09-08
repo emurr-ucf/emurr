@@ -5,7 +5,7 @@ import { Logo } from '../components/Logo'
 const HomePage: NextPage = () => {
   return (
     <>
-      <div className="w-full h-full bg-background-400 text-green-700">
+      <div className="w-full h-full">
         <Navbar 
           page="home"
         />

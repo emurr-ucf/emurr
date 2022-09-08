@@ -25,12 +25,12 @@ export const Navbar = (props: NavbarProps) => {
                 home
               </Link>
             </div>
-            <div className={`p-2 rounded-md ${props.page === "about" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
+            <div className={`py-1 px-2 rounded-md ${props.page === "about" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
               <Link href="/about" className="m-5">
                 about
               </Link>
             </div>
-            <div className={`p-2 rounded-md ${props.page === "login" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600  transition ease-in-out delay-50`}>
+            <div className={`py-1 px-2 rounded-md ${props.page === "login" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600  transition ease-in-out delay-50`}>
               <Link href="/login" className="m-5">
                 login
               </Link>

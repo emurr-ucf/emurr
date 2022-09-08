@@ -25,7 +25,7 @@ const LoginPage: NextPage = () => {
 
   return (
     <>
-      <div className="w-full min-h-screen bg-background-400">
+      <div className="w-full min-h-screen ">
         <Navbar 
           page="login"
         />

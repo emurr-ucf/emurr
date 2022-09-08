@@ -4,11 +4,11 @@ import { Navbar } from '../components/Navbar'
 const AboutPage: NextPage = () => {
   return (
     <>
-      <div className="w-full h-full bg-background-400">
+      <div className="w-full h-full">
         <Navbar 
           page="about"
         />
-        <div className="w-full px-20 text-justify text-green">
+        <div className="w-full px-20 text-justify">
           ACT I
           PROLOGUE
           Two households, both alike in dignity,
