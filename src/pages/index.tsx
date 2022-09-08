@@ -5,7 +5,7 @@ import { Logo } from '../components/Logo'
 const HomePage: NextPage = () => {
   return (
     <>
-      <div className="w-full h-full bg-background-500 text-green">
+      <div className="w-full h-full bg-background-400 text-green-700">
         <Navbar 
           page="home"
         />
@@ -21,10 +21,10 @@ const HomePage: NextPage = () => {
               <Logo />
             </div>
           </div>
-          <div className="text-5xl mt-40 font-light">
+          <div className="text-5xl mt-40 font-light text-green-700">
             Meet the team
           </div>
-          <div className="flex flex-col justify-between w-full mt-5">
+          <div className="flex flex-col justify-between w-full mt-5 text-green-700">
             <div className="text-2xl text-center font-light">
               Royal Court of House CHDR
             </div>

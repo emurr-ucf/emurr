@@ -4,7 +4,7 @@ import { Navbar } from '../components/Navbar'
 const AboutPage: NextPage = () => {
   return (
     <>
-      <div className="w-full h-full bg-background-500">
+      <div className="w-full h-full bg-background-400">
         <Navbar 
           page="about"
         />

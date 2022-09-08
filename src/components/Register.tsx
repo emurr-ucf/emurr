@@ -8,7 +8,7 @@ export const Register = (props: RegisterProps) => {
   return (
     <>
       <form action="/api/register" method="POST" className="flex flex-col w-64 gap-6">
-        <div className="text-3xl text-green">
+        <div className="text-3xl text-green-700">
           Register
         </div>
         <div className="flex flex-col gap-6">
@@ -54,7 +54,7 @@ export const Register = (props: RegisterProps) => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green hover:bg-green-900"
+            className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
           >
             Register
           </button>
