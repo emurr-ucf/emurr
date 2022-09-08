@@ -16,7 +16,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
             type="text"
             autoComplete="on"
             placeholder="Email"
-            className="w-full h-12 appearance-none border border-stone-800 rounded px-3"
+            className=" h-12 appearance-none border border-stone-800 rounded px-3"
           />
         </div>
         <div className="flex justify-center">

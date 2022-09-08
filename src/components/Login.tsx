@@ -16,13 +16,13 @@ export const Login = (props: LoginProps) => {
             type="text"
             autoComplete="on"
             placeholder="Email"
-            className="w-full h-12 appearance-none border border-brown rounded px-3"
+            className=" h-12 appearance-none border border-brown rounded px-3"
           />
           <input
             type="password"
             autoComplete="on"
             placeholder="Password"
-            className="w-full h-12 appearance-none border border-brown rounded px-3"
+            className=" h-12 appearance-none border border-brown rounded px-3"
           />
         </div>
         <div className="flex justify-center text-brown">
