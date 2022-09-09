@@ -8,7 +8,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
   return (
     <>
       <form action="/api/forgot-password" method="POST" className="flex flex-col w-64 gap-6">
-        <div className="text-3xl ">
+        <div className="text-3xl">
           Forgot Password
         </div>
         <div className="flex flex-col gap-6">
@@ -16,7 +16,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
             type="text"
             autoComplete="on"
             placeholder="Email"
-            className=" h-12 appearance-none border border-stone-800 rounded px-3"
+            className="h-12 appearance-none border border-stone-800 rounded px-3"
           />
         </div>
         <div className="flex justify-center">

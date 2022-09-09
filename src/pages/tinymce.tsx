@@ -21,8 +21,8 @@ const TinyMCEPage: NextPage = () => {
       <Navbar 
         page="tinymce"
       />
-      <div className="  flex flex-col justify-center items-center">
-        <div className="flex  justify-center items-center">
+      <div className="flex flex-col justify-center items-center">
+        <div className="flex justify-center items-center">
           <div className='w-1/2'>
           <Editor
             onInit={(evt, editor: EditorType) => editorRef.current = editor}
@@ -43,12 +43,12 @@ const TinyMCEPage: NextPage = () => {
             }}
           />
           </div>
-          <div className='prose lg:prose-xl prose-zinc  w-1/2 ml-5'>
+          <div className='prose lg:prose-xl prose-zinc w-1/2 ml-5'>
             <div dangerouslySetInnerHTML={{ __html: site }} />
           </div>
 
         </div>
-        <div className=" mt-5 flex justify-center">
+        <div className="mt-5 flex justify-center">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={log}>Convert HTML</button>
         </div>
       </div>

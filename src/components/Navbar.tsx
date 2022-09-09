@@ -7,8 +7,8 @@ export interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   return (
     <>
-      <nav className="sticky top-0 z-50  border-b border-brown backdrop-blur-md">
-        <div className="flex justify-between h-auto  py-2 px-10">
+      <nav className="sticky top-0 z-50 border-b border-brown backdrop-blur-md">
+        <div className="flex justify-between h-auto py-2 px-10">
           <div className="flex flex-row justify-center items-center gap-4">
             <img
               src="/images/logo_vert_5.png"
@@ -30,7 +30,7 @@ export const Navbar = (props: NavbarProps) => {
                 about
               </Link>
             </div>
-            <div className={`py-1 px-2 rounded-md ${props.page === "login" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600  transition ease-in-out delay-50`}>
+            <div className={`py-1 px-2 rounded-md ${props.page === "login" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
               <Link href="/login" className="m-5">
                 login
               </Link>

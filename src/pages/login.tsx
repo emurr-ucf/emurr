@@ -25,11 +25,11 @@ const LoginPage: NextPage = () => {
 
   return (
     <>
-      <div className=" min-h-screen ">
+      <div className="min-h-screen">
         <Navbar 
           page="login"
         />
-        <div className="flex   justify-center text-green-800">
+        <div className="flex justify-center text-green-800">
           <div className="flex justify-center h-fit p-5 mt-28 rounded-lg bg-background-200 border-2 border-l-4 border-b-4 border-brown sm:rounded-md">
             {formType === FormType.LOGIN && <Login hook={handleChange} />}
             {formType === FormType.REGISTER && <Register hook={handleChange} />}
