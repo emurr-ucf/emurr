@@ -5,7 +5,7 @@ CREATE TABLE `User` (
     `lastName` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `emailVerified` INTEGER NOT NULL,
+    `emailVerified` BOOLEAN NOT NULL DEFAULT false,
     `emailToken` VARCHAR(255) NOT NULL,
     `resPassword` INTEGER NOT NULL,
     `resPassToken` VARCHAR(255) NOT NULL,
