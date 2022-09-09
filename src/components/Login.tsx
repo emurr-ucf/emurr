@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-=======
 import axios, { AxiosResponse } from 'axios';
 import Router from 'next/router';
 import { useState } from 'react';
 import { LoginRequestType, LoginResponseType } from '../pages/api/user/login';
->>>>>>> sign-in-connect
 import { FormType } from '../pages/login';
 
 interface LoginProps {
@@ -12,11 +9,6 @@ interface LoginProps {
 }
 
 export const Login = (props: LoginProps) => {
-<<<<<<< HEAD
-  return (
-    <>
-      <form action="/api/login" method="POST" className="flex flex-col w-64 gap-6">
-=======
 
   const [loginFormState, setLoginFormState] = useState<LoginRequestType>({
     email: "",
@@ -44,7 +36,6 @@ export const Login = (props: LoginProps) => {
   return (
     <>
       <form action="#" method="POST" className="flex flex-col w-64 gap-6">
->>>>>>> sign-in-connect
         <div className="text-3xl">
           Login
         </div>
@@ -52,25 +43,17 @@ export const Login = (props: LoginProps) => {
           <input
             type="text"
             autoComplete="on"
-<<<<<<< HEAD
-            placeholder="Email"
-=======
             name="email"
             placeholder="Email"
             onChange={handleFormChange}
->>>>>>> sign-in-connect
             className="w-full h-12 appearance-none border border-stone-800 rounded px-3"
           />
           <input
             type="password"
             autoComplete="on"
-<<<<<<< HEAD
-            placeholder="Password"
-=======
             name="password"
             placeholder="Password"
             onChange={handleFormChange}
->>>>>>> sign-in-connect
             className="w-full h-12 appearance-none border border-stone-800 rounded px-3"
           />
         </div>
@@ -91,12 +74,8 @@ export const Login = (props: LoginProps) => {
         </div>
         <div className="flex justify-center">
           <button
-<<<<<<< HEAD
-            type="submit"
-=======
             type="button"
             onClick={handleLoginRequest}
->>>>>>> sign-in-connect
             className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-white bg-green-800 hover:bg-green-900"
           >
             Login

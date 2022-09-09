@@ -9,18 +9,6 @@ datasource db {
 }
 
 model User {
-<<<<<<< HEAD
-  id            Int     @id @default(autoincrement())
-  firstName     String? @db.VarChar(255)
-  lastName      String? @db.VarChar(255)
-  email         String  @unique @db.VarChar(255)
-  password      String  @db.VarChar(255)
-  emailVerified Int     @db.Int
-  emailToken    String  @db.Text
-  resPassword   Int     @db.Int
-  resPassToken  String  @db.Text
-}
-=======
   id            Int       @id @default(autoincrement())
   firstName     String    @db.VarChar(255)
   lastName      String    @db.VarChar(255)
@@ -79,4 +67,3 @@ enum Role {
   USER
   ADMIN
 }
->>>>>>> sign-in-connect
