@@ -48,12 +48,12 @@ model User {
   tours         Tour[]
   comments      Comment[]
   role          Role      @default(USER)
-  password      String    @db.VarChar(255)
-  verifyEmail   Boolean   @default(false) // oldField emailVerified renamed to verifyEmail
-  emailToken    String    @db.VarChar(255)
-  resPassword   Int       @db.Int
-  resPassToken  String    @db.VarChar(255)
-  registeredAt  DateTime  @default(now())
+  password      String?
+  verifyEmail   Boolean?  @default(false) // oldField emailVerified renamed to verifyEmail
+  emailToken    String?
+  resPassword   Int?
+  resPassToken  String?
+  registeredAt  DateTime? @default(now())
 }
 
 model VerificationToken {
