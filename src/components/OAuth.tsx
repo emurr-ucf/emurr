@@ -2,7 +2,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { getProviders, signIn, ClientSafeProvider, LiteralUnion } from 'next-auth/react';
 import { BuiltInProviderType } from 'next-auth/providers';
-import Router from 'next/router';
 
 export const OAuth = () => {
   const [providers, setproviders] = useState<Record<

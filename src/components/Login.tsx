@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from 'axios';
-import Router from 'next/router';
-import { useState } from 'react';
-import { LoginRequestType, LoginResponseType } from '../pages/api/user/login';
+import { useState, useEffect } from 'react';
 import { FormType } from '../pages/login';
+
+import { getProviders, signIn, ClientSafeProvider, LiteralUnion } from 'next-auth/react';
+import { BuiltInProviderType } from 'next-auth/providers';
 
 interface LoginProps {
   hook: (value: FormType) => void;
@@ -10,28 +10,21 @@ interface LoginProps {
 
 export const Login = (props: LoginProps) => {
 
-  const [loginFormState, setLoginFormState] = useState<LoginRequestType>({
-    email: "",
-    password: ""
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleFormChange = ({
-    target: { name, value }
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginFormState((prev) => ({ ...prev, [name]: value }));
-  };
+  const [providers, setproviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+    > | null>();
 
-  const handleLoginRequest = async () => {
-    try {
-      const res = await axios.post<LoginRequestType, AxiosResponse<LoginResponseType>>("/api/user/login", loginFormState);
-
-      if (res.status === 200) {
-        Router.push("/dashboard");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  useEffect(() => {
+    const setTheProviders = async () => {
+      const setupProviders = await getProviders();
+      setproviders(setupProviders);
+    };
+    setTheProviders();
+  }, []);
 
   return (
     <>
@@ -39,24 +32,38 @@ export const Login = (props: LoginProps) => {
         <div className="text-2xl">
           Login
         </div>
-        <div className="flex flex-col gap-6">
-          <input
-            type="text"
-            autoComplete="on"
-            name="email"
-            placeholder="Email"
-            onChange={handleFormChange}
-            className="h-12 appearance-none border border-brown rounded px-3"
-          />
-          <input
-            type="password"
-            autoComplete="on"
-            name="password"
-            placeholder="Password"
-            onChange={handleFormChange}
-            className="h-12 appearance-none border border-brown rounded px-3"
-          />
-        </div>
+        {providers?.credentials && (
+          <>
+            <input
+              id="email"
+              type="text"
+              autoComplete="on"
+              name="email"
+              placeholder="Email"
+              onChange={({ target: { name, value } }) => {setPassword(value)}}
+              className="h-12 appearance-none border border-brown rounded px-3"
+            />
+            <input
+              type="password"
+              autoComplete="on"
+              name="password"
+              placeholder="Password"
+              onChange={({ target: { name, value } }) => {setPassword(value)}}
+              className="h-12 appearance-none border border-brown rounded px-3"
+            />
+            <div className="flex justify-center">
+              <button
+                onClick={() => signIn(providers.credentials.id, {
+                  email,
+                  password
+                })}
+                className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
+              >
+                <div>Login</div>
+              </button>
+            </div>
+          </>
+        )}
         <div className="flex justify-center text-brown">
           <div
             onClick={() => props.hook(FormType.FORGOT_PASSWORD)}
@@ -71,15 +78,6 @@ export const Login = (props: LoginProps) => {
           >
             Register
           </div>
-        </div>
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={handleLoginRequest}
-            className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
-          >
-            Login
-          </button>
         </div>
       </form>
     </>
