@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcryptjs";
 
 export default function hashPass(password: string)
 {
