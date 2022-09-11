@@ -1,4 +1,5 @@
-export default function Example() {
+
+export const Filezone = () => {
     return (
         <>
             <div className="flex justify-center items-center ">
