@@ -12,8 +12,6 @@ module.exports = {
         '3000': '3000ms',
         '2000': '2000ms',
     },
-<<<<<<< HEAD
-=======
     colors: {
       'brown': '#78685e',
       'green': {
@@ -37,7 +35,6 @@ module.exports = {
         900: '#cca37f',
       }
     },
->>>>>>> 428210b9dba491b7335cd15938323ca8e95f7110
   },
   plugins: [
     require('@tailwindcss/typography'),
