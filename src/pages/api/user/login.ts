@@ -37,8 +37,8 @@ export default async function handler (
         throw new Error("Please input a valid email.");
     }
 
-    // If all checks are passed.
-    // Query the database.
+    // If All Checks are Passed.
+    // Query the Database.
     const user = await prisma.user.findFirst({
         where: {
             email,
@@ -46,9 +46,17 @@ export default async function handler (
     })
 
     if(user){
-        // If inputted password and hasshed password are the same, return user.
-        if(comparePass(password, user.password))
-            return res.status(200).json({error:"", user});
+        // If inputted password and hashed password are the same, continue to next step.
+        if(comparePass(password, user.password)) {
+            // If Email is Verified Return User.
+            if(user.emailVerified === true)
+                return res.status(200).json({error:"", user});
+            
+            //Error: Email not verified.
+            else
+                return res.status(200).json({error: "Email not verified, please check email."}); 
+        }
+        // Error: Incorrect password.
         else 
             return res.status(200).json({error: "Incorrect password."}); 
     }
