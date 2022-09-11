@@ -1,10 +1,26 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
 import { Navbar } from '../components/Navbar';
 import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
+import Router from 'next/router';
+import { GetTourResponseType } from "./api/tour/getTour"
+import axios from 'axios';
+import { Tour } from '@prisma/client';
 
-const DashboardPage: NextPage = () => {
+const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return (
+      <>
+        <div>Loading...</div>
+      </>
+    )
+  }
+
+  if (status === "unauthenticated") {
+    Router.push("/");
+  }
 
   return (
     <>
@@ -45,25 +61,28 @@ const DashboardPage: NextPage = () => {
                 </div>
               </button>
             </div>
-            <div className="flex justify-between w-full">
-              <TourSiteCard
-                title="Name"
-                description="description"
-              />
-              <TourSiteCard
-                title="Name"
-                description="description"
-              />
-              <TourSiteCard
-                title="Name"
-                description="description"
-              />
+            <div className="inline-grid grid-cols-3 justify-items-center gap-6">
+              {tours.map((tour: Tour) => {
+                return <TourSiteCard
+                  key={tour.id}
+                  title={tour.tourTitle}
+                  description={tour.tourDescription ? tour.tourDescription : "No description..."}
+                />
+              })}
             </div>
           </div>
         </div>
       </div>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const res = await axios.get<GetTourResponseType>("http://localhost:3000/api/tour/getTour");
+
+  return {
+    props: { tours: res.data.tours },
+  }
 }
 
 export default DashboardPage

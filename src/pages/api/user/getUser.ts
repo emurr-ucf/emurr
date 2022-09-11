@@ -5,19 +5,19 @@ import { User } from '@prisma/client';
 const secret = process.env.NEXTAUTH_SECRET
 
 // API Inputs.
-export interface LoginRequestType {
+export interface GetUserRequestType {
     email: string;
 }
 
 // API Outputs.
-export interface LoginResponseType {
+export interface GetUserResponseType {
     user?: User;
     error: string;
 }
 
 export default async function handler (
     req: NextApiRequest,
-    res: NextApiResponse<LoginResponseType>
+    res: NextApiResponse<GetUserResponseType>
 ) {
     const { email } = req.body;
 
