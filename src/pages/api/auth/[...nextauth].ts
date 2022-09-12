@@ -1,10 +1,14 @@
-import NextAuth from "next-auth"
-import GithubProvider from "next-auth/providers/github"
-import GoogleProvider from "next-auth/providers/google"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth from 'next-auth';
+import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { prisma } from '../../../lib/prisma';
 
 export default NextAuth({
-	secret: process.env.NEXTAUTH_SECRET,
+	// Lets our Providers Work with Prisma.
+	adapter: PrismaAdapter(prisma),
+	// All of the Sign-In Options Shown.
 	providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ? process.env.GITHUB_ID : "",
@@ -43,5 +47,10 @@ export default NextAuth({
 				}
 			}
 		}),
-  ],
+  	],
+	// Lets us replace built-in Next-Auth pages with custom ones.
+	pages: {
+		signIn: '/login',
+	},
+	secret: process.env.NEXTAUTH_SECRET,
 })
