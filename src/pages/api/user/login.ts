@@ -22,18 +22,16 @@ export default async function handler (
     const { email, password } = req.body;
 
     // Error: Not all fields are filled out.
-    if (!email || !password) {
-        res.status(400).json({ error: "Please fill out all fields." });
-        return;
-    }
+    if (!email || !password)
+        return res.status(400).json({ error: "Please fill out all fields." });
 
     // Error: Not a valid email.
-    if ((typeof email !== 'string') || (!email.includes('@')) || (!email.includes('.'))) {
-        res.status(400).json({ error: "Please input a valid email." });
-        return;
-    }
+    if ((typeof email !== 'string') || (!email.includes('@')) || (!email.includes('.')))
+        return res.status(400).json({ error: "Please input a valid email." });
+        
 
-    // If All Checks are Passed.
+    // If all checks are passed.
+
     // Query the Database.
     const user = await prisma.user.findFirst({
         where: {
@@ -41,11 +39,11 @@ export default async function handler (
         },
     })
 
-    if(user){
+    if(user) {
         // If inputted password and hashed password are the same, continue to next step.
-        if(comparePass(password, user.password)) {
+        if(user.password && comparePass(password, user.password)) {
             // If Email is Verified Return User.
-            if(user.emailVerified === true)
+            if(user.verifyEmail === true)
                 return res.status(200).json({error:"", user});
             
             //Error: Email not verified.
