@@ -11,7 +11,7 @@ export interface RegisterRequestType {
     password: string;
 
     // Not passed in, created by this endpoint.
-    emailVerified: number;
+    verifyEmail: number;
     emailToken: string;
     resPassword: number;
     resPassToken: string;
@@ -34,40 +34,28 @@ export default async function handler (
             email,
         },
     })
-    
-    if(user) {
-        res.status(400);
-        
-        throw new Error("User already exists.")
-    }
+    if(user)
+        return res.status(400).json({ error: "User already exists." });
 
     // Error: Not all fields are filled out.
-    if(!firstName || !lastName || !email || !password) {
-        res.status(400);
-
-        throw new Error("Please add all fields.");
-    }
+    if(!firstName || !lastName || !email || !password)
+        return res.status(400).json({ error: "Please add all fields." });
 
     // Error: Name values are not strings.
-    if((typeof firstName !== 'string') || (typeof lastName !== 'string')) {
-        res.status(400);
-
-        throw new Error("Please input a proper name.");
-    }
+    if((typeof firstName !== 'string') || (typeof lastName !== 'string'))
+        return res.status(400).json({ error: "Please input a proper name." });
 
     // Error: Not a valid email.
-    if((!email.includes('@')) || (!email.includes('.'))) {
-        res.status(400);
+    if((!email.includes('@')) || (!email.includes('.')))
+        return res.status(400).json({ error: "Please input a valid email." });
 
-        throw new Error("Please input a valid email.");
-    }
-
-    // If All Checks are Passed.
+    // If all checks are passed.
+    
     // Send Verification Email.
-    // Creates a Random String.
+    // Creates a random string.
     const emailTok = generateRandString();
 
-    // Sends the Verification Email. 
+    // Sends the verification email. 
     const sgMail = require('@sendgrid/mail')
         sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         const msg = {
@@ -94,7 +82,7 @@ export default async function handler (
     const hashedPass = hashPass(password);
 
     // Save New User.
-    const userData = {firstName, lastName, email, password:hashedPass, emailVerified:false, emailToken: emailTok, resPassword:0, resPassToken:''};
+    const userData = {name: firstName, lastName, email, password:hashedPass, verifyEmail:false, emailToken: emailTok, resPassword:0, resPassToken:''};
     const savedUser = await prisma.user.create({data:userData});
     return res.status(200).json({error: ""});
 }
