@@ -24,11 +24,11 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
 
   return (
     <>
-      <div className="w-full min-h-screen bg-amber-50">
+      <div className="w-full min-h-screen">
         <Navbar 
-          page="login"
+          page="dashboard"
         />
-        <div className="flex w-full h-full mt-16 align-center justify-center text-green-800">
+        <div className="flex w-full h-full mt-16 align-center justify-center">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
               <div>
@@ -47,7 +47,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
-              <button className="flex items-center justify-between w-36 border border-green-800 shadow-md rounded-md px-2 text-black bg-white text-base text-white hover:bg-slate-200 transition ease-in-out delay-50">
+              <button className="flex items-center justify-between w-36 border border-green-800 shadow-md rounded-md px-2 text-black bg-white text-base hover:bg-slate-200 transition ease-in-out delay-50">
                 <div className="flex justify-center gap-2">
                   <div className="font-bold">
                     Sort By:
