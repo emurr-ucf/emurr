@@ -18,23 +18,20 @@ export default async function handler (
     const { emailToken } = req.body;
 
     // Error: Token was not sent.
-    if(!emailToken) {
-        res.status(400);
+    if(!emailToken)
+        res.status(400).json({ error: "No token was sent." });
 
-        throw new Error("No token was sent.");
-    }
-
-    // If All Checks are Passed.
+    // If all Checks are passed.
 
     // Count Email as Verified.
     const user = await prisma.user.updateMany({
         where: {
             emailToken,
-            emailVerified:false,
+            verifyEmail:false,
         },
         data: {
             emailToken: '',
-            emailVerified:true,
+            verifyEmail:true,
         }
     })
     if(user)
