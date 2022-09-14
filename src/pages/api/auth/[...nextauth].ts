@@ -28,8 +28,10 @@ export default NextAuth({
 				password: {  label: "Password", type: "password", placeholder: "Password..." }
 			},
 			async authorize(credentials, req) {
+				console.log("Test1");
 				// API Request.
 				if(credentials) {
+					console.log("Test");
 					const res = await fetch("http://localhost:3000/api/user/login", {
 						method: 'POST',
 						body: JSON.stringify(credentials),
@@ -56,4 +58,27 @@ export default NextAuth({
 		strategy: 'jwt',
 	},
 	secret: process.env.NEXTAUTH_SECRET,
+	callbacks: {
+    session: async ({session, user}) => {
+      session.jwt = user.jwt;
+      session.id = user.id;
+      return Promise.resolve(session);
+    },
+    jwt: async ({token, user, account}) => {
+      const isSignIn = user ? true : false;
+      if (isSignIn) {
+        if (account.type == 'credentials') {
+          token.jwt = user.jwt;
+          token.id = user.id;
+        } else {
+          var fetch_url = `${process.env.NEXT_PUBLIC_API_URL}/auth/${account.provider}/callback?access_token=${account?.accessToken}`;
+          let response = await fetch(fetch_url, params);
+          const data = await response.json();
+          token.jwt = data.jwt;
+          token.id = data.user.id;
+        }
+      }
+      return Promise.resolve(token);
+    },
+  },
 })
