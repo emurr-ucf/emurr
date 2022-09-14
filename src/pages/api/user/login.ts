@@ -20,6 +20,7 @@ export default async function handler (
     res: NextApiResponse
 ) {
     const { email, password } = req.body;
+    console.log("Testing1");
 
     // Error: Not all fields are filled out.
     if (!email || !password)
@@ -43,6 +44,7 @@ export default async function handler (
         if(user.password && comparePass(password, user.password)) {
             // If Email is Verified Return User.
             if(user.verifyEmail === true){
+                console.log("Testing2");
                 return res.status(200).json({error:"", user});
             }
             //Error: Email not verified.

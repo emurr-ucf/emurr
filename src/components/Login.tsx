@@ -55,7 +55,8 @@ export const Login = (props: LoginProps) => {
               <button
                 onClick={() => signIn(providers.credentials.id, {
                   email,
-                  password
+                  password,
+                  redirect: true,
                 })}
                 className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
               >
