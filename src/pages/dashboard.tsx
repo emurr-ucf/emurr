@@ -3,7 +3,7 @@ import { Navbar } from '../components/Navbar';
 import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
 import Router from 'next/router';
-import { GetTourResponseType } from "./api/tour/getTour"
+import { GetTourResponseType } from "./api/tour/getTour";
 import axios from 'axios';
 import { Tour } from '@prisma/client';
 
@@ -24,15 +24,20 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
 
   return (
     <>
-      <div className="w-full min-h-screen bg-amber-50">
-        <Navbar />
-        <div className="flex w-full h-full mt-16 align-center justify-center text-green-800">
+      <div className="w-full min-h-screen">
+        <Navbar 
+          page="dashboard"
+        />
+        <div className="flex w-full h-full mt-16 align-center justify-center">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
               <div>
                 Users Pages
               </div>
-              <button className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50">
+              <button
+                onClick={() => console.log(session)}
+                className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
+              >
                 Create New Page +
               </button>
             </div>
@@ -45,7 +50,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
-              <button className="flex items-center justify-between w-36 border border-green-800 shadow-md rounded-md px-2 text-black bg-white text-base text-white hover:bg-slate-200 transition ease-in-out delay-50">
+              <button className="flex items-center justify-between w-36 border border-green-800 shadow-md rounded-md px-2 text-black bg-white text-base hover:bg-slate-200 transition ease-in-out delay-50">
                 <div className="flex justify-center gap-2">
                   <div className="font-bold">
                     Sort By:

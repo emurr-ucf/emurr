@@ -25,16 +25,16 @@ const LoginPage: NextPage = () => {
 
   return (
     <>
-      <div className="w-full min-h-screen bg-amber-50">
+      <div className="min-h-screen">
         <Navbar 
           page="login"
         />
-        <div className="flex w-full h-full justify-center text-green-800">
-          <div className="flex justify-center h-fit p-5 mt-28 rounded-lg bg-white shadow-hard border-2 border-green-800 sm:rounded-md">
+        <div className="flex justify-center text-green-800">
+          <div className="flex justify-center h-fit p-5 mt-28 rounded-lg bg-background-200 border-2 border-l-4 border-b-4 border-brown sm:rounded-md">
             {formType === FormType.LOGIN && <Login hook={handleChange} />}
             {formType === FormType.REGISTER && <Register hook={handleChange} />}
             {formType === FormType.FORGOT_PASSWORD && <ForgotPassword hook={handleChange} />}
-            <div className="mx-10 border-l-2 rounded border-stone-400"></div>
+            <div className="mx-10 border-l-2 rounded border-brown"></div>
             <OAuth />
           </div>
         </div>
