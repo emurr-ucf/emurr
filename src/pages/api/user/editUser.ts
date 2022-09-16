@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
 import { prisma } from '../../../lib/prisma'
 
 // API Inputs.
@@ -17,6 +18,14 @@ export default async function handler (
     req: NextApiRequest,
     res: NextApiResponse<RegisterResponseType>
 ) {
+    const token = await getToken({req});
+
+    if(!token)
+        return res.status(400).json({error:"Not signed in"});
+    else 
+        return res.status(200).json({ error: JSON.stringify(token) })
+    
+
     const { firstName, lastName, email } = req.body;
 
     // Error: Email was not received.
@@ -47,7 +56,6 @@ export default async function handler (
             email,
         },
         data: {
-            firstName,
             lastName,
         }
     })
