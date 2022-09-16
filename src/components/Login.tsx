@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from 'axios';
-import Router from 'next/router';
-import { useState } from 'react';
-import { LoginRequestType, LoginResponseType } from '../pages/api/user/login';
+import { useState, useEffect } from 'react';
 import { FormType } from '../pages/login';
+
+import { getProviders, signIn, ClientSafeProvider, LiteralUnion } from 'next-auth/react';
+import { BuiltInProviderType } from 'next-auth/providers';
 
 interface LoginProps {
   hook: (value: FormType) => void;
@@ -10,78 +10,77 @@ interface LoginProps {
 
 export const Login = (props: LoginProps) => {
 
-  const [loginFormState, setLoginFormState] = useState<LoginRequestType>({
-    email: "",
-    password: ""
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleFormChange = ({
-    target: { name, value }
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginFormState((prev) => ({ ...prev, [name]: value }));
-  };
+  const [providers, setproviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+    > | null>();
 
-  const handleLoginRequest = async () => {
-    try {
-      const res = await axios.post<LoginRequestType, AxiosResponse<LoginResponseType>>("/api/user/login", loginFormState);
-
-      if (res.status === 200) {
-        Router.push("/dashboard");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  useEffect(() => {
+    const setTheProviders = async () => {
+      const setupProviders = await getProviders();
+      setproviders(setupProviders);
+    };
+    setTheProviders();
+  }, []);
 
   return (
     <>
-      <form action="#" method="POST" className="flex flex-col w-64 gap-6">
-        <div className="text-3xl">
+      <div className="flex flex-col w-64 gap-6">
+        <div className="text-2xl">
           Login
         </div>
-        <div className="flex flex-col gap-6">
-          <input
-            type="text"
-            autoComplete="on"
-            name="email"
-            placeholder="Email"
-            onChange={handleFormChange}
-            className="w-full h-12 appearance-none border border-stone-800 rounded px-3"
-          />
-          <input
-            type="password"
-            autoComplete="on"
-            name="password"
-            placeholder="Password"
-            onChange={handleFormChange}
-            className="w-full h-12 appearance-none border border-stone-800 rounded px-3"
-          />
-        </div>
-        <div className="flex justify-center">
+        {providers?.credentials && (
+          <>
+            <input
+              id="email"
+              type="text"
+              autoComplete="on"
+              name="email"
+              placeholder="Email"
+              onChange={({ target: { name, value } }) => {setEmail(value)}}
+              className="h-12 appearance-none border border-brown rounded px-3"
+            />
+            <input
+              type="password"
+              autoComplete="on"
+              name="password"
+              placeholder="Password"
+              onChange={({ target: { name, value } }) => {setPassword(value)}}
+              className="h-12 appearance-none border border-brown rounded px-3"
+            />
+            <div className="flex justify-center">
+              <button
+                onClick={() => signIn(providers.credentials.id, {
+                  email,
+                  password,
+                })}
+                type="button"
+                className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
+              >
+                <div>Login</div>
+              </button>
+            </div>
+          </>
+        )}
+        <div className="flex justify-center text-brown">
           <div
             onClick={() => props.hook(FormType.FORGOT_PASSWORD)}
-            className="cursor-pointer select-none"
+            className="cursor-pointer select-none hover:text-background-900"
           >
             Forgot password?
           </div>
-          <div className="mx-2 border-l-2 rounded border-stone-400"></div>
+          <div className="mx-2 border-l-2 rounded border-brown"></div>
           <div
             onClick={() => props.hook(FormType.REGISTER)}
-            className="cursor-pointer select-none"
+            className="cursor-pointer select-none hover:text-background-900"
           >
             Register
           </div>
         </div>
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={handleLoginRequest}
-            className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-white bg-green-800 hover:bg-green-900"
-          >
-            Login
-          </button>
-        </div>
-      </form>
+      </div>
     </>
   )
 }
