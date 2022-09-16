@@ -28,7 +28,7 @@ export const Login = (props: LoginProps) => {
 
   return (
     <>
-      <form action="#" method="POST" className="flex flex-col w-64 gap-6">
+      <div className="flex flex-col w-64 gap-6">
         <div className="text-2xl">
           Login
         </div>
@@ -40,7 +40,7 @@ export const Login = (props: LoginProps) => {
               autoComplete="on"
               name="email"
               placeholder="Email"
-              onChange={({ target: { name, value } }) => {setPassword(value)}}
+              onChange={({ target: { name, value } }) => {setEmail(value)}}
               className="h-12 appearance-none border border-brown rounded px-3"
             />
             <input
@@ -55,8 +55,9 @@ export const Login = (props: LoginProps) => {
               <button
                 onClick={() => signIn(providers.credentials.id, {
                   email,
-                  password
+                  password,
                 })}
+                type="button"
                 className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
               >
                 <div>Login</div>
@@ -79,7 +80,7 @@ export const Login = (props: LoginProps) => {
             Register
           </div>
         </div>
-      </form>
+      </div>
     </>
   )
 }
