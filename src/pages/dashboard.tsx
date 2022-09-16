@@ -3,7 +3,7 @@ import { Navbar } from '../components/Navbar';
 import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
 import Router from 'next/router';
-import { GetTourResponseType } from "./api/tour/getTour"
+import { GetTourResponseType } from "./api/tour/getTour";
 import axios from 'axios';
 import { Tour } from '@prisma/client';
 
@@ -34,7 +34,10 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
               <div>
                 Users Pages
               </div>
-              <button className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50">
+              <button
+                onClick={() => console.log(session)}
+                className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
+              >
                 Create New Page +
               </button>
             </div>

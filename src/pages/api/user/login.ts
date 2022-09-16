@@ -43,6 +43,7 @@ export default async function handler (
         if(user.password && comparePass(password, user.password)) {
             // If Email is Verified Return User.
             if(user.verifyEmail === true){
+                console.log("Testing2");
                 return res.status(200).json({error:"", user});
             }
             //Error: Email not verified.
