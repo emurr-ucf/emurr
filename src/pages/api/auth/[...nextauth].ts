@@ -4,6 +4,8 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
+import { Session } from 'inspector';
+
 
 export default NextAuth({
 	// Lets our Providers Work with Prisma.
@@ -28,16 +30,14 @@ export default NextAuth({
 				password: {  label: "Password", type: "password", placeholder: "Password..." }
 			},
 			async authorize(credentials, req) {
-				console.log("Test1");
 				// API Request.
 				if(credentials) {
-					console.log("Test");
 					const res = await fetch("http://localhost:3000/api/user/login", {
 						method: 'POST',
 						body: JSON.stringify(credentials),
 						headers: { "Content-Type": "application/json" }
 					})
-				var user = await res.json();
+					var user = await res.json();
 				}
 				// If API Works.
 				if(user.error === "") {
@@ -57,28 +57,15 @@ export default NextAuth({
 	session: {
 		strategy: 'jwt',
 	},
-	secret: process.env.NEXTAUTH_SECRET,
 	callbacks: {
-    session: async ({session, user}) => {
-      session.jwt = user.jwt;
-      session.id = user.id;
-      return Promise.resolve(session);
-    },
-    jwt: async ({token, user, account}) => {
-      const isSignIn = user ? true : false;
-      if (isSignIn) {
-        if (account.type == 'credentials') {
-          token.jwt = user.jwt;
-          token.id = user.id;
-        } else {
-          var fetch_url = `${process.env.NEXT_PUBLIC_API_URL}/auth/${account.provider}/callback?access_token=${account?.accessToken}`;
-          let response = await fetch(fetch_url, params);
-          const data = await response.json();
-          token.jwt = data.jwt;
-          token.id = data.user.id;
-        }
-      }
-      return Promise.resolve(token);
-    },
-  },
+    jwt: async ({ token, user }) => {
+				user && (token = user);
+				return token;
+		},
+		session: async ({ session, token }) => {
+				session.user = token;
+				return session;
+		},
+	},
+	secret: process.env.NEXTAUTH_SECRET,
 })

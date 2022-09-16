@@ -20,7 +20,6 @@ export default async function handler (
     res: NextApiResponse
 ) {
     const { email, password } = req.body;
-    console.log("Testing1");
 
     // Error: Not all fields are filled out.
     if (!email || !password)
