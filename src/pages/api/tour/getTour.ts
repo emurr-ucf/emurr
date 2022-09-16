@@ -12,28 +12,37 @@ export interface GetTourRequestType {
 
 // API Outputs.
 export interface GetTourResponseType {
-  tours: Tour[];
+  error?: string;
+  tours?: Tour[];
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetTourResponseType>
 ) {
+  const token = await getToken({req});
+  console.log(token);
 
-  const session = await getToken({ req });
-
-  const { query } = req.query;
-
+  if(!token)
+      return res.status(401).json({ error:"Not signed in" });
+  else 
+      return res.status(200).json({ error: JSON.stringify(token) })
+  
+  console.log("Poop3");
   // Error: Email was not received.
   if (query) {
     const tours = await prisma.tour.findMany({
-      where: {}
+      where: {
+        tourAuthorId: token.id,
+      }
     })
 
     res.status(200).json({ tours });
   } else {
     const tours = await prisma.tour.findMany({
-      where: {}
+      where: {
+        tourAuthorId: token.id,
+      }
     })
 
     res.status(200).json({ tours });
