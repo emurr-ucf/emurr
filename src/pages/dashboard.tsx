@@ -3,7 +3,7 @@ import { Navbar } from '../components/Navbar';
 import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
 import Router from 'next/router';
-import { GetTourResponseType } from "./api/tour/getTour";
+import { GetTourResponseType } from "./api/tour"
 import axios from 'axios';
 import { Tour } from '@prisma/client';
 
