@@ -38,12 +38,14 @@ export const Navbar = (props: NavbarProps) => {
                   profile
                 </Link>
               </div>
-              <div className={`p-2 rounded-md ${props.page === "home" ? "font-semibold text-stone-700" : ""} hover:bg-stone-600 hover:font-normal hover:text-stone-50 transition ease-in-out delay-50`}>
+              <div>
                 <button
                   onClick={so}
                   className="flex justify-center items-center"
                 >
-                  <img src="images/google.png" className="w-5 h-5"></img>
+                  <img src={session?.user.image ? session?.user.image : "images/google.png"} 
+                    className="w-7 h-7 rounded-full cursor-pointer"
+                  />
                 </button>
               </div>
             </div>
