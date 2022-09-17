@@ -43,7 +43,7 @@ export const Navbar = (props: NavbarProps) => {
                   onClick={so}
                   className="flex justify-center items-center"
                 >
-                  <img src="/images/google.png" className="w-5 h-5"></img>
+                  <img src={`${session.user?.image ? session.user?.image : "images/google.png"}`} className="w-5 h-5"></img>
                 </button>
               </div>
             </div>
