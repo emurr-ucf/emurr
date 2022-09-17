@@ -91,8 +91,6 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const token = await getToken(context);
 
-  console.log(token)
-
   if (token) {
     const tours = await prisma.tour.findMany({
       where: {
