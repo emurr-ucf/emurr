@@ -1,11 +1,35 @@
 import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
 import { Navbar } from '../components/Navbar';
-import { useSession } from 'next-auth/react';
+import { getProviders, getSession, useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
 import Router from 'next/router';
-import { GetTourResponseType } from "./api/tour"
-import axios from 'axios';
 import { Tour } from '@prisma/client';
+import { DefaultJWT, getToken } from 'next-auth/jwt';
+import { Session } from 'next-auth';
+import { prisma } from "../lib/prisma";
+
+interface JWTMod {
+  data: { user: DefaultJWT };
+}
+
+type ModifyDeep<A extends AnyObject, B extends DeepPartialAny<A>> = {
+  [K in keyof A]: B[K] extends never
+    ? A[K]
+    : B[K] extends AnyObject
+      ? ModifyDeep<A[K], B[K]>
+      : B[K]
+} & (A extends AnyObject ? Omit<B, keyof A> : A)
+
+/** Makes each property optional and turns each leaf property into any, allowing for type overrides by narrowing any. */
+type DeepPartialAny<T> = {
+  [P in keyof T]?: T[P] extends AnyObject ? DeepPartialAny<T[P]> : any
+}
+
+type AnyObject = Record<string, any>
+
+interface JWTSession extends ModifyDeep<Session, JWTMod> {
+  user: DefaultJWT;
+}
 
 const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
@@ -35,7 +59,15 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                 Users Pages
               </div>
               <button
-                onClick={() => console.log(session)}
+                onClick={async () => {
+                  const res = await fetch("/api/user/editUser", {
+                  method: "POST",
+                  body: JSON.stringify({ test: "test" })
+                  })
+                  const val = res.json();
+
+                  console.log(val);
+              }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >
                 Create New Page +
@@ -81,10 +113,27 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await axios.get<GetTourResponseType>("http://localhost:3000/api/tour/getTour");
+  const token = await getToken(context);
+
+  if (token) {
+    const tours = await prisma.tour.findMany({
+      where: {
+        tourAuthorId: token.id,
+      },
+      select: {
+        id: true,
+        tourTitle: true,
+        tourDescription: true,
+      }
+    })
+  
+    return {
+      props: { tours }
+    }
+  }
 
   return {
-    props: { tours: res.data.tours },
+    props: {  }
   }
 }
 
