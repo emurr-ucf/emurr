@@ -28,8 +28,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetTourResponseType | CreateTourResponseType>
 ) {
-  const session = await getToken({ req });
-  //if (!session) return res.status(405).json({ error: "Not authorized." });
+  const token = await getToken({ req });
+  if (!token) return res.status(405).json({ error: "Not authorized." });
 
   if (req.method === "GET") {
     const { query } = req.query;
