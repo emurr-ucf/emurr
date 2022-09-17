@@ -2,7 +2,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link'
 
 export interface NavbarProps {
-  page: string;
+  page?: string;
 }
 
 export const Navbar = (props: NavbarProps) => {
