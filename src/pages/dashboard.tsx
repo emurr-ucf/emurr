@@ -1,35 +1,11 @@
 import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
 import { Navbar } from '../components/Navbar';
-import { getProviders, getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../components/TourSiteCard';
 import Router from 'next/router';
 import { Tour } from '@prisma/client';
-import { DefaultJWT, getToken } from 'next-auth/jwt';
-import { Session } from 'next-auth';
+import { getToken } from 'next-auth/jwt';
 import { prisma } from "../lib/prisma";
-
-interface JWTMod {
-  data: { user: DefaultJWT };
-}
-
-type ModifyDeep<A extends AnyObject, B extends DeepPartialAny<A>> = {
-  [K in keyof A]: B[K] extends never
-    ? A[K]
-    : B[K] extends AnyObject
-      ? ModifyDeep<A[K], B[K]>
-      : B[K]
-} & (A extends AnyObject ? Omit<B, keyof A> : A)
-
-/** Makes each property optional and turns each leaf property into any, allowing for type overrides by narrowing any. */
-type DeepPartialAny<T> = {
-  [P in keyof T]?: T[P] extends AnyObject ? DeepPartialAny<T[P]> : any
-}
-
-type AnyObject = Record<string, any>
-
-interface JWTSession extends ModifyDeep<Session, JWTMod> {
-  user: DefaultJWT;
-}
 
 const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
@@ -66,7 +42,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                   })
                   const val = res.json();
 
-                  console.log(val);
+                  console.log(session?.user.id);
               }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >
@@ -114,6 +90,8 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const token = await getToken(context);
+
+  console.log(token)
 
   if (token) {
     const tours = await prisma.tour.findMany({

@@ -4,8 +4,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
-import { getProviders } from 'next-auth/react';
-
 
 export default NextAuth({
 	// Lets our Providers Work with Prisma.
@@ -37,11 +35,11 @@ export default NextAuth({
 						body: JSON.stringify(credentials),
 						headers: { "Content-Type": "application/json" }
 					})
-					var user = await res.json();
+					var resJson = await res.json();
 				}
 				// If API Works.
-				if(user.error === "") {
-					return user.user;
+				if(resJson.error === "") {
+					return resJson.user;
 				} 
 				else {
 					// Returning null displays a error advising the user to check their details.
@@ -59,8 +57,15 @@ export default NextAuth({
 	},
 	callbacks: {
     jwt: async ({ token, user }) => {
-				user && (token = user);
-				return token;
+			if (user) {
+				token.id = user.id;
+				token.name = user.name;
+				token.email = user.email;
+				token.image = user.image;
+				token.role = user.role;
+			}
+				
+			return token;
 		},
 		session: async ({ session, token }) => {
 				session.user = token;
