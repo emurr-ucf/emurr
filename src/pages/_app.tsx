@@ -10,7 +10,7 @@ function MyApp({
   }: AppProps) {
     return (
       <SessionProvider session={session} refetchInterval={5 * 60}>
-        <div className="w-full h-full text-green-700 bg-background-400">
+        <div className="w-screen h-screen m-0 p-0 text-green-700 bg-background-400 overflow-auto">
           <Component {...pageProps} />
         </div>
       </SessionProvider>
