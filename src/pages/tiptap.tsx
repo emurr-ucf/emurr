@@ -31,8 +31,8 @@ const Tiptap: NextPage = () => {
     <>
       <div className="flex flex-col w-full h-screen">
         <Navbar />
-        <div className="flex justify-between items-center w-full h-20 px-20 border-b border-brown">
-          <div className="flex items-center h-full gap-5">
+        <div className="flex justify-between items-center py-2 px-20 border-b border-brown">
+          <div className="flex items-center gap-5">
             <input 
               type="text"
               placeholder="Untitled"
