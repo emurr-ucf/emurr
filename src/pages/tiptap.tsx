@@ -100,13 +100,13 @@ const Tiptap: NextPage = () => {
             <div>Test</div>
           </div>
           <div className="flex flex-[4_1_0] flex-col overflow-auto">
-            <div className="flex border-x border-t border-black to bg-slate-200">
+            <div className="flex border-x border-t border-green-800 bg-background-400">
               <button
                 onClick={() => {
                   editor?.commands.toggleBold();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 font-bold hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 B
               </button>
@@ -116,7 +116,7 @@ const Tiptap: NextPage = () => {
                   editor?.commands.toggleItalic();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 italic hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 I
               </button>
@@ -126,7 +126,7 @@ const Tiptap: NextPage = () => {
                   editor?.commands.toggleStrike();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 <s>S</s>
               </button>
@@ -136,7 +136,7 @@ const Tiptap: NextPage = () => {
                   editor?.commands.toggleBlockquote();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 "
               </button>
@@ -146,7 +146,7 @@ const Tiptap: NextPage = () => {
                   editor?.commands.toggleCodeBlock();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 &lt;
               </button>
@@ -156,7 +156,7 @@ const Tiptap: NextPage = () => {
                   editor?.commands.toggleBulletList();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 •
               </button>
@@ -166,7 +166,7 @@ const Tiptap: NextPage = () => {
                   editor?.commands.setBlockquote();
                   editor?.commands.focus();
                 }}
-                className="w-10 h-10 hover:bg-slate-300 transition ease-in-out"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 "
               </button>
