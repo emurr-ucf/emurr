@@ -110,7 +110,7 @@ const Tiptap: NextPage = () => {
               >
                 B
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
               <button
                 onClick={() => {
                   editor?.commands.toggleItalic();
@@ -120,7 +120,7 @@ const Tiptap: NextPage = () => {
               >
                 I
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
               <button
                 onClick={() => {
                   editor?.commands.toggleStrike();
@@ -130,7 +130,7 @@ const Tiptap: NextPage = () => {
               >
                 <s>S</s>
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
               <button
                 onClick={() => {
                   editor?.commands.toggleBlockquote();
@@ -140,7 +140,7 @@ const Tiptap: NextPage = () => {
               >
                 "
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
               <button
                 onClick={() => {
                   editor?.commands.toggleCodeBlock();
@@ -150,7 +150,7 @@ const Tiptap: NextPage = () => {
               >
                 &lt;
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
               <button
                 onClick={() => {
                   editor?.commands.toggleBulletList();
@@ -160,7 +160,7 @@ const Tiptap: NextPage = () => {
               >
                 •
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
               <button
                 onClick={() => {
                   editor?.commands.setBlockquote();
@@ -170,9 +170,9 @@ const Tiptap: NextPage = () => {
               >
                 "
               </button>
-              <div className="border-x border-black" />
+              <div className="border-x border-green-900" />
             </div>
-            <div className="h-screen bg-slate-50 border-x border-t border-black overflow-y-auto">
+            <div className="h-screen bg-background-200 border-x border-t border-green-900 overflow-y-auto">
               <EditorContent editor={editor}/>
             </div>
           </div>
