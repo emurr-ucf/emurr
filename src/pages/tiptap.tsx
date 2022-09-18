@@ -57,8 +57,8 @@ const Tiptap: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full h-full overflow-y-auto">
-          <div className="flex flex-col pl-3 w-3/12 overflow-y-scroll">
+        <div className="flex pt-10 pr-10 pl-4 overflow-hidden">
+          <div className="flex-1 pb-4 overflow-hidden hover:overflow-scroll">
             <div>Test</div>
             <div>Test</div>
             <div>Test</div>
@@ -98,11 +98,9 @@ const Tiptap: NextPage = () => {
             <div>Test</div>
             <div>Test</div>
             <div>Test</div>
-
-
           </div>
-          <div className="flex flex-col w-full h-full px-5 pt-5">
-            <div className="flex w-full h-auto border-x border-t border-black to bg-slate-200">
+          <div className="flex flex-[4_1_0] flex-col overflow-auto">
+            <div className="flex border-x border-t border-black to bg-slate-200">
               <button
                 onClick={() => {
                   editor?.commands.toggleBold();
@@ -174,7 +172,7 @@ const Tiptap: NextPage = () => {
               </button>
               <div className="border-x border-black" />
             </div>
-            <div className="h-full bg-slate-50 border-t border-x border-black overflow-y-auto">
+            <div className="h-screen bg-slate-50 border-x border-t border-black overflow-y-auto">
               <EditorContent editor={editor}/>
             </div>
           </div>
