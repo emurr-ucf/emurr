@@ -11,13 +11,24 @@ export const Register = (props: RegisterProps) => {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("");
+
+  const error = (message: string) => {
+    setColor("text-red-800");
+    setMessage(message);
+  }
+
+  const success = (message: string) => {
+    setColor("text-green-600");
+    setMessage(message);
+  }
 
   const doRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (password !== password2) {
-      setError("Passwords must match");
+      error("Passwords must match");
       return;
     }
 
@@ -27,14 +38,11 @@ export const Register = (props: RegisterProps) => {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(body)
     }).then((response: Response) => {
-      
       if (response.status === 200) {
-        // TODO do registration magic here
-        setError("Registered!")
+        success("Registered! Please check your inbox and verify your email address.");
       }
       else {
-        //setError("Error :( " + response.status);
-        response.json().then((json) => setError(json.error));
+        response.json().then((json) => error(json.error));
       }
     });
   }
@@ -98,7 +106,9 @@ export const Register = (props: RegisterProps) => {
             Register
           </button>
         </div>
-        <div className="text-center text-red-800">{error}</div>
+        <div className="text-center">
+          <span className={color}>{message}</span>
+        </div>
       </form>
     </>
   )
