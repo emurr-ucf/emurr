@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Account {
@@ -44,8 +44,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  writtenPosts  Post[]    @relation("WrittenPosts")
-  favoritePosts Post[]    @relation("FavPosts")
+  writtenPosts  Page[]    @relation("WrittenPosts")
+  favoritePosts Page[]    @relation("FavPosts")
   tours         Tour[]
   comments      Comment[]
   role          Role      @default(USER)
@@ -65,7 +65,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Post {
+model Page {
   id            String    @id @default(cuid())
   postCreatedAt DateTime  @default(now())
   postUpdatedAt DateTime  @updatedAt
@@ -87,7 +87,7 @@ model Tour {
   tourUpdatedAt   DateTime @updatedAt
   tourTitle       String   @db.VarChar(255)
   tourDescription String?
-  tourPosts       Post[]
+  tourPosts       Page[]
   tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tourAuthorId    String
 }
@@ -97,7 +97,7 @@ model Comment {
   content         String
   commentAuthor   User    @relation(fields: [commentAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentAuthorId String
-  commentPost     Post?   @relation(fields: [commentPostId], references: [id])
+  commentPost     Page?   @relation(fields: [commentPostId], references: [id])
   commentPostId   String?
 }
 
