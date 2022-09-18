@@ -44,8 +44,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  writtenPosts  Page[]    @relation("WrittenPosts")
-  favoritePosts Page[]    @relation("FavPosts")
+  writtenPosts  Page[]    @relation("WrittenPages")
+  favoritePosts Page[]    @relation("FavPages")
   tours         Tour[]
   comments      Comment[]
   role          Role      @default(USER)
@@ -67,14 +67,14 @@ model VerificationToken {
 
 model Page {
   id            String    @id @default(cuid())
-  postCreatedAt DateTime  @default(now())
-  postUpdatedAt DateTime  @updatedAt
+  pageCreatedAt DateTime  @default(now())
+  pageUpdatedAt DateTime  @updatedAt
   title         String    @db.VarChar(255)
   content       String?
   published     Boolean   @default(false)
-  author        User      @relation("WrittenPosts", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      String // relation scalar field  (used in the `@relation` attribute above)
-  favoritedBy   User?     @relation("FavPosts", fields: [favoritedById], references: [id])
+  favoritedBy   User?     @relation("FavPages", fields: [favoritedById], references: [id])
   favoritedById String?
   tours         Tour?     @relation(fields: [tourId], references: [id])
   tourId        String?
@@ -87,7 +87,7 @@ model Tour {
   tourUpdatedAt   DateTime @updatedAt
   tourTitle       String   @db.VarChar(255)
   tourDescription String?
-  tourPosts       Page[]
+  tourPages       Page[]
   tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tourAuthorId    String
 }
@@ -97,8 +97,8 @@ model Comment {
   content         String
   commentAuthor   User    @relation(fields: [commentAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentAuthorId String
-  commentPost     Page?   @relation(fields: [commentPostId], references: [id])
-  commentPostId   String?
+  commentPage     Page?   @relation(fields: [commentPageId], references: [id])
+  commentPageId   String?
 }
 
 enum Role {

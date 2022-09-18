@@ -71,8 +71,8 @@ CREATE TABLE `VerificationToken` (
 -- CreateTable
 CREATE TABLE `Page` (
     `id` VARCHAR(191) NOT NULL,
-    `postCreatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `postUpdatedAt` DATETIME(3) NOT NULL,
+    `pageCreatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `pageUpdatedAt` DATETIME(3) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `content` VARCHAR(191) NULL,
     `published` BOOLEAN NOT NULL DEFAULT false,
@@ -100,7 +100,7 @@ CREATE TABLE `Comment` (
     `id` VARCHAR(191) NOT NULL,
     `content` VARCHAR(191) NOT NULL,
     `commentAuthorId` VARCHAR(191) NOT NULL,
-    `commentPostId` VARCHAR(191) NULL,
+    `commentPageId` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -127,4 +127,4 @@ ALTER TABLE `Tour` ADD CONSTRAINT `Tour_tourAuthorId_fkey` FOREIGN KEY (`tourAut
 ALTER TABLE `Comment` ADD CONSTRAINT `Comment_commentAuthorId_fkey` FOREIGN KEY (`commentAuthorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Comment` ADD CONSTRAINT `Comment_commentPostId_fkey` FOREIGN KEY (`commentPostId`) REFERENCES `Page`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Comment` ADD CONSTRAINT `Comment_commentPageId_fkey` FOREIGN KEY (`commentPageId`) REFERENCES `Page`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
