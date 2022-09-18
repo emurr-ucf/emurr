@@ -70,7 +70,7 @@ model Page {
   pageCreatedAt DateTime  @default(now())
   pageUpdatedAt DateTime  @updatedAt
   title         String    @db.VarChar(255)
-  content       String?
+  content       String?   @db.Text
   published     Boolean   @default(false)
   author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      String // relation scalar field  (used in the `@relation` attribute above)
@@ -85,8 +85,8 @@ model Tour {
   id              String   @id @default(cuid())
   tourCreatedAt   DateTime @default(now())
   tourUpdatedAt   DateTime @updatedAt
-  tourTitle       String   @db.VarChar(255)
-  tourDescription String?
+  tourTitle       String
+  tourDescription String?  @db.VarChar(255)
   tourPages       Page[]
   tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tourAuthorId    String
