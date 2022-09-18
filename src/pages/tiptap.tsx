@@ -39,6 +39,12 @@ const Tiptap: NextPage = () => {
               className="w-60 h-10 bg-transparent border-b-2 placeholder-green-900 text-green-900 hover:border-brown focus:border-brown focus:outline-none transition ease-in-out"
             />
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
+              Save
+            </button>
+            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
+              Download
+            </button>
+            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
               Publish
             </button>
           </div>
