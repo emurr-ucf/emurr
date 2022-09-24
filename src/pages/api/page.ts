@@ -42,17 +42,19 @@ export default async function handler (
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+    // Checks JWT token.
+    const token = await getToken({req});
+    if (!token)
+        return res.status(401).json({ error: "User is not logged in." });
+
     // Posting new page.
     if (req.method === "POST") {
-        // Checks JWT token.
-        const token = await getToken({req});
-        if (!token)
-            return res.status(401).json({ error: "User is not logged in." });
-
         const { tourId } = req.query;
+
+        if (typeof tourId != "string") return res.status(400).json({ error: "Please send a tour ID." });
         
         // Creates a new page instance in the database.
-        const pageData = {title: '', authorId: token.id, tourId};
+        const pageData = {title: "", authorId: token.id, tourId};
         const savedPage = await prisma.page.create({data: pageData});
 
         if(savedPage) {
@@ -67,8 +69,7 @@ export default async function handler (
             });
 
             // Creates page.
-            createPage.any() (req, res, () => {
-            });
+            createPage.any() (req, res, () => {});
 
             return res.status(200).json({ error: "Page created." });
         }
@@ -78,12 +79,10 @@ export default async function handler (
     
     // Updates a page.
     if (req.method === "PUT") {
-        // Checks JWT token.
-        const token = await getToken({req});
-        if (!token)
-            return res.status(401).json({ error: "User is not logged in." });
-
         const { tourId, pageId } = req.query;
+
+        if (typeof tourId != "string" || typeof pageId != "string") 
+            return res.status(400).json({ error: "Page ID and Tour ID cannot be blank." });
 
         const destination = "./websites/" + tourId; 
 
@@ -91,13 +90,12 @@ export default async function handler (
         const updatedPage = multer({
             storage: multer.diskStorage({
                 destination,
-                filename: (req, file, cb) => cb(null, file.originalname),
+                filename: (req, file, cb) => cb(null, pageId + /\.[0-9a-z]+$/i.exec(file.originalname)),
                 }),
             });
 
         // Replaces page in new position.
-        updatedPage.any() (req, res, () => {
-        });
+        updatedPage.any() (req, res, () => {});
 
         // Updates the last modified date.
         const updatePage = await prisma.page.update({
@@ -117,17 +115,14 @@ export default async function handler (
 
     // Gets file.
     if (req.method === "GET") {
-        // Checks JWT token.
-        const token = await getToken({req});
-        if (!token)
-            return res.status(401).json({ error: "User is not logged in." });
-
         const { tourId, pageId } = req.query;
+        if (typeof tourId != "string" || typeof pageId != "string") 
+            return res.status(400).json({ error: "Page ID and Tour ID cannot be blank." });
 
         // Returns file.
-        const path = "./websites/" + tourId + "/" + pageId + ".txt";
+        const path = "./websites/" + tourId + "/" + pageId + ".html";
         const file = fs.createReadStream(path)
-        res.setHeader('Content-Disposition', 'attachement; filename="' + pageId + '.txt"')
+        res.setHeader('Content-Disposition', 'attachement; filename="' + pageId + '.html"')
         file.pipe(res)
     }
 }
