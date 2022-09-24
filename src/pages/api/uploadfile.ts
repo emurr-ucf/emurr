@@ -24,8 +24,7 @@ const apiRoute = nextConnect({
 apiRoute.use(upload.array('file'));
 
 apiRoute.post((req, res) => {
-  const { data: session } = useSession();
-  if (!session) {res.status(401).json({ error: 'Unauthorized' }); return;}
+  
 
   res.status(200).json({ data: 'success' });
 });
