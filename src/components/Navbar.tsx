@@ -29,12 +29,12 @@ export const Navbar = (props: NavbarProps) => {
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
               <div className={`py-1 px-2 rounded-md ${props.page === "dashboard" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                <Link href="/dashboard">
+                <Link href="/tours">
                   dashboard
                 </Link>
               </div>
               <div className={`py-1 px-2 rounded-md ${props.page === "profile" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                <Link href="/profilepage">
+                <Link href="/profile">
                   profile
                 </Link>
               </div>
