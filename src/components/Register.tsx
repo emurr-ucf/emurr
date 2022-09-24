@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FormType } from '../pages/login';
 
 interface RegisterProps {
@@ -5,9 +6,50 @@ interface RegisterProps {
 }
 
 export const Register = (props: RegisterProps) => {
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("");
+
+  const error = (message: string) => {
+    setColor("text-red-800");
+    setMessage(message);
+  }
+
+  const success = (message: string) => {
+    setColor("text-green-600");
+    setMessage(message);
+  }
+
+  const doRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (password !== password2) {
+      error("Passwords must match");
+      return;
+    }
+
+    const body = {firstName, lastName, email, password};
+    fetch("api/user/register", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    }).then((response: Response) => {
+      if (response.status === 200) {
+        success("Registered! Please check your inbox and verify your email address.");
+      }
+      else {
+        response.json().then((json) => error(json.error));
+      }
+    });
+  }
+
   return (
     <>
-      <form action="/api/register" method="POST" className="flex flex-col w-64 gap-6">
+      <form onSubmit={doRegister} className="flex flex-col w-64 gap-6">
         <div className="text-3xl">
           Register
         </div>
@@ -17,30 +59,35 @@ export const Register = (props: RegisterProps) => {
             autoComplete="on"
             placeholder="Email"
             className="h-12 appearance-none border border-brown rounded px-3"
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="text"
             autoComplete="on"
             placeholder="First Name"
             className="h-12 appearance-none border border-brown rounded px-3"
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <input
             type="text"
             autoComplete="on"
             placeholder="Last Name"
             className="h-12 appearance-none border border-brown rounded px-3"
+            onChange={(e) => setLastName(e.target.value)}
           />
           <input
             type="password"
             autoComplete="on"
             placeholder="Password"
             className="h-12 appearance-none border border-brown rounded px-3"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <input
             type="password"
             autoComplete="on"
             placeholder="Confirm Password"
             className="h-12 appearance-none border border-brown rounded px-3"
+            onChange={(e) => setPassword2(e.target.value)}
           />
         </div>
         <div className="flex justify-center">
@@ -58,6 +105,9 @@ export const Register = (props: RegisterProps) => {
           >
             Register
           </button>
+        </div>
+        <div className="text-center">
+          <span className={color}>{message}</span>
         </div>
       </form>
     </>

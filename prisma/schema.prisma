@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Account {
@@ -44,8 +44,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  writtenPosts  Post[]    @relation("WrittenPosts")
-  favoritePosts Post[]    @relation("FavPosts")
+  writtenPosts  Page[]    @relation("WrittenPages")
+  favoritePosts Page[]    @relation("FavPages")
   tours         Tour[]
   comments      Comment[]
   role          Role      @default(USER)
@@ -65,16 +65,16 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Post {
+model Page {
   id            String    @id @default(cuid())
-  postCreatedAt DateTime  @default(now())
-  postUpdatedAt DateTime  @updatedAt
+  pageCreatedAt DateTime  @default(now())
+  pageUpdatedAt DateTime  @updatedAt
   title         String    @db.VarChar(255)
-  content       String?
+  content       String?   @db.Text
   published     Boolean   @default(false)
-  author        User      @relation("WrittenPosts", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      String // relation scalar field  (used in the `@relation` attribute above)
-  favoritedBy   User?     @relation("FavPosts", fields: [favoritedById], references: [id])
+  favoritedBy   User?     @relation("FavPages", fields: [favoritedById], references: [id])
   favoritedById String?
   tours         Tour?     @relation(fields: [tourId], references: [id])
   tourId        String?
@@ -85,9 +85,9 @@ model Tour {
   id              String   @id @default(cuid())
   tourCreatedAt   DateTime @default(now())
   tourUpdatedAt   DateTime @updatedAt
-  tourTitle       String   @db.VarChar(255)
-  tourDescription String?
-  tourPosts       Post[]
+  tourTitle       String
+  tourDescription String?  @db.VarChar(255)
+  tourPages       Page[]
   tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tourAuthorId    String
 }
@@ -97,8 +97,8 @@ model Comment {
   content         String
   commentAuthor   User    @relation(fields: [commentAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentAuthorId String
-  commentPost     Post?   @relation(fields: [commentPostId], references: [id])
-  commentPostId   String?
+  commentPage     Page?   @relation(fields: [commentPageId], references: [id])
+  commentPageId   String?
 }
 
 enum Role {
