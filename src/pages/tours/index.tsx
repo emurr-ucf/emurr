@@ -6,6 +6,7 @@ import Router from 'next/router';
 import { Tour } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { prisma } from "../../lib/prisma";
+import { CreateTourResponseType } from '../api/tour';
 
 const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
@@ -36,17 +37,23 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
               </div>
               <button
                 onClick={async () => {
-                  const res = await fetch("/api/user/editUser", {
-                  method: "POST",
-                  body: JSON.stringify({ test: "test" })
-                  })
-                  const val = res.json();
+                  const file = new File([], "blank.html");
+                  const formData = new FormData();
+                  formData.append("file", file);
 
-                  console.log(session?.user.id);
+                  const res = await fetch("/api/tour", {
+                    method: "POST",
+                    body: formData,
+                  })
+                  
+                  const body: CreateTourResponseType = await res.json();
+
+                  if (!body.error)
+                    Router.push(`/tours/${body.tourId}`);
               }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >
-                Create New Page +
+                Create New Tour +
               </button>
             </div>
             <div className="flex justify-between">
@@ -75,6 +82,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
               {tours.map((tour: Tour) => {
                 return <TourSiteCard
+                  id={tour.id}
                   key={tour.id}
                   title={tour.tourTitle}
                   description={tour.tourDescription ? tour.tourDescription : "No description..."}
@@ -101,7 +109,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         tourTitle: true,
         tourDescription: true,
       }
-    })
+    });
   
     return {
       props: { tours }

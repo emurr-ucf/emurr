@@ -15,12 +15,11 @@ const LoginPage: NextPage = () => {
   const { data: session, status } = useSession();
 
   const handleChange = (value: FormType) => {
-    console.log("Test");
     setFormType(value);
   }
 
   if (session) {
-    Router.push('/dashboard');
+    Router.push('/tours');
   }
 
   return (

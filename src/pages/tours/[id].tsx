@@ -2,12 +2,20 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import CharacterCount from '@tiptap/extension-character-count'
 import { NextPage } from 'next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/Navbar'
+import { prisma } from '../../lib/prisma'
+import Router, { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
+import { Page } from '@prisma/client'
 
 const Tiptap: NextPage = () => {
   const [charCount, setCharCount] = useState(0);
   const [wordCount, setWordCount] = useState(0);
+  const [pages, setPages] = useState([]);
+  const { data: session, status} = useSession();
+  const router = useRouter();
+  const { id } = router.query;
 
   const editor = useEditor({
     extensions: [
@@ -27,6 +35,19 @@ const Tiptap: NextPage = () => {
     content: '<p>Hello World! 🌎️</p>',
   })
 
+  useEffect(() => {
+    const load = () => {
+      fetch(`/api/tour?tourId=${id}`, {
+        method: "GET",
+      }).then(res => 
+        res.json().then(body => 
+          setPages(body)
+      ));
+    }
+  }, [id]);
+
+  if (status === "unauthenticated") return Router.push("/");
+
   return (
     <>
       <div className="flex flex-col w-full h-screen">
@@ -35,7 +56,6 @@ const Tiptap: NextPage = () => {
           <div className="flex items-center gap-5">
             <input 
               type="text"
-              placeholder="Untitled"
               className="w-60 h-10 bg-transparent border-b-2 placeholder-green-900 text-green-900 hover:border-brown focus:border-brown focus:outline-none transition ease-in-out"
             />
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
@@ -46,6 +66,25 @@ const Tiptap: NextPage = () => {
             </button>
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
               Publish
+            </button>
+            <button
+              onClick={async () => {
+                console.log(id);
+
+                const file = new File([], "blank.html");
+
+                const formData = new FormData();
+
+                formData.append("file", file);
+
+                await fetch(`/api/page?tourId=${id}`, {
+                  method: "POST",
+                  body: formData,
+                })
+              }}
+              className="py-1 px-4 text-background-200 bg-green-700 rounded-sm"
+            >
+              Create New Page +
             </button>
           </div>
           <div className="flex flex-col justify-right text-sm">
@@ -59,45 +98,9 @@ const Tiptap: NextPage = () => {
         </div>
         <div className="flex pt-10 pr-10 pl-4 overflow-hidden">
           <div className="flex-1 pb-4 overflow-hidden hover:overflow-scroll">
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
+            {pages.map((page: Page) => {
+              return <div key={page.id}>Test</div>;
+            })}
           </div>
           <div className="flex flex-[4_1_0] flex-col overflow-auto">
             <div className="flex border-x border-t border-green-800 bg-background-400">

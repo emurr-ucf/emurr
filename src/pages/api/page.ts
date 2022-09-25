@@ -116,14 +116,39 @@ export default async function handler (
     // Gets file.
     if (req.method === "GET") {
         const { tourId, pageId } = req.query;
-        if (typeof tourId != "string" || typeof pageId != "string") 
-            return res.status(400).json({ error: "Page ID and Tour ID cannot be blank." });
 
+        console.log("POOp")
+
+        if (!pageId && typeof tourId === "string") {
+            const pages = await prisma.page.findMany({
+                where: {
+                    authorId: token.id,
+                    tourId,
+                },
+                select: {
+                    id: true,
+                    pageCreatedAt: true,
+                    pageUpdatedAt: true,
+                    title: true,
+                    published: true,
+                    comments: true,
+                }
+            });
+
+            console.log(pages);
+
+            res.status(200).json({ tours: pages })
+
+        } else if (typeof tourId != "string" || typeof pageId != "string") {
+            return res.status(400).json({ error: "Page ID and Tour ID cannot be blank." });
+        }
+        
         // Returns file.
         const path = "./websites/" + tourId + "/" + pageId + ".html";
         const file = fs.createReadStream(path)
         res.setHeader('Content-Disposition', 'attachement; filename="' + pageId + '.html"')
-        file.pipe(res)
+        file.pipe(res);
+        
     }
 }
 

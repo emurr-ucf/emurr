@@ -72,6 +72,7 @@ model Page {
   title         String    @db.VarChar(255)
   content       String?   @db.Text
   published     Boolean   @default(false)
+  deletable     Boolean   @default(true)
   author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId      String // relation scalar field  (used in the `@relation` attribute above)
   favoritedBy   User?     @relation("FavPages", fields: [favoritedById], references: [id])

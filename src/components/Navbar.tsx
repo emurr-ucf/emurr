@@ -43,7 +43,8 @@ export const Navbar = (props: NavbarProps) => {
                   onClick={so}
                   className="flex justify-center items-center"
                 >
-                  <img src={session?.user.image ? session?.user.image : "images/google.png"} 
+                  <img src={session?.user.image ? session?.user.image : "images/google.png"}
+                    alt="Profile Image"
                     className="w-7 h-7 rounded-full cursor-pointer"
                   />
                 </button>
