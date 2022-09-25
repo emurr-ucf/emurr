@@ -3,7 +3,7 @@ import StarterKit from '@tiptap/starter-kit'
 import CharacterCount from '@tiptap/extension-character-count'
 import { NextPage } from 'next'
 import { useState } from 'react'
-import { Navbar } from '../components/Navbar'
+import { Navbar } from '../../components/Navbar'
 
 const Tiptap: NextPage = () => {
   const [charCount, setCharCount] = useState(0);
@@ -138,7 +138,7 @@ const Tiptap: NextPage = () => {
                 }}
                 className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
-                "
+                &ldquo;
               </button>
               <div className="border-x border-green-900" />
               <button
@@ -168,7 +168,7 @@ const Tiptap: NextPage = () => {
                 }}
                 className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
-                "
+                &ldquo;
               </button>
               <div className="border-x border-green-900" />
             </div>

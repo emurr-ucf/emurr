@@ -1,11 +1,11 @@
 import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next';
-import { Navbar } from '../components/Navbar';
+import { Navbar } from '../../components/Navbar';
 import { useSession } from 'next-auth/react';
-import { TourSiteCard } from '../components/TourSiteCard';
+import { TourSiteCard } from '../../components/TourSiteCard';
 import Router from 'next/router';
 import { Tour } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
-import { prisma } from "../lib/prisma";
+import { prisma } from "../../lib/prisma";
 
 const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
@@ -51,7 +51,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
             </div>
             <div className="flex justify-between">
               <div className="flex w-3/5 h-auto items-center rounded-md border border-green-800 bg-white shadow-sm shadow-black">
-                <img src="/images/search.png" className="w-5 h-5 m-2" />
+                <img src="/images/search.png" alt="" className="w-5 h-5 m-2" />
                 <input
                   type="text"
                   placeholder="Search by Title, Tour Pack, or Page Contents"
