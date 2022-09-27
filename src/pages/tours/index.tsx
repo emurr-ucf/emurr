@@ -46,7 +46,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                     body: formData,
                   })
                   
-                  const body: CreateTourResponseType = await res.json();
+                 const body: CreateTourResponseType = await res.json();
 
                   if (!body.error)
                     Router.push(`/tours/${body.tourId}`);

@@ -52,8 +52,6 @@ export default async function handler(
     }
   } 
   else if (req.method === "POST") {
-    console.log("Poop12");
-
     const createTour = await prisma.tour.create({
       data: {
         tourTitle: "Untitled",
@@ -65,7 +63,7 @@ export default async function handler(
       const pageData = {title: "", authorId: token.id, tourId: createTour.id, deletable: false};
       const savedPage = await prisma.page.create({data: pageData});
 
-      const destination = "./websites/" + createTour.id; 
+      const destination = "./websites/" + createTour.id;
 
       // Upload page multer instance.
       const createPage = multer({
@@ -84,3 +82,9 @@ export default async function handler(
       return res.status(400).json({ error: "Tour could not be created." });
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: false, // Disallow body parsing, consume as stream
+  },
+};

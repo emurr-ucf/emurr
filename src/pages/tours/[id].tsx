@@ -8,6 +8,7 @@ import { prisma } from '../../lib/prisma'
 import Router, { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Page } from '@prisma/client'
+import Highlight from '@tiptap/extension-highlight'
 
 const Tiptap: NextPage = () => {
   const [charCount, setCharCount] = useState(0);
@@ -172,6 +173,16 @@ const Tiptap: NextPage = () => {
                 className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
                 &ldquo;
+              </button>
+              <button
+                onClick={() => {
+                  editor?.commands.toggleHighlight();
+                  editor?.commands.toggleHighlight({ color: '#ffcc00' });
+                  editor?.commands.focus();
+                }}
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                N
               </button>
               <div className="border-x border-green-900" />
             </div>
