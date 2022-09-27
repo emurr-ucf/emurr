@@ -17,7 +17,7 @@ const Tiptap: NextPage = () => {
       CharacterCount,
       Highlight.configure({ multicolor: true }),
       Heading.configure({
-        levels: [1, 2],
+        levels: [1, 2, 3],
       }),
     ],
     editorProps: {
@@ -184,32 +184,68 @@ const Tiptap: NextPage = () => {
               <div className="border-x border-green-900" />
               <button
                 onClick={() => {
-                  editor?.commands.toggleBlockquote();
-                  editor?.commands.focus();
-                }}
-                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-              >
-                &ldquo;
-              </button>
-              <div className="border-x border-green-900" />
-              <button
-                onClick={() => {
                   editor?.commands.toggleBulletList();
                   editor?.commands.focus();
                 }}
+                title="Bullet List"
                 className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
-                •
+                <img src="/images/list-unordered.svg" className="w-5 h-5 m-2" />
               </button>
               <div className="border-x border-green-900" />
               <button
                 onClick={() => {
-                  editor?.commands.setBlockquote();
-                  editor?.commands.focus();
+                  editor.commands.toggleHeading({ level: 2 });
+                  editor.commands.focus();
                 }}
+                title="Ordered List"
                 className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
-                &ldquo;
+                <img src="/images/list-ordered.svg" className="w-5 h-5 m-2" />
+              </button>
+              <div className="border-x border-green-900" />
+              <button
+                onClick={() => {
+                  editor?.commands.toggleBlockquote();
+                  editor?.commands.focus();
+                }}
+                title="Blockquote"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                <img src="/images/double-quotes-l.svg" className="w-5 h-5 m-2" />
+              </button>
+              <div className="border-x border-green-900" />
+              <button
+                onClick={() => {
+                  editor.commands.toggleHeading({ level: 2 });
+                  editor.commands.focus();
+                }}
+                title="Clear Format"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                <img src="/images/format-clear.svg" className="w-5 h-5 m-2" />
+              </button>
+              <div className="border-x border-green-900" />
+              <button
+                onClick={() => {
+                  editor?.commands.toggleBlockquote();
+                  editor?.commands.focus();
+                }}
+                title="Undo"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                <img src="/images/arrow-go-back-line.svg" className="w-5 h-5 m-2" />
+              </button>
+              <div className="border-x border-green-900" />
+              <button
+                onClick={() => {
+                  editor.commands.toggleHeading({ level: 2 });
+                  editor.commands.focus();
+                }}
+                title="Redo"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                <img src="/images/arrow-go-forward-line.svg" className="w-5 h-5 m-2" />
               </button>
               <div className="border-x border-green-900" />
             </div>
