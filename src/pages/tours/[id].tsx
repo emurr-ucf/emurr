@@ -2,18 +2,24 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CharacterCount from "@tiptap/extension-character-count";
 import Highlight from "@tiptap/extension-highlight";
-
+import Heading from "@tiptap/extension-heading";
 import { NextPage } from "next";
 import { useState } from "react";
 import { Navbar } from "../../components/Navbar";
-
 
 const Tiptap: NextPage = () => {
   const [charCount, setCharCount] = useState(0);
   const [wordCount, setWordCount] = useState(0);
 
   const editor = useEditor({
-    extensions: [StarterKit, CharacterCount, Highlight.configure({ multicolor: true })],
+    extensions: [
+      StarterKit,
+      CharacterCount,
+      Highlight.configure({ multicolor: true }),
+      Heading.configure({
+        levels: [1, 2],
+      }),
+    ],
     editorProps: {
       attributes: {
         class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
@@ -26,6 +32,10 @@ const Tiptap: NextPage = () => {
     },
     content: "<p>Hello World! 🌎️</p>",
   });
+
+  if (!editor) {
+    return null;
+  }
 
   return (
     <>
@@ -147,10 +157,29 @@ const Tiptap: NextPage = () => {
                 title="Highlight"
                 className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
               >
-                <svg className="w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M15.243 4.515l-6.738 6.737-.707 2.121-1.04 1.041 2.828 2.829 1.04-1.041 2.122-.707 6.737-6.738-4.242-4.242zm6.364 3.535a1 1 0 0 1 0 1.414l-7.779 7.779-2.12.707-1.415 1.414a1 1 0 0 1-1.414 0l-4.243-4.243a1 1 0 0 1 0-1.414l1.414-1.414.707-2.121 7.779-7.779a1 1 0 0 1 1.414 0l5.657 5.657zm-6.364-.707l1.414 1.414-4.95 4.95-1.414-1.414 4.95-4.95zM4.283 16.89l2.828 2.829-1.414 1.414-4.243-1.414 2.828-2.829z" />
-                </svg>
+                <img src="/images/mark-pen-line.svg" className="w-5 h-5 m-2" />
+              </button>
+              <div className="border-x border-green-900" />
+              <button
+                onClick={() => {
+                  editor.commands.toggleHeading({ level: 1 });
+                  editor.commands.focus();
+                }}
+                title="Heading 1"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                <img src="/images/h-1.svg" className="w-5 h-5 m-2" />
+              </button>
+              <div className="border-x border-green-900" />
+              <button
+                onClick={() => {
+                  editor.commands.toggleHeading({ level: 2 });
+                  editor.commands.focus();
+                }}
+                title="Heading 2"
+                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+              >
+                <img src="/images/h-2.svg" className="w-5 h-5 m-2" />
               </button>
               <div className="border-x border-green-900" />
               <button
