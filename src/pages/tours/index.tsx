@@ -29,7 +29,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
         <Navbar 
           page="dashboard"
         />
-        <div className="flex w-full h-full mt-16 align-center justify-center">
+        <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
               <div>

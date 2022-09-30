@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
 import { prisma } from '../../lib/prisma';
+import { returnTour } from '../../lib/returnTour';
 import multer from 'multer';
 import fs from 'fs'
+import { Tour } from "@prisma/client";
 
 // Post API Inputs.
 export interface PostFileRequestType {
@@ -13,6 +15,7 @@ export interface PostFileRequestType {
 // Post API Output.
 export interface PostFileResponseType {
     error?: string;
+    pages?: Tour;
 }
 
 // Put API Inputs.
@@ -54,8 +57,9 @@ export default async function handler (
         if (typeof tourId != "string") return res.status(400).json({ error: "Please send a tour ID." });
         
         // Creates a new page instance in the database.
-        const pageData = {title: "", authorId: token.id, tourId};
+        const pageData = {title: "Untitled", authorId: token.id, tourId};
         const savedPage = await prisma.page.create({data: pageData});
+        const tour = await returnTour(tourId, token.id);
 
         if(savedPage) {
             const destination = "./websites/" + tourId; 
@@ -71,10 +75,10 @@ export default async function handler (
             // Creates page.
             createPage.any() (req, res, () => {});
 
-            return res.status(200).json({ error: "Page created." });
+            return res.status(200).json({ tour });
         }
         else
-            return res.status(200).json({ error: "Page could not be created." });
+            return res.status(400).json({ error: "Page could not be created." });
     } 
     
     // Updates a page.
@@ -117,8 +121,6 @@ export default async function handler (
     if (req.method === "GET") {
         const { tourId, pageId } = req.query;
 
-        console.log("POOp")
-
         if (!pageId && typeof tourId === "string") {
             const pages = await prisma.page.findMany({
                 where: {
@@ -127,15 +129,11 @@ export default async function handler (
                 },
                 select: {
                     id: true,
-                    pageCreatedAt: true,
-                    pageUpdatedAt: true,
                     title: true,
                     published: true,
                     comments: true,
                 }
             });
-
-            console.log(pages);
 
             res.status(200).json({ tours: pages })
 

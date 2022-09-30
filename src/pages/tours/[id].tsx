@@ -1,22 +1,21 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import CharacterCount from '@tiptap/extension-character-count'
-import { NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next'
+import { PropsWithChildren, useState } from 'react'
 import { Navbar } from '../../components/Navbar'
 import { prisma } from '../../lib/prisma'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Page } from '@prisma/client'
-import Highlight from '@tiptap/extension-highlight'
+import { Page, Tour } from '@prisma/client'
+import { getToken } from 'next-auth/jwt'
 
-const Tiptap: NextPage = () => {
+const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [charCount, setCharCount] = useState(0);
   const [wordCount, setWordCount] = useState(0);
-  const [pages, setPages] = useState([]);
   const { data: session, status} = useSession();
-  const router = useRouter();
-  const { id } = router.query;
+
+  const [tour, setTour] = useState(propTour);
 
   const editor = useEditor({
     extensions: [
@@ -36,19 +35,8 @@ const Tiptap: NextPage = () => {
     content: '<p>Hello World! 🌎️</p>',
   })
 
-  useEffect(() => {
-    const load = () => {
-      fetch(`/api/tour?tourId=${id}`, {
-        method: "GET",
-      }).then(res => 
-        res.json().then(body => 
-          setPages(body)
-      ));
-    }
-  }, [id]);
-
-  if (status === "unauthenticated") return Router.push("/");
-
+  if (status === "loading") return <div>Loading...</div>;
+  if (status === "unauthenticated") Router.push("/");
   return (
     <>
       <div className="flex flex-col w-full h-screen">
@@ -57,7 +45,8 @@ const Tiptap: NextPage = () => {
           <div className="flex items-center gap-5">
             <input 
               type="text"
-              className="w-60 h-10 bg-transparent border-b-2 placeholder-green-900 text-green-900 hover:border-brown focus:border-brown focus:outline-none transition ease-in-out"
+              defaultValue={tour.tourTitle}
+              className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
               Save
@@ -70,18 +59,21 @@ const Tiptap: NextPage = () => {
             </button>
             <button
               onClick={async () => {
-                console.log(id);
-
                 const file = new File([], "blank.html");
 
                 const formData = new FormData();
 
                 formData.append("file", file);
 
-                await fetch(`/api/page?tourId=${id}`, {
+                const res = await fetch(`/api/page?tourId=${tour.id}`, {
                   method: "POST",
                   body: formData,
                 })
+
+                const resJSON = await res.json();
+
+                if (resJSON.tour)
+                  setTour(resJSON.tour);
               }}
               className="py-1 px-4 text-background-200 bg-green-700 rounded-sm"
             >
@@ -97,11 +89,17 @@ const Tiptap: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex pt-10 pr-10 pl-4 overflow-hidden">
-          <div className="flex-1 pb-4 overflow-hidden hover:overflow-scroll">
-            {pages.map((page: Page) => {
-              return <div key={page.id}>Test</div>;
+        <div className="flex pt-10 px-4 overflow-hidden">
+          <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
+
+            {tour.tourPages.map((page: Page) => {
+              return <input
+                  key={page.id}
+                  defaultValue={page.title === "" ? "Untitled" : page.title}
+                  className="w-full rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300"
+                />
             })}
+
           </div>
           <div className="flex flex-[4_1_0] flex-col overflow-auto">
             <div className="flex border-x border-t border-green-800 bg-background-400">
@@ -174,16 +172,6 @@ const Tiptap: NextPage = () => {
               >
                 &ldquo;
               </button>
-              <button
-                onClick={() => {
-                  editor?.commands.toggleHighlight();
-                  editor?.commands.toggleHighlight({ color: '#ffcc00' });
-                  editor?.commands.focus();
-                }}
-                className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-              >
-                N
-              </button>
               <div className="border-x border-green-900" />
             </div>
             <div className="h-screen bg-background-200 border-x border-t border-green-900 overflow-y-auto">
@@ -196,4 +184,38 @@ const Tiptap: NextPage = () => {
   )
 }
 
-export default Tiptap;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = await getToken(context);
+  const { id } = context.query;
+
+  if (token && (typeof id === "string")) {
+    const propTour = await prisma.tour.findFirst({
+      where: {
+        id,
+        tourAuthorId: token.id,
+      },
+      select: {
+        id: true,
+        tourTitle: true,
+        tourDescription: true,
+        tourPages: {
+          select: {
+            id: true,
+            title: true,
+            published: true,
+          },
+        },
+      }
+    });
+  
+    return {
+      props: { propTour },
+    }
+  }
+
+  return {
+    props: {  }
+  }
+}
+
+export default TiptapPage;
