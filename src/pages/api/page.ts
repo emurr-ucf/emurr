@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma';
 import { returnTour } from '../../lib/returnTour';
 import multer from 'multer';
 import fs from 'fs'
-import { Tour } from "@prisma/client";
+import { Page, Tour } from "@prisma/client";
 
 // Post API Inputs.
 export interface PostFileRequestType {
@@ -15,6 +15,7 @@ export interface PostFileRequestType {
 // Post API Output.
 export interface PostFileResponseType {
     error?: string;
+    newPage?: Page;
     pages?: Tour;
 }
 

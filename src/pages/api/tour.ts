@@ -80,6 +80,9 @@ export default async function handler(
     }
     else
       return res.status(400).json({ error: "Tour could not be created." });
+  } 
+  else if (req.method === "PUT") {
+    const { tourId, pageId,  } = req.body;
   }
 }
 
