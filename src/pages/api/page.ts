@@ -16,7 +16,7 @@ export interface PostFileRequestType {
 export interface PostFileResponseType {
     error?: string;
     newPage?: Page;
-    pages?: Tour;
+    tour?: Tour;
 }
 
 // Put API Inputs.

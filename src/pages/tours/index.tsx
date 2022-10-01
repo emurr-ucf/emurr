@@ -44,7 +44,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                   const res = await fetch("/api/tour", {
                     method: "POST",
                     body: formData,
-                  })
+                  });
                   
                  const body: CreateTourResponseType = await res.json();
 

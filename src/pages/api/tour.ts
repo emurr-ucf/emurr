@@ -23,11 +23,20 @@ export interface CreateTourResponseType {
   error?: string;
 }
 
+export interface UpdateTourRequestType {
+  tourId: string;
+  name: string;
+}
+
+export interface UpdateTourResponseType {
+  tour?: Tour;
+  error?: string;
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetTourResponseType | CreateTourResponseType>
+  res: NextApiResponse<GetTourResponseType | CreateTourResponseType | UpdateTourResponseType>
 ) {
-
   // Checks JWT token.
   const token = await getToken({req});
   if (!token)
@@ -37,9 +46,14 @@ export default async function handler(
     const { query } = req.query;
   
     // Error: Email was not received.
-    if (query) {
+    if (typeof query === "string") {
       const tours = await prisma.tour.findMany({
-        where: {}
+        where: {
+          OR: [
+            { tourTitle: query },
+            { tourDescription: query },
+          ],
+        }
       })
   
       res.status(200).json({ tours });
@@ -59,35 +73,29 @@ export default async function handler(
       }
     });
 
-    if (createTour) {
-      const pageData = {title: "", authorId: token.id, tourId: createTour.id, deletable: false};
-      const savedPage = await prisma.page.create({data: pageData});
-
-      const destination = "./websites/" + createTour.id;
-
-      // Upload page multer instance.
-      const createPage = multer({
-      storage: multer.diskStorage({
-          destination,
-          filename: (req, file, cb) => cb(null, savedPage.id + /\.[0-9a-z]+$/i.exec(file.originalname)),
-          }),
-      });
-
-      // Creates page.
-      createPage.any() (req, res, () => {});
-
+    if (createTour)
       return res.status(200).json({ tourId: createTour.id });
-    }
     else
       return res.status(400).json({ error: "Tour could not be created." });
   } 
   else if (req.method === "PUT") {
-    const { tourId, pageId,  } = req.body;
+    const { tourId, name } = req.body;
+
+    if (!tourId)
+      return res.status(400).json({ error: "Tour ID cannot be blank." })
+
+    const tour = await prisma.tour.update({
+      where: {
+        id: tourId,
+      },
+      data: {
+        tourTitle: name,
+      }
+    });
+
+    if (tour)
+      return res.status(200).json({ tour });
+    else
+      return res.status(400).json({ error: "Could not update tour." });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false, // Disallow body parsing, consume as stream
-  },
-};

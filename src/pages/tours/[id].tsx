@@ -2,7 +2,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import CharacterCount from '@tiptap/extension-character-count'
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Navbar } from '../../components/Navbar'
 import { prisma } from '../../lib/prisma'
 import Router from 'next/router'
@@ -20,9 +20,12 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [wordCount, setWordCount] = useState(0);
   const { data: session, status} = useSession();
   const [page, setPage] = useState("");
-  const [check, setCheck] = useState(false);
 
   const [tour, setTour] = useState(propTour);
+  const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
+  const [tourTitle, setTourTitle] = useState(tour.tourTitle);
+  const [pageRename, setPageRename] = useState("");
+  const [pageTitle, setPageTitle] = useState("");
 
   const editor = useEditor({
     extensions: [
@@ -46,16 +49,31 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   return (
     <>
       <div className="flex flex-col w-full h-screen">
-        <Navbar />
-        <div className="flex justify-between items-center py-2 px-20 border-b border-brown">
-          <div className="flex items-center gap-5">
+        <Navbar>
+          <>
             <input 
               type="text"
               defaultValue={tour.tourTitle}
+              onChange={(event) => {
+                setTourTitle(event.target.value);
+                setUpdatedTourTitle(true);
+              }}
               className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
             <button
               onClick={async () => {
+                if (updatedTourTitle) {
+                  const body = { tourId: tour.id, name: tourTitle };
+
+                  await fetch("/api/tour", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body),
+                  });
+
+                  setUpdatedTourTitle(false);
+                }
+
                 const data = editor?.getHTML();
 
                 if (data && page) {
@@ -81,6 +99,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
               Publish
             </button>
+          </>
+        </Navbar>
+        <div className="flex pt-4 px-4 overflow-hidden">
+          <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
             <button
               onClick={async () => {
                 const file = new File([], "blank.html");
@@ -99,27 +121,21 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 if (resJSON.tour)
                   setTour(resJSON.tour);
               }}
-              className="py-1 px-4 text-background-200 bg-green-700 rounded-sm"
+              className="w-full py-1 px-4 mb-2 text-background-200 bg-green-700 rounded-sm"
             >
-              Create New Page +
+              Create New Page
             </button>
-          </div>
-          <div className="flex flex-col justify-right text-sm">
-            <div>
-              Character Count: {charCount}
-            </div>
-            <div>
-              Word Count: {wordCount}
-            </div>
-          </div>
-        </div>
-        <div className="flex pt-10 px-4 overflow-hidden">
-          <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
+            
             {tour.tourPages.map((page: Page) => {
               return (
-                <div key={page.id}>
+                <div 
+                  key={page.id}
+                  className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300"
+                >
                   <button
                     onClick={async () => {
+                      if (pageRename === page.id) return;
+
                       const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${page.id}`, {
                         method: "GET",
                       });
@@ -135,9 +151,40 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   >
                     <input
                       defaultValue={page.title === "" ? "Untitled" : page.title}
-                      disabled
-                      className="w-full rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300"
+                      disabled={pageRename != page.id}
+                      autoFocus={true}
+                      onChange={(event) => setPageTitle(event.target.value)}
+                      className="w-full"
                     />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPageRename(page.id);
+                    }}
+                    className={`${(pageRename === page.id || pageRename != "") ? "hidden" : ""} invisible group-hover:visible`}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={async () => {
+                      const body = { pageId: page.id, name: pageTitle };
+
+                      const res = await fetch("/api/pagedb", {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(body),
+                      });
+
+                      const resJSON = await res.json();
+
+                      if (resJSON.tour)
+                        setTour(resJSON.tour);
+    
+                      setPageRename("");
+                    }}
+                    className={`${pageRename != page.id ? "hidden" : ""}`}
+                  >
+                    Save
                   </button>
                 </div>
               );
