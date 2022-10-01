@@ -7,20 +7,30 @@ import { Tour } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { prisma } from "../../lib/prisma";
 import { CreateTourResponseType } from '../api/tour';
+import { useState } from 'react';
 
-const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
+  const [tours, setTours] = useState(propTours);
+  const [query, setQuery] = useState("");
+  let timer: NodeJS.Timeout;
 
-  if (status === "loading") {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    )
-  }
+  if (status === "loading") return <div>Loading...</div>;
+  if (status === "unauthenticated") Router.push("/");
 
-  if (status === "unauthenticated") {
-    Router.push("/");
+  const queryTours = () => {
+    clearTimeout(timer);
+
+    timer = setTimeout(async () => {
+      const res = await fetch(`/api/tour?query=${query}`, {
+        method: "GET"
+      })
+
+      const resJSON = await res.json();
+
+      if (resJSON)
+        setTours(resJSON.tours);
+    }, 500)
   }
 
   return (
@@ -62,6 +72,10 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                 <input
                   type="text"
                   placeholder="Search by Title, Tour Pack, or Page Contents"
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                    queryTours();
+                  }}
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
@@ -100,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const token = await getToken(context);
 
   if (token) {
-    const tours = await prisma.tour.findMany({
+    const propTours = await prisma.tour.findMany({
       where: {
         tourAuthorId: token.id,
       },
@@ -112,12 +126,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     });
   
     return {
-      props: { tours }
+      props: { propTours }
     }
   }
 
   return {
-    props: {  }
+    props: { propTours: [] }
   }
 }
 

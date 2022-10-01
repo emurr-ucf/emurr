@@ -197,7 +197,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               </div>
               : 
               <>
-                <div className="flex border-x border-t border-green-800 bg-background-400">
+                <div className="flex border-x border-t rounded-tr-md border-green-800 bg-background-400">
                   <button
                     onClick={() => {
                       editor?.commands.toggleBold();

@@ -50,11 +50,19 @@ export default async function handler(
       const tours = await prisma.tour.findMany({
         where: {
           OR: [
-            { tourTitle: query },
-            { tourDescription: query },
+            {
+              tourTitle: {
+                contains: query,
+              }
+            },
+            { 
+              tourDescription: {
+                contains: query,
+              },
+            },
           ],
         }
-      })
+      });
   
       res.status(200).json({ tours });
     } else {
@@ -97,5 +105,24 @@ export default async function handler(
       return res.status(200).json({ tour });
     else
       return res.status(400).json({ error: "Could not update tour." });
+  }
+  else if (req.method === "DELETE") {
+    const { tourId } = req.body;
+
+    console.log(tourId);
+
+    if (!tourId)
+      return res.status(400).json({ error: "Tour ID cannot be blank." });
+
+    const tour = await prisma.tour.delete({
+      where: {
+        id: tourId,
+      }
+    })
+
+    if (tour)
+      return res.status(200).json({ error: "Tour has been deleted." });
+    else
+      return res.status(400).json({ error: "Tour could not be deleted." });
   }
 }
