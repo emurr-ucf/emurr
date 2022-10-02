@@ -29,7 +29,7 @@ export interface UpdateTourRequestType {
 }
 
 export interface UpdateTourResponseType {
-  tour?: Tour;
+  tour?: Tour | Prisma.BatchPayload;
   error?: string;
 }
 

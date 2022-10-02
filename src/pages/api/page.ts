@@ -74,7 +74,9 @@ export default async function handler (
             });
 
             // Creates page.
+            /// @ts-ignore-start
             createPage.any() (req, res, () => {});
+            // @ts-ignore-end
 
             return res.status(200).json({ tour });
         }
@@ -100,7 +102,9 @@ export default async function handler (
             });
 
         // Replaces page in new position.
+        /// @ts-ignore-start
         updatedPage.any() (req, res, () => {});
+        // @ts-ignore-end
 
         // Updates the last modified date.
         const updatePage = await prisma.page.update({
