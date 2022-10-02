@@ -1,3 +1,4 @@
+import { Tour } from '@prisma/client';
 import { prisma } from './prisma';
 
 /**

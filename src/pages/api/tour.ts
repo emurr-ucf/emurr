@@ -33,9 +33,17 @@ export interface UpdateTourResponseType {
   error?: string;
 }
 
+export interface DeleteTourRequestType {
+  tourId: string;
+}
+
+export interface DeleteTourResponseType {
+  error: string;
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetTourResponseType | CreateTourResponseType | UpdateTourResponseType>
+  res: NextApiResponse<GetTourResponseType | CreateTourResponseType | UpdateTourResponseType | DeleteTourResponseType>
 ) {
   // Checks JWT token.
   const token = await getToken({req});
@@ -44,22 +52,30 @@ export default async function handler(
 
   if (req.method === "GET") {
     const { query } = req.query;
-  
+    console.log(query)
+
     // Error: Email was not received.
-    if (typeof query === "string") {
+    if (typeof query === "string" && query != "") {
       const tours = await prisma.tour.findMany({
         where: {
-          OR: [
+          AND: [
             {
-              tourTitle: {
-                contains: query,
-              }
+              tourAuthorId: token.id,
             },
-            { 
-              tourDescription: {
-                contains: query,
-              },
-            },
+            {
+              OR: [
+                {
+                  tourTitle: {
+                    contains: query,
+                  }
+                },
+                { 
+                  tourDescription: {
+                    contains: query,
+                  },
+                },
+              ],
+            }
           ],
         }
       });
@@ -67,7 +83,9 @@ export default async function handler(
       res.status(200).json({ tours });
     } else {
       const tours = await prisma.tour.findMany({
-        where: {}
+        where: {
+          tourAuthorId: token.id,
+        }
       })
   
       res.status(200).json({ tours });
@@ -92,9 +110,10 @@ export default async function handler(
     if (!tourId)
       return res.status(400).json({ error: "Tour ID cannot be blank." })
 
-    const tour = await prisma.tour.update({
+    const tour = await prisma.tour.updateMany({
       where: {
         id: tourId,
+        tourAuthorId: token.id,
       },
       data: {
         tourTitle: name,
@@ -109,14 +128,13 @@ export default async function handler(
   else if (req.method === "DELETE") {
     const { tourId } = req.body;
 
-    console.log(tourId);
-
     if (!tourId)
       return res.status(400).json({ error: "Tour ID cannot be blank." });
 
-    const tour = await prisma.tour.delete({
+    const tour = await prisma.tour.deleteMany({
       where: {
         id: tourId,
+        tourAuthorId: token.id,
       }
     })
 

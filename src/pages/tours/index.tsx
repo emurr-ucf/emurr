@@ -7,7 +7,7 @@ import { Tour } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { prisma } from "../../lib/prisma";
 import { CreateTourResponseType } from '../api/tour';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
@@ -32,6 +32,10 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
         setTours(resJSON.tours);
     }, 500)
   }
+
+  useEffect(() => {
+    queryTours();
+  }, [query]);
 
   return (
     <>
@@ -72,10 +76,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                 <input
                   type="text"
                   placeholder="Search by Title, Tour Pack, or Page Contents"
-                  onChange={(event) => {
-                    setQuery(event.target.value);
-                    queryTours();
-                  }}
+                  onChange={(event) => setQuery(event.target.value)}
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
