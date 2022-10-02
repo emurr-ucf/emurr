@@ -15,9 +15,6 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
   const [query, setQuery] = useState("");
   let timer: NodeJS.Timeout;
 
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") Router.push("/");
-
   const queryTours = () => {
     clearTimeout(timer);
 
@@ -36,6 +33,9 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
   useEffect(() => {
     queryTours();
   }, [query]);
+
+  if (status === "loading") return <div>Loading...</div>;
+  if (status === "unauthenticated") Router.push("/");
 
   return (
     <>
