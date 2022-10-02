@@ -316,4 +316,4 @@ const AboutPage: NextPage = () => {
   )
 }
 
-export default AboutPage
+export default AboutPage;

@@ -40,6 +40,11 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
   ],
+  variants: {
+    extend: {
+      display: ["group-hover"],
+    },
+  },
   darkMode: ['class', '[data-mode="dark"]'],
   } 
 }
