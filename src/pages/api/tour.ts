@@ -52,7 +52,6 @@ export default async function handler(
 
   if (req.method === "GET") {
     const { query } = req.query;
-    console.log(query)
 
     // Error: Email was not received.
     if (typeof query === "string" && query != "") {
