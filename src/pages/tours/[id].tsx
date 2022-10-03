@@ -1,8 +1,11 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Document from "@tiptap/extension-document";
+import Heading from "@tiptap/extension-heading";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
 import CharacterCount from "@tiptap/extension-character-count";
 import Highlight from "@tiptap/extension-highlight";
-import Heading from "@tiptap/extension-heading";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
@@ -35,11 +38,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Document,
+      Paragraph,
+      Text,
       CharacterCount,
       Underline,
       Highlight.configure({ multicolor: true }),
       Heading.configure({
-        levels: [1, 2, 3],
+        levels: [1, 2],
       }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
