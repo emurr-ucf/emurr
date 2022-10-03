@@ -16,7 +16,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           title="Bold"
           className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
         >
-          B
+          <img src="/images/bold.svg" alt="bold" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
         <button
@@ -27,7 +27,18 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           title="Italic"
           className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
         >
-          <em>I</em>
+          <img src="/images/italic.svg" alt="italic" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.toggleUnderline();
+            editor?.commands.focus();
+          }}
+          title="Underline"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/underline.svg" alt="underline" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
         <button
@@ -38,7 +49,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           title="Strike"
           className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
         >
-          <s>S</s>
+          <img src="/images/strikethrough.svg" alt="strikethrough" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
         <button
