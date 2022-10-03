@@ -17,6 +17,7 @@
 /out/
 
 /websites/dump/
+/websites
 
 # production
 /build
