@@ -4,6 +4,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 import Highlight from "@tiptap/extension-highlight";
 import Heading from "@tiptap/extension-heading";
 import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useState } from "react";
 import { Navbar } from "../../components/Navbar";
@@ -39,6 +40,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Highlight.configure({ multicolor: true }),
       Heading.configure({
         levels: [1, 2, 3],
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        // alignments: ["left", "center", "right", "justify"],
       }),
     ],
     editorProps: {

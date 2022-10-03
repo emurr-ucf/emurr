@@ -76,6 +76,50 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
         <div className="border-x border-green-900" />
         <button
           onClick={() => {
+            editor?.commands.setTextAlign("left");
+            editor?.commands.focus();
+          }}
+          title="Left align"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/align-left.svg" alt="align left" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.setTextAlign("center");
+            editor?.commands.focus();
+          }}
+          title="Center align"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/align-center.svg" alt="align center" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.setTextAlign("right");
+            editor?.commands.focus();
+          }}
+          title="Right align"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/align-right.svg" alt="align right" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.setTextAlign("justify");
+            editor?.commands.focus();
+          }}
+          title="Justify"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/align-justify.svg" alt="align justify" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
             editor?.commands.toggleHeading({ level: 1 });
             editor?.commands.focus();
           }}
