@@ -11,7 +11,16 @@ export interface UpdatePageRequestType {
 
 export interface UpdatePageResponseType {
   error?: string;
-  tour?: Tour;
+  tour?: {
+    tourPages: {
+        id: string;
+        title: string;
+        published: boolean;
+    }[];
+    id: string;
+    tourTitle: string;
+    tourDescription: string | null;
+  } | null;
 }
 
 export default async function handler(
