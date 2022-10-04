@@ -7,7 +7,7 @@ interface TourSiteCardProps {
 
 export const EditorMenu = ({ editor }: TourSiteCardProps) => {
   const addImage = useCallback(() => {
-    const url = window.prompt("URL");
+    const url = window.prompt("Enter image URL");
 
     if (url) {
       editor?.chain().focus().setImage({ src: url }).run();

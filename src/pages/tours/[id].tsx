@@ -76,14 +76,6 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     },
   });
 
-  const addImage = useCallback(() => {
-    const url = window.prompt("URL");
-
-    if (url) {
-      editor?.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
-
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
   return (
