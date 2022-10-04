@@ -1,10 +1,19 @@
 import { Editor } from "@tiptap/react";
+import { useCallback } from "react";
 
 interface TourSiteCardProps {
   editor: Editor | null;
 }
 
 export const EditorMenu = ({ editor }: TourSiteCardProps) => {
+  const addImage = useCallback(() => {
+    const url = window.prompt("URL");
+
+    if (url) {
+      editor?.chain().focus().setImage({ src: url }).run();
+    }
+  }, [editor]);
+
   return (
     <>
       <div className="flex border-x border-t rounded-tr-md border-green-800 bg-background-400">
@@ -195,7 +204,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           <img src="/images/arrow-go-forward-line.svg" alt="arrow-go-forward" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
-        <button title="Insert image" className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out">
+        <button onClick={addImage} title="Insert image" className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out">
           <img src="/images/image-line.svg" alt="image" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
