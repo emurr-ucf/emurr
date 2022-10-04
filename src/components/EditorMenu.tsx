@@ -60,7 +60,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           title="Code"
           className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
         >
-          &lt; &gt;
+          <img src="/images/code-box-line.svg" alt="code block" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
         <button
@@ -153,7 +153,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
         <div className="border-x border-green-900" />
         <button
           onClick={() => {
-            editor?.commands.toggleHeading({ level: 2 });
+            editor?.commands.toggleOrderedList();
             editor?.commands.focus();
           }}
           title="Ordered List"
@@ -171,17 +171,6 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
         >
           <img src="/images/double-quotes-l.svg" alt="double-quotes" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 2 });
-            editor?.commands.focus();
-          }}
-          title="Clear Format"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/format-clear.svg" alt="format-clear" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
         <button

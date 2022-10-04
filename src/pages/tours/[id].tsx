@@ -1,13 +1,18 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Document from "@tiptap/extension-document";
-import Heading from "@tiptap/extension-heading";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import CharacterCount from "@tiptap/extension-character-count";
-import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
+import Heading from "@tiptap/extension-heading";
+import BulletList from "@tiptap/extension-bullet-list";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
+import Blockquote from "@tiptap/extension-blockquote";
+import History from "@tiptap/extension-history";
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useState } from "react";
 import { Navbar } from "../../components/Navbar";
@@ -17,6 +22,7 @@ import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { EditorMenu } from "../../components/EditorMenu";
+import React from "react";
 
 interface PageType {
   page: Page;
@@ -49,8 +55,12 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
-        // alignments: ["left", "center", "right", "justify"],
       }),
+      BulletList,
+      OrderedList,
+      ListItem,
+      Blockquote,
+      // History,
     ],
     editorProps: {
       attributes: {
