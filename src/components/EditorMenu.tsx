@@ -195,6 +195,10 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           <img src="/images/arrow-go-forward-line.svg" alt="arrow-go-forward" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
+        <button title="Insert image" className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out">
+          <img src="/images/image-line.svg" alt="image" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
       </div>
     </>
   );
