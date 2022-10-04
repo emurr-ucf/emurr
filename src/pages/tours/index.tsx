@@ -6,21 +6,36 @@ import Router from 'next/router';
 import { Tour } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { prisma } from "../../lib/prisma";
+import { CreateTourResponseType } from '../api/tour';
+import { useEffect, useState } from 'react';
 
-const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
+  const [tours, setTours] = useState(propTours);
+  const [query, setQuery] = useState("");
+  let timer: NodeJS.Timeout;
 
-  if (status === "loading") {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    )
+  const queryTours = () => {
+    clearTimeout(timer);
+
+    timer = setTimeout(async () => {
+      const res = await fetch(`/api/tour?query=${query}`, {
+        method: "GET"
+      })
+
+      const resJSON = await res.json();
+
+      if (resJSON)
+        setTours(resJSON.tours);
+    }, 500)
   }
 
-  if (status === "unauthenticated") {
-    Router.push("/");
-  }
+  useEffect(() => {
+    queryTours();
+  }, [query]);
+
+  if (status === "loading") return <div>Loading...</div>;
+  if (status === "unauthenticated") Router.push("/");
 
   return (
     <>
@@ -28,7 +43,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
         <Navbar 
           page="dashboard"
         />
-        <div className="flex w-full h-full mt-16 align-center justify-center">
+        <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
               <div>
@@ -36,17 +51,23 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
               </div>
               <button
                 onClick={async () => {
-                  const res = await fetch("/api/user/editUser", {
-                  method: "POST",
-                  body: JSON.stringify({ test: "test" })
-                  })
-                  const val = res.json();
+                  const file = new File([], "blank.html");
+                  const formData = new FormData();
+                  formData.append("file", file);
 
-                  console.log(session?.user.id);
+                  const res = await fetch("/api/tour", {
+                    method: "POST",
+                    body: formData,
+                  });
+                  
+                 const body: CreateTourResponseType = await res.json();
+
+                  if (!body.error)
+                    Router.push(`/tours/${body.tourId}`);
               }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >
-                Create New Page +
+                Create New Tour +
               </button>
             </div>
             <div className="flex justify-between">
@@ -55,6 +76,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
                 <input
                   type="text"
                   placeholder="Search by Title, Tour Pack, or Page Contents"
+                  onChange={(event) => setQuery(event.target.value)}
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
@@ -75,6 +97,7 @@ const DashboardPage: NextPage = ({ tours }: InferGetServerSidePropsType<typeof g
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
               {tours.map((tour: Tour) => {
                 return <TourSiteCard
+                  id={tour.id}
                   key={tour.id}
                   title={tour.tourTitle}
                   description={tour.tourDescription ? tour.tourDescription : "No description..."}
@@ -92,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const token = await getToken(context);
 
   if (token) {
-    const tours = await prisma.tour.findMany({
+    const propTours = await prisma.tour.findMany({
       where: {
         tourAuthorId: token.id,
       },
@@ -101,15 +124,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         tourTitle: true,
         tourDescription: true,
       }
-    })
+    });
   
     return {
-      props: { tours }
+      props: { propTours }
     }
   }
 
   return {
-    props: {  }
+    props: { propTours: [] }
   }
 }
 

@@ -32,13 +32,7 @@ export default async function handler(
 
   } else if (req.method == "POST") {
 
-    const newUser: HelloPostRequest = req.body;
-
-    if (newUser) {
-      await prisma.user.create({ data: newUser });
-      res.status(204).json({});
-    } else {
-      res.status(400).json({ error: "Could not create user." })
-    }
+    console.log(req.body);
+    res.status(200).json({})
   }
 }

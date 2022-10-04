@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
 import { prisma } from '../../lib/prisma';
+import { returnTour } from '../../lib/returnTour';
 import multer from 'multer';
 import fs from 'fs'
+import { Page, Tour } from "@prisma/client";
 
 // Post API Inputs.
 export interface PostFileRequestType {
@@ -13,6 +15,8 @@ export interface PostFileRequestType {
 // Post API Output.
 export interface PostFileResponseType {
     error?: string;
+    newPage?: Page;
+    tour?: Tour;
 }
 
 // Put API Inputs.
@@ -54,8 +58,9 @@ export default async function handler (
         if (typeof tourId != "string") return res.status(400).json({ error: "Please send a tour ID." });
         
         // Creates a new page instance in the database.
-        const pageData = {title: "", authorId: token.id, tourId};
+        const pageData = {title: "Untitled", authorId: token.id, tourId};
         const savedPage = await prisma.page.create({data: pageData});
+        const tour = await returnTour(tourId, token.id);
 
         if(savedPage) {
             const destination = "./websites/" + tourId; 
@@ -69,12 +74,14 @@ export default async function handler (
             });
 
             // Creates page.
+            /// @ts-ignore-start
             createPage.any() (req, res, () => {});
+            // @ts-ignore-end
 
-            return res.status(200).json({ error: "Page created." });
+            return res.status(200).json({ tour });
         }
         else
-            return res.status(200).json({ error: "Page could not be created." });
+            return res.status(400).json({ error: "Page could not be created." });
     } 
     
     // Updates a page.
@@ -95,7 +102,9 @@ export default async function handler (
             });
 
         // Replaces page in new position.
+        /// @ts-ignore-start
         updatedPage.any() (req, res, () => {});
+        // @ts-ignore-end
 
         // Updates the last modified date.
         const updatePage = await prisma.page.update({
@@ -116,14 +125,33 @@ export default async function handler (
     // Gets file.
     if (req.method === "GET") {
         const { tourId, pageId } = req.query;
-        if (typeof tourId != "string" || typeof pageId != "string") 
-            return res.status(400).json({ error: "Page ID and Tour ID cannot be blank." });
 
+        if (!pageId && typeof tourId === "string") {
+            const pages = await prisma.page.findMany({
+                where: {
+                    authorId: token.id,
+                    tourId,
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    published: true,
+                    comments: true,
+                }
+            });
+
+            res.status(200).json({ tours: pages })
+
+        } else if (typeof tourId != "string" || typeof pageId != "string") {
+            return res.status(400).json({ error: "Page ID and Tour ID cannot be blank." });
+        }
+        
         // Returns file.
         const path = "./websites/" + tourId + "/" + pageId + ".html";
         const file = fs.createReadStream(path)
         res.setHeader('Content-Disposition', 'attachement; filename="' + pageId + '.html"')
-        file.pipe(res)
+        file.pipe(res);
+        
     }
 }
 
