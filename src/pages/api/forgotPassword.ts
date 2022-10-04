@@ -73,9 +73,9 @@ export default async function handler (
             }
         })
         if (user)
-            return res.status(200).json({error: ""});
+            return res.status(200).json({});
         else
-            return res.status(200).json({error: "Could not send forgot password request."});
+            return res.status(409).json({error: "Could not send forgot password request."});
     }
 
     if (req.method === "PUT") {
@@ -107,8 +107,8 @@ export default async function handler (
         })
         
         if (user)
-            return res.status(200).json({error: ""});
+            return res.status(200).json({});
         else
-            return res.status(200).json({error: "Could not change password."})
+            return res.status(409).json({error: "Could not change password."})
     }
 }

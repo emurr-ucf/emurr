@@ -27,7 +27,6 @@ export interface PostUserResponseType {
 export interface PutUserRequestType {
     firstName: string;
     lastName: string;
-    email: string;
 }
 
 // Put API Outputs.
@@ -64,7 +63,7 @@ export default async function handler (
             },
         })
         if(user)
-            return res.status(400).json({ error: "User already exists." });
+            return res.status(409).json({ error: "User already exists." });
 
         // Error: Not all fields are filled out.
         if(!firstName || !lastName || !password)
@@ -109,21 +108,20 @@ export default async function handler (
         // Save New User.
         const userData = {name: firstName, lastName, email, password:hashedPass, verifyEmail:false, emailToken: emailTok, resPassword:0, resPassToken:''};
         const savedUser = await prisma.user.create({data:userData});
-        return res.status(200).json({error: ""});
+        if (savedUser)
+            return res.status(200).json({});
+        else
+            return res.status(409).json({ error: "User was not registered." });
     } 
     
     // Updates user information.
     if (req.method === "PUT") {
         // Checks JWT token.
-        // const token = await getToken({req});
-        // if (!token)
-        //     return res.status(401).json({ error: "User is not logged in." });
+        const token = await getToken({req});
+        if (!token)
+            return res.status(401).json({ error: "User is not logged in." });
 
-        const { firstName, lastName, email } = req.body;
-
-        // Error: Email was not received.
-        if(!email) 
-            return res.status(400).json({ error: "Email was not recieved." });
+        const { firstName, lastName } = req.body;
 
         // Error: Not all fields are filled out.
         if(!firstName || !lastName)
@@ -137,7 +135,7 @@ export default async function handler (
 
         const user = await prisma.user.update({
             where: {
-                email,
+                email:token.email,
             },
             data: {
                 name: firstName,
@@ -145,34 +143,28 @@ export default async function handler (
             }
         })
         if(user)
-            return res.status(200).json({error: ""});
+            return res.status(200).json({});
         else
-            return res.status(200).json({error: "Could not update information"})
+            return res.status(409).json({error: "Could not update information"})
     }
 
     // Deletes a user.
     if (req.method === "DELETE") {
         // Checks JWT token.
-        // const token = await getToken({req});
-        // if (!token)
-        //     return res.status(401).json({ error: "User is not logged in." });
+        const token = await getToken({req});
+        if (!token)
+            return res.status(401).json({ error: "User is not logged in." });
         
-        const { userID } = req.body;
-
-        // Error: UserID is not valid.
-        if (!userID || typeof userID != "string")
-            return res.status(401).json({ error: "UserID is not a string." });
-
         // Deletes a user.
         const deleteUser = await prisma.user.delete({
             where: {
-                id: userID,
+                id: token.id,
             },
         });
 
         if (deleteUser)
-            return res.status(200).json({ error: "User deleted." });
+            return res.status(200).json({});
         else
-            return res.status(200).json({ error: "User was not deleted." });
+            return res.status(409).json({ error: "User was not deleted." });
     }
 }
