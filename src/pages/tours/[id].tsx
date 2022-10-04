@@ -13,6 +13,7 @@ import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Blockquote from "@tiptap/extension-blockquote";
 import History from "@tiptap/extension-history";
+import Image from "@tiptap/extension-image";
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useState } from "react";
 import { Navbar } from "../../components/Navbar";
@@ -22,7 +23,7 @@ import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { EditorMenu } from "../../components/EditorMenu";
-import React from "react";
+import React, { useCallback } from "react";
 
 interface PageType {
   page: Page;
@@ -61,6 +62,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       ListItem,
       Blockquote,
       // History,
+      Image,
     ],
     editorProps: {
       attributes: {
@@ -73,6 +75,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       setWordCount(editor?.storage.characterCount.words());
     },
   });
+
+  const addImage = useCallback(() => {
+    const url = window.prompt("URL");
+
+    if (url) {
+      editor?.chain().focus().setImage({ src: url }).run();
+    }
+  }, [editor]);
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
