@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 export interface NavbarProps {
   page?: string;
+  children?: JSX.Element;
 }
 
 export const Navbar = (props: NavbarProps) => {
@@ -19,22 +20,28 @@ export const Navbar = (props: NavbarProps) => {
           <div className="flex justify-between h-auto py-2 px-10">
             <div className="flex flex-row justify-center items-center gap-4">
               <img
-                src="/images/logo_vert_5.png"
-                alt="An SVG of the Emurr Logo"
-                className="w-10 h-10"
-              />
-              <div className="text-2xl font-semibold">
-                EMURR
-              </div>
+                  src="/images/logo_vert_5.png"
+                  alt="An SVG of the Emurr Logo"
+                  className="w-10 h-10"
+                />
+              {props.children ? 
+              props.children
+              :
+              <>
+                <div className="text-2xl font-semibold">
+                  EMURR
+                </div>
+              </>
+              }
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
               <div className={`py-1 px-2 rounded-md ${props.page === "dashboard" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                <Link href="/dashboard">
+                <Link href="/tours">
                   dashboard
                 </Link>
               </div>
               <div className={`py-1 px-2 rounded-md ${props.page === "profile" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                <Link href="/profilepage">
+                <Link href="/profile">
                   profile
                 </Link>
               </div>
@@ -43,7 +50,7 @@ export const Navbar = (props: NavbarProps) => {
                   onClick={so}
                   className="flex justify-center items-center"
                 >
-                  <img src={session?.user.image ? session?.user.image : "images/google.png"} 
+                  <img src={session?.user.image ? session?.user.image : "images/google.png"}
                     className="w-7 h-7 rounded-full cursor-pointer"
                   />
                 </button>
