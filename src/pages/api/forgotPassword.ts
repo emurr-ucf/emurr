@@ -28,16 +28,17 @@ export default async function handler (
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if ( req.method === "POST") {
+    if (req.method === "POST") {
         const { email } = req.body;
 
-        // Error: Email was not recieved.
-        if (!email)
-            return res.status(400).json({error: "Email was not recieved."});
+        // Error: Not a valid email.
+        if(!email || (typeof email != 'string') || (!email.includes('@')) || (!email.includes('.')))
+            return res.status(400).json({error: "Please input a valid email."});
 
         // If All Checks are Passed.
+        
         // Send Verification Email.
-        // Creates a Random String.
+        // Creates a random string.
         var passwordTok = generateRandString();
         
         // Sends the Verification Email.
@@ -62,7 +63,7 @@ export default async function handler (
                     console.error(error)
                 })
         
-        // Insert Token into the Database.
+        // Insert Token in Database.
         const user = await prisma.user.update({
             where: {
                 email,
@@ -85,15 +86,15 @@ export default async function handler (
         if (!resPassToken)
             res.status(400).json({error: "No token was sent."});
     
-        // Error: Password was not recieved.
-        if (!newPassword)
-            res.status(400).json({error: "No password was recieved."});
+        // Error: Password is not valid.
+        if (!newPassword || (typeof newPassword !== 'string'))
+            res.status(400).json({error: "Please input a valid password."});
     
         // If All Checks are Passed.
-        // Hash Password.
+        // Hash password.
         const hashedPass = hashPass(newPassword);
     
-        // Update Database with New Password.
+        // Put New Password in Database.
         const user = await prisma.user.updateMany({
             where: {
                 resPassToken,
