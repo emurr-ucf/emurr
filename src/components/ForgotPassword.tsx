@@ -7,7 +7,7 @@ interface ForgotPasswordProps {
 export const ForgotPassword = (props: ForgotPasswordProps) => {
   return (
     <>
-      <form action="/api/forgot-password" method="POST" className="flex flex-col w-64 gap-6">
+      <form action="/api/forgotPassword" method="POST" className="flex flex-col w-64 gap-6">
         <div className="text-3xl">
           Forgot Password
         </div>
