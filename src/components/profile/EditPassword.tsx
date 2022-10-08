@@ -14,7 +14,7 @@ export const EditPassword = () => {
   
 	return (
 	  <>
-	    <Box image="/images/key.png" title="Edit password" description="Edit your login password" action="" onClick={handleShow} />
+	    <Box image="/images/profile/shield.svg" title="Edit password" description="Edit your login password" action="" onClick={handleShow} />
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Edit password</Modal.Title>

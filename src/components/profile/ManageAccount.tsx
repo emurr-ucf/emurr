@@ -14,7 +14,7 @@ export const ManageAccount = () => {
   
 	return (
 	  <>
-	    <Box image="/images/key.png" title="Manage account" description="Edit or delete your account" action="" onClick={handleShow} />
+	    <Box image="/images/profile/write.svg" title="Manage account" description="Edit or delete your account" onClick={handleShow} />
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Manage account</Modal.Title>

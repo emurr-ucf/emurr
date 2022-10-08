@@ -1,20 +1,65 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 import { Box } from '../Box';
+import { useSession } from 'next-auth/react';
 
 export const EditProfile = () => {
+	const { data: session, status } = useSession();
+
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+
 	const [show, setShow] = useState(false);
-	const handleShow = () => setShow(true);
+	const handleShow = async () => {
+		setShow(true);
+		
+		// TODO loading screen while awaiting api call
+		const res = await fetch('/api/user/getUser', {
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify({
+				email: session?.user.email || "",
+			})
+		})
+		const json = await res.json();
+
+		if (json.error) {
+			alert(json.error);
+			return;
+		}
+
+		setFirstName(json.user.name || "");
+		setLastName(json.user.lastName || "");
+	};
+
 	const handleClose = () => setShow(false);
-	const handleSave = () => {
-		// TODO make a request and show response
-		alert("Submitted");
-		setShow(false);
+	const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		console.log({firstName, lastName});
+
+		const res = await fetch('/api/user/editUser', {
+			method: "POST",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify({
+				firstName,
+				lastName,
+			})
+		});
+
+		const json = await res.json();
+		if (json.error) {
+			alert(json.error);
+		}
+		else {
+			alert("Updated!");
+			setShow(false);
+		}
 	}
   
 	return (
 	  <>
-	    <Box image="/images/key.png" title="Edit profile" description="Edit your profile information, such as your name and profile picture" action="" onClick={handleShow} />
+	    <Box image="/images/profile/profile.svg" title="Edit profile" description="Edit your profile information, such as your name and profile picture" onClick={handleShow} />
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Edit profile</Modal.Title>
@@ -36,12 +81,16 @@ export const EditProfile = () => {
 					<input 
 						type="text"
 						placeholder='First name'
+						defaultValue={firstName}
 						className="h-12 appearance-none border border-brown rounded px-3"
+						onChange={(e) => setFirstName(e.target.value)}
 					/>
 					<input 
 						type="text"
 						placeholder='Last name'
+						defaultValue={lastName}
 						className="h-12 appearance-none border border-brown rounded px-3"
+						onChange={(e) => setLastName(e.target.value)}
 					/>
 					<div className="flex justify-center">
 						<button
