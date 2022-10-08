@@ -5,15 +5,17 @@ import { useSession } from 'next-auth/react';
 
 export const EditProfile = () => {
 	const { data: session, status } = useSession();
-
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
-
 	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	
 	const handleShow = async () => {
 		setShow(true);
-		
-		// TODO loading screen while awaiting api call
+
+		// TODO consider loading screen while awaiting api call
+		// TODO consider making lastName information part of session information
 		const res = await fetch('/api/user/getUser', {
 			method: "POST",
 			headers: {"Content-Type": "application/json"},
@@ -32,11 +34,8 @@ export const EditProfile = () => {
 		setLastName(json.user.lastName || "");
 	};
 
-	const handleClose = () => setShow(false);
 	const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-
-		console.log({firstName, lastName});
 
 		const res = await fetch('/api/user/editUser', {
 			method: "POST",
@@ -49,10 +48,10 @@ export const EditProfile = () => {
 
 		const json = await res.json();
 		if (json.error) {
-			alert(json.error);
+			alert(json.error); // TODO improve interface
 		}
 		else {
-			alert("Updated!");
+			alert("Updated!"); // TODO improve interface
 			setShow(false);
 		}
 	}
