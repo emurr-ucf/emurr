@@ -1,8 +1,7 @@
 import { Prisma, Tour } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
-import { prisma } from '../../lib/prisma'
-import multer from 'multer';
+import { prisma } from '../../lib/prisma';
 
 // API Inputs.
 export interface GetTourRequestType {

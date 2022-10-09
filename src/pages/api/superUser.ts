@@ -40,18 +40,18 @@ export default async function handler (
     // Checks JWT token.
     const token = await getToken({req});
     if (!token)
-        return res.status(401).json({ error: "User is not logged in." });
+        return res.status(401).json({error: "User is not logged in."});
 
-    // Updates role to user.
+    // Updates Role to Admin.
     if (req.method === "POST") {
         const { userID } = req.body;
 
         // Error: UserID is not valid.
-        if (!userID || typeof userID != "string")
-            return res.status(400).json({ error: "UserID is not valid." });
+        if (!userID || typeof userID !== "string")
+            return res.status(400).json({error: "UserID is not valid."});
 
-        if (token.role == "ADMIN") {
-            // If role is admin, update role to admin.
+        if (token.role === "ADMIN") {
+            // If role is admin, update users role to admin.
             const updateUserRole = await prisma.user.update({
                 where: {
                     id: userID,
@@ -64,22 +64,22 @@ export default async function handler (
             if (updateUserRole)
                 return res.status(200).json({});
             else
-                return res.status(409).json({ error: "Role was not updated." });
+                return res.status(409).json({error: "Role was not updated."});
         }
         else
-            return res.status(401).json({ error: "User is not an admin." });
+            return res.status(401).json({error: "User is not an admin."});
     } 
     
-    // Updates role to user.
+    // Updates Role to User.
     if (req.method === "PUT") {
         const { userID } = req.body;
 
         // Error: UserID is not valid.
-        if(!userID || typeof userID != "string")
-            return res.status(400).json({ error: "UserID is not valid." });
+        if(!userID || typeof userID !== "string")
+            return res.status(400).json({error: "UserID is not valid."});
 
-        if (token.role == "ADMIN") {
-            // If role is admin, update role to user.
+        if (token.role === "ADMIN") {
+            // If role is admin, update users role to user.
             const updateUserRole = await prisma.user.update({
                 where: {
                     id: userID,
@@ -92,22 +92,22 @@ export default async function handler (
             if (updateUserRole)
                 return res.status(200).json({});
             else
-                return res.status(409).json({ error: "Role was not updated." });
+                return res.status(409).json({error: "Role was not updated."});
         }
         else
-            return res.status(401).json({ error: "User is not an admin." });
+            return res.status(401).json({error: "User is not an admin."});
     }
 
     // Deletes either a tour or user.
     if (req.method === "DELETE") {
         const { tourID, userID } = req.body;
 
-        if (token.role == "ADMIN") {
+        if (token.role === "ADMIN") {
             // If a tour id is sent, the tour is deleted.
             if (tourID) {
                 // Error: TourID is not a string.
-                if(typeof tourID != "string")
-                    return res.status(400).json({ error: "TourID is not a string." });
+                if(typeof tourID !== "string")
+                    return res.status(400).json({error: "TourID is not a string."});
 
                 // Deletes a tour.
                 const deleteTour = await prisma.tour.delete({
@@ -125,8 +125,8 @@ export default async function handler (
             // If a user id is sent, the user is deleted.
             if(userID) {
                 // Error: UserID is not valid.
-                if(typeof userID != "string" )
-                    return res.status(400).json({ error: "UserID is not a string." });
+                if(typeof userID !== "string" )
+                    return res.status(400).json({error: "UserID is not a string."});
 
                 // Deletes a user.
                 const deleteUser = await prisma.user.delete({
@@ -138,13 +138,13 @@ export default async function handler (
                 if (deleteUser)
                     return res.status(200).json({});
                 else
-                    return res.status(409).json({ error: "User was not deleted." });
+                    return res.status(409).json({error: "User was not deleted."});
             }
             
             // Error: TourID or UserID were sent. 
-            return res.status(400).json({ error: "TourID or UserID were not sent." });
+            return res.status(400).json({error: "TourID or UserID were not sent."});
         }
         else
-            return res.status(401).json({ error: "User is not an admin." });
+            return res.status(401).json({error: "User is not an admin."});
     }
 }
