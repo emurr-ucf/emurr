@@ -14,7 +14,7 @@ export const EditLogin = () => {
   
 	return (
 	  <>
-	    <Box image="/images/profile/mail.svg" title="Edit email" description="Edit your login email" action="" onClick={handleShow} />
+	    <Box image="/images/profile/mail.svg" title="Edit email" description="Edit your login email" onClick={handleShow} />
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Edit email</Modal.Title>
