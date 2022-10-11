@@ -1,19 +1,29 @@
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+// The below extensions are included on StarterKit
+import Blockquote from "@tiptap/extension-blockquote";
+import BulletList from "@tiptap/extension-bullet-list";
+import CodeBlock from "@tiptap/extension-code-block";
 import Document from "@tiptap/extension-document";
+import HardBreak from "@tiptap/extension-hard-break";
+import Heading from "@tiptap/extension-heading";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
+import Bold from "@tiptap/extension-bold";
+import Code from "@tiptap/extension-code";
+import Italic from "@tiptap/extension-italic";
+import Strike from "@tiptap/extension-strike";
+// End of StarterKit extensions
+// Additional Extensions
 import CharacterCount from "@tiptap/extension-character-count";
 import Underline from "@tiptap/extension-underline";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
-import Heading from "@tiptap/extension-heading";
-import BulletList from "@tiptap/extension-bullet-list";
-import ListItem from "@tiptap/extension-list-item";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Blockquote from "@tiptap/extension-blockquote";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
+// End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useState } from "react";
 import { Navbar } from "../../components/Navbar";
@@ -44,7 +54,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      CodeBlock,
+      Bold,
+      Code,
+      Italic,
+      Strike,
       Document,
       Paragraph,
       Text,
@@ -66,7 +80,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     ],
     editorProps: {
       attributes: {
-        class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+        class: "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
