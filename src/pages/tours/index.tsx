@@ -9,10 +9,21 @@ import { prisma } from "../../lib/prisma";
 import { CreateTourResponseType } from '../api/tour';
 import { useEffect, useState } from 'react';
 
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import React from 'react'
+import { title } from 'process';
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
+
 const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
   const [tours, setTours] = useState(propTours);
   const [query, setQuery] = useState("");
+  const [sortQuery, setSortQuery] = useState("");
   let timer: NodeJS.Timeout;
 
   const queryTours = () => {
@@ -30,9 +41,30 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
     }, 500)
   }
 
+  const sortQueryTours = () => {
+    if(sortQuery)
+      document.getElementById("sortVariable")!.innerHTML = sortQuery
+
+    clearTimeout(timer);
+
+    timer = setTimeout(async () => {
+      const res = await fetch(`/api/tour?sortQuery=${sortQuery}`, {
+        method: "GET"
+      })
+      const resJSON = await res.json();
+
+      if (resJSON)
+        setTours(resJSON.tours);
+    }, 500)
+  }
+
   useEffect(() => {
     queryTours();
   }, [query]);
+
+  useEffect(() => {
+    sortQueryTours();
+  },[sortQuery])
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
@@ -80,19 +112,50 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
-              <button className="flex items-center justify-between w-36 border border-green-800 shadow-md rounded-md px-2 text-black bg-white text-base hover:bg-slate-200 transition ease-in-out delay-50">
-                <div className="flex justify-center gap-2">
-                  <div className="font-bold">
-                    Sort By:
-                  </div>
-                  <div>
-                    nil
-                  </div>
+              <Menu as="div" className="relative inline-block text-left">
+                <div>
+                    <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                        <div className="font-bold">
+                            Sort By: <span id="sortVariable"></span> ▾ 
+                        </div> 
+                    </Menu.Button>
                 </div>
-                <div className="text-slate-300">
-                  ▼
-                </div>
-              </button>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                            <form onClick={(event) => setSortQuery(' ')}>
+                                <Menu.Item>
+                                {({ active }) => (
+                                    <a href="#" className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm')}>None</a>
+                                )}
+                                </Menu.Item>
+                            </form>
+                            <form onClick={(event) => setSortQuery('Title')}>
+                                <Menu.Item>
+                                {({ active }) => (
+                                    <a href="#" className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm')}>Title</a>
+                                )}
+                                </Menu.Item>
+                            </form>
+                            <form onClick={(event) => setSortQuery('Date')}>
+                                <Menu.Item>
+                                {({ active }) => (
+                                    <a href="#" className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm')}>Date Created</a>
+                                )}
+                                </Menu.Item>
+                            </form>
+                        </div>
+                    </Menu.Items>
+                </Transition>
+              </Menu>
             </div>
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
               {tours.map((tour: Tour) => {
