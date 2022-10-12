@@ -74,7 +74,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
         <div className="border-x border-green-900" />
         <button
           onClick={() => {
-            editor?.commands.toggleHighlight();
+            editor?.commands.toggleHighlight({ color: "#f1e740" });
             editor?.commands.focus();
           }}
           title="Highlight"
@@ -147,6 +147,50 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
           className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
         >
           <img src="/images/h-2.svg" alt="h-2" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.toggleHeading({ level: 3 });
+            editor?.commands.focus();
+          }}
+          title="Heading 3"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/h-3.svg" alt="h-3" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.toggleHeading({ level: 4 });
+            editor?.commands.focus();
+          }}
+          title="Heading 4"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/h-4.svg" alt="h-4" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.toggleHeading({ level: 5 });
+            editor?.commands.focus();
+          }}
+          title="Heading 5"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/h-5.svg" alt="h-5" className="w-5 h-5 m-2" />
+        </button>
+        <div className="border-x border-green-900" />
+        <button
+          onClick={() => {
+            editor?.commands.toggleHeading({ level: 6 });
+            editor?.commands.focus();
+          }}
+          title="Heading 6"
+          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
+        >
+          <img src="/images/h-6.svg" alt="h-6" className="w-5 h-5 m-2" />
         </button>
         <div className="border-x border-green-900" />
         <button
