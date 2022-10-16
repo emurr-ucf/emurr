@@ -25,7 +25,7 @@ export default NextAuth({
 			// Credentials needed.
 			credentials: {
 				email: { label: "Email", type: "text", placeholder: "email@email.com" },
-				password: {  label: "Password", type: "password", placeholder: "Password..." }
+				password: {  label: "Password", type: "password", placeholder: "Password..." },
 			},
 			async authorize(credentials, req) {
 				// API Request.
