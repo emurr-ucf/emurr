@@ -60,70 +60,66 @@ export default async function handler(
     const { query, sortQuery } = req.query;
 
     // If a query is sent, tours that contain that query are searched.
-    if (query) {
-      if (typeof query === "string") {
-        // Searches database for tour titles or descriptions that contain the search value.
-        const tours = await prisma.tour.findMany({
-          where: {
-            AND: [
-              {
-                tourAuthorId: token.id,
-              },
-              {
-                OR: [
-                  {
-                    tourTitle: {
-                      contains: query,
-                    }
+    if (typeof query === "string") {
+      // Searches database for tour titles or descriptions that contain the search value.
+      const tours = await prisma.tour.findMany({
+        where: {
+          AND: [
+            {
+              tourAuthorId: token.id,
+            },
+            {
+              OR: [
+                {
+                  tourTitle: {
+                    contains: query,
+                  }
+                },
+                { 
+                  tourDescription: {
+                    contains: query,
                   },
-                  { 
-                    tourDescription: {
-                      contains: query,
-                    },
-                  },
-                ],
-              }
-            ],
-          }
-        });
-        
-        // Returns the found tours.
-        res.status(200).json({ tours });
-      }
+                },
+              ],
+            }
+          ],
+        }
+      });
+      
+      // Returns the found tours.
+      res.status(200).json({ tours });
     }
 
     // If a sort query is sent, tours are sent back sorted by the specifc value.
-    else if (sortQuery) {
-      if (typeof sortQuery === "string") {
-        // The user wants to sort by date.
-        if (sortQuery == "Date") {
-          // Sorts the tours by date.
-          const tours = await prisma.tour.findMany({
-            where: {
-              tourAuthorId: token.id,
-            },
-            orderBy: {
-              tourCreatedAt: "asc",
-            }
-          });
+    else if (typeof sortQuery === "string") {
+      // The user wants to sort by date.
+      if (sortQuery == "Date") {
+        // Sorts the tours by date.
+        const tours = await prisma.tour.findMany({
+          where: {
+            tourAuthorId: token.id,
+          },
+          orderBy: {
+            tourCreatedAt: "asc",
+          }
+        });
 
-          res.status(200).json({ tours });
-        }
+        res.status(200).json({ tours });
+      }
 
-        // The user wants to sort by title.
-        else if (sortQuery == "Title") {
-          // Sorts the tours by title.
-          const tours = await prisma.tour.findMany({
-            where: {
-              tourAuthorId: token.id,
-            },
-            orderBy: {
-              tourTitle: "asc",
-            }
-          });
-          
-          res.status(200).json({tours});
-        }
+      // The user wants to sort by title.
+      else if (sortQuery == "Title") {
+        // Sorts the tours by title.
+        const tours = await prisma.tour.findMany({
+          where: {
+            tourAuthorId: token.id,
+          },
+          orderBy: {
+            tourTitle: "asc",
+          }
+        });
+        
+        res.status(200).json({tours});
       }
     }
 
