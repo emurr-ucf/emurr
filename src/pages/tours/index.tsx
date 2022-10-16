@@ -30,25 +30,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
     clearTimeout(timer);
 
     timer = setTimeout(async () => {
-      const res = await fetch(`/api/tour?query=${query}`, {
-        method: "GET"
-      })
-
-      const resJSON = await res.json();
-
-      if (resJSON)
-        setTours(resJSON.tours);
-    }, 500)
-  }
-
-  const sortQueryTours = () => {
-    if(sortQuery)
-      document.getElementById("sortVariable")!.innerHTML = sortQuery
-
-    clearTimeout(timer);
-
-    timer = setTimeout(async () => {
-      const res = await fetch(`/api/tour?sortQuery=${sortQuery}`, {
+      const res = await fetch(`/api/tour?sortQuery=${sortQuery}&query=${query}`, {
         method: "GET"
       })
       const resJSON = await res.json();
@@ -60,11 +42,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
 
   useEffect(() => {
     queryTours();
-  }, [query]);
-
-  useEffect(() => {
-    sortQueryTours();
-  },[sortQuery])
+  },[query, sortQuery])
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
@@ -116,7 +94,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                 <div>
                     <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                         <div className="font-bold">
-                            Sort By: <span id="sortVariable"></span> ▾ 
+                            Sort By: {sortQuery} ▾ 
                         </div> 
                     </Menu.Button>
                 </div>

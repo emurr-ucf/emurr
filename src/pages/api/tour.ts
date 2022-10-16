@@ -60,7 +60,18 @@ export default async function handler(
     const { query, sortQuery } = req.query;
 
     // If a query is sent, tours that contain that query are searched.
-    if (typeof query === "string") {
+    if (typeof query === "string" && typeof sortQuery === "string") {
+      let orderBy = {  };
+
+          // If a sort query is sent, tours are sent back sorted by the specifc value.
+      // The user wants to sort by date.
+      if (sortQuery == "Date")
+        orderBy =  { tourCreatedAt: "asc" };
+      // The user wants to sort by title.
+      else if (sortQuery == "Title")
+        // Sorts the tours by title.
+        orderBy = { tourTitle: "asc" };
+
       // Searches database for tour titles or descriptions that contain the search value.
       const tours = await prisma.tour.findMany({
         where: {
@@ -83,44 +94,12 @@ export default async function handler(
               ],
             }
           ],
-        }
+        },
+        orderBy,
       });
       
       // Returns the found tours.
       res.status(200).json({ tours });
-    }
-
-    // If a sort query is sent, tours are sent back sorted by the specifc value.
-    else if (typeof sortQuery === "string") {
-      // The user wants to sort by date.
-      if (sortQuery == "Date") {
-        // Sorts the tours by date.
-        const tours = await prisma.tour.findMany({
-          where: {
-            tourAuthorId: token.id,
-          },
-          orderBy: {
-            tourCreatedAt: "asc",
-          }
-        });
-
-        res.status(200).json({ tours });
-      }
-
-      // The user wants to sort by title.
-      else if (sortQuery == "Title") {
-        // Sorts the tours by title.
-        const tours = await prisma.tour.findMany({
-          where: {
-            tourAuthorId: token.id,
-          },
-          orderBy: {
-            tourTitle: "asc",
-          }
-        });
-        
-        res.status(200).json({tours});
-      }
     }
 
     // If no query is called, the normal list of tours is sent back.
