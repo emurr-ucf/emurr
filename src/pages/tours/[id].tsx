@@ -187,13 +187,19 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     }}
                     className="w-full"
                   >
-                    <input defaultValue={page.title === "" ? "Untitled" : page.title} disabled={pageRename != page.id} autoFocus={true} onChange={(event) => setPageTitle(event.target.value)} className="w-full" />
+                    <input 
+                      defaultValue={page.title === "" ? "Untitled" : page.title} 
+                      disabled={pageRename != page.id}
+                      autoFocus={true}
+                      onChange={(event) => setPageTitle(event.target.value)}
+                      className="w-full" 
+                    />
                   </button>
                   <button
                     onClick={() => {
                       setPageRename(page.id);
                     }}
-                    className={`${pageRename === page.id || pageRename != "" ? "hidden" : ""} invisible group-hover:visible`}
+                    className={`${(pageRename === page.id || pageRename != "") ? "hidden" : ""} invisible group-hover:visible`}
                   >
                     Edit
                   </button>
