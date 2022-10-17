@@ -5,13 +5,13 @@ import { Page, Tour } from "@prisma/client";
 const archiver = require('archiver')
 
 // Post API Inputs.
-export interface PostFileRequestType {
+export interface PostDownloadRequestType {
     tourId: string
     file: File
 }
 
 // Post API Output.
-export interface PostFileResponseType {
+export interface PostDownloadResponseType {
     error?: string;
     newPage?: Page;
     tour?: Tour;
@@ -22,9 +22,9 @@ export default async function handler (
     res: NextApiResponse
 ) {
     // Checks JWT token.
-    // const token = await getToken({req});
-    // if (!token)
-    //     return res.status(401).json({ error: "User is not logged in." });
+    const token = await getToken({req});
+    if (!token)
+        return res.status(401).json({ error: "User is not logged in." });
 
     // Posting new page.
     if (req.method === "POST") {
@@ -36,7 +36,7 @@ export default async function handler (
 
         const tour = await prisma.tour.findMany({
             where: {
-                tourAuthorId: 'cl8jk2ldu0045h5j3ko3h7ygp',
+                tourAuthorId: token.id,
                 id:tourId
             },
         });
