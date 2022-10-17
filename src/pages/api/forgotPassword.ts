@@ -84,12 +84,21 @@ export default async function handler (
 
         // Error: Token was not sent.
         if (!resPassToken)
-            res.status(400).json({error: "No token was sent."});
+            return res.status(400).json({error: "No token was sent."});
     
         // Error: Password is not valid.
         if (!newPassword || (typeof newPassword !== 'string'))
-            res.status(400).json({error: "Please input a valid password."});
-    
+            return res.status(400).json({error: "Please input a valid password."});
+        
+        const resetPassRequest = await prisma.user.findFirst({
+            where: {
+                resPassToken,
+            },
+        });
+
+        if (!resetPassRequest)
+            return res.status(404).json({error: "No reset password request found."});
+
         // If All Checks are Passed.
         // Hash password.
         const hashedPass = hashPass(newPassword);
