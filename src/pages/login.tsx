@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Register } from '../components/Register';
 import { ForgotPassword } from '../components/ForgotPassword';
 
-export enum FormType { LOGIN = 1, REGISTER, FORGOT_PASSWORD };
+export enum FormType { LOGIN = 1, REGISTER, FORGOT_PASSWORD, FORGOT_PASSWORD_RESET };
 
 const LoginPage: NextPage = () => {
   const [formType, setFormType] = useState(FormType.LOGIN);
