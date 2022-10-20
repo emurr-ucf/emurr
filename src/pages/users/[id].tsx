@@ -8,16 +8,25 @@ import { id } from "@material-tailwind/react/types/components/tabs";
 
 
 export const getStaticPaths = async () => {
-    const res = await fetch('http://localhost:3000/api/hello', {
-        method: "GET"
+    const test = {
+        email: 'watkins.braedon@gmail.com',
+    };
+    const res = await fetch('https://localhost:3000/api/user/getUserId', {
+        method: "POST",
+        body: JSON.stringify(test),
+        headers:  { "Content-Type": "application/json" }
     }); //idk what to do for this tbh
     const data = await res.json();
     
-    const paths = data.users.map((user: User) => {
-        return{
-            params: {id: user.id.toString()}
-        };
-    });
+    // console.log(data.id.toString());
+    const paths = [{params: {id: data.id.id.toString()}}];
+    console.log(paths);
+    // console.log("TYPE: " + typeof(data.id));
+    // const paths = data.id.map((ids: String) => {
+    //     return{
+    //         params: {ids: ids.toString()}
+    //     };
+    // });
     
     return{
         paths,
@@ -25,15 +34,19 @@ export const getStaticPaths = async () => {
     }
 }
 
-export const getStaticProps = async (context) => {
-    
-    return{props: {}}
+export const getStaticProps: GetStaticProps = async (context) => {
+
+    const id = context.params?.id;
+    const res = await fetch('localhost:3000/users/' + id);
+    const data = await res.json();
+
+    return{props: {id: data}}
 }
 
-const Details = ({}) => {
+const Details = ({id}) => {
     return(
         <div>
-            Test 
+            <h1>{id.id}</h1>
         </div>
     )
 } 
