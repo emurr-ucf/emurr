@@ -25,7 +25,7 @@ import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../lib/prisma";
 import Router from "next/router";
@@ -47,8 +47,9 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [page, setPage] = useState("");
 
   const [tour, setTour] = useState(propTour);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
-  const [tourTitle, setTourTitle] = useState(tour.tourTitle);
+  const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
 
@@ -75,8 +76,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
-      // History,
-      Image,
+      History,
+      Image.extend({}),
     ],
     editorProps: {
       attributes: {
@@ -85,10 +86,33 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     },
     autofocus: "start",
     onUpdate: () => {
+      setUnsavedChanges(true);
       setCharCount(editor?.storage.characterCount.characters());
       setWordCount(editor?.storage.characterCount.words());
     },
   });
+
+  useEffect(() => {
+    const warningText =
+      'You have unsaved changes.\nAre you sure you wish to leave this page?';
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!unsavedChanges) return;
+      e.preventDefault();
+      return (e.returnValue = warningText);
+    };
+    const handleBrowseAway = () => {
+      if (!unsavedChanges) return;
+      if (window.confirm(warningText)) return;
+      Router.events.emit('routeChangeError');
+      throw 'routeChange aborted.';
+    };
+    window.addEventListener('beforeunload', handleWindowClose);
+    Router.events.on('routeChangeStart', handleBrowseAway);
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose);
+      Router.events.off('routeChangeStart', handleBrowseAway);
+    };
+  }, [unsavedChanges]);
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
@@ -133,6 +157,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     method: "PUT",
                     body: formData,
                   });
+
+                  setUnsavedChanges(false);
                 }
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
@@ -233,7 +259,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             ) : (
               <>
                 <EditorMenu editor={editor} />
-                <div className="h-screen bg-background-200 border-x border-t border-green-900 overflow-y-auto">
+                <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
                 </div>
               </>

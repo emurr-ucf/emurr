@@ -1,5 +1,6 @@
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link'
+import { useEffect, useState } from 'react';
 
 export interface NavbarProps {
   page?: string;
@@ -49,7 +50,7 @@ export const Navbar = ( props: NavbarProps ) => {
                   onClick={ so }
                   className="flex justify-center items-center"
                 >
-                  <img src={ session?.user.image ? session?.user.image : "images/google.png" }
+                  <img src={ session.user.image ? session.user.image : "/images/google.png" }
                     className="w-7 h-7 rounded-full cursor-pointer" alt=""
                   />
                 </button>

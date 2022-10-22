@@ -1,11 +1,16 @@
 import { Editor } from "@tiptap/react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { Menu, Transition, Popover } from '@headlessui/react'
+import { Fragment } from 'react'
 
 interface TourSiteCardProps {
   editor: Editor | null;
 }
 
 export const EditorMenu = ({ editor }: TourSiteCardProps) => {
+  const [heading, setHeading] = useState("Heading 1");
+  const [images, setImages] = useState([]);
+
   const addImage = useCallback(() => {
     const url = window.prompt("Enter image URL");
 
@@ -16,242 +21,341 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
 
   return (
     <>
-      <div className="flex border-x border-t rounded-tr-md border-green-800 bg-background-400">
-        <button
-          onClick={() => {
-            editor?.commands.toggleBold();
-            editor?.commands.focus();
-          }}
-          title="Bold"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/bold.svg" alt="bold" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleItalic();
-            editor?.commands.focus();
-          }}
-          title="Italic"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/italic.svg" alt="italic" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleUnderline();
-            editor?.commands.focus();
-          }}
-          title="Underline"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/underline.svg" alt="underline" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleStrike();
-            editor?.commands.focus();
-          }}
-          title="Strike"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/strikethrough.svg" alt="strikethrough" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleCode();
-            editor?.commands.focus();
-          }}
-          title="Code"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/code-box-line.svg" alt="code block" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHighlight({ color: "#f1e740" });
-            editor?.commands.focus();
-          }}
-          title="Highlight"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/mark-pen-line.svg" alt="mark-pen-line" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.setTextAlign("left");
-            editor?.commands.focus();
-          }}
-          title="Left align"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/align-left.svg" alt="align left" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.setTextAlign("center");
-            editor?.commands.focus();
-          }}
-          title="Center align"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/align-center.svg" alt="align center" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.setTextAlign("right");
-            editor?.commands.focus();
-          }}
-          title="Right align"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/align-right.svg" alt="align right" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.setTextAlign("justify");
-            editor?.commands.focus();
-          }}
-          title="Justify"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/align-justify.svg" alt="align justify" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 1 });
-            editor?.commands.focus();
-          }}
-          title="Heading 1"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/h-1.svg" alt="h-1" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 2 });
-            editor?.commands.focus();
-          }}
-          title="Heading 2"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/h-2.svg" alt="h-2" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 3 });
-            editor?.commands.focus();
-          }}
-          title="Heading 3"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/h-3.svg" alt="h-3" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 4 });
-            editor?.commands.focus();
-          }}
-          title="Heading 4"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/h-4.svg" alt="h-4" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 5 });
-            editor?.commands.focus();
-          }}
-          title="Heading 5"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/h-5.svg" alt="h-5" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 6 });
-            editor?.commands.focus();
-          }}
-          title="Heading 6"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/h-6.svg" alt="h-6" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleBulletList();
-            editor?.commands.focus();
-          }}
-          title="Bullet List"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/list-unordered.svg" alt="list-unordered" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleOrderedList();
-            editor?.commands.focus();
-          }}
-          title="Ordered List"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/list-ordered.svg" alt="list-ordered" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleBlockquote();
-            editor?.commands.focus();
-          }}
-          title="Blockquote"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/double-quotes-l.svg" alt="double-quotes" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleBlockquote();
-            editor?.commands.focus();
-          }}
-          title="Undo"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/arrow-go-back-line.svg" alt="arrow-go-backwards" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button
-          onClick={() => {
-            editor?.commands.toggleHeading({ level: 2 });
-            editor?.commands.focus();
-          }}
-          title="Redo"
-          className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out"
-        >
-          <img src="/images/arrow-go-forward-line.svg" alt="arrow-go-forward" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
-        <button onClick={addImage} title="Insert image" className="w-10 h-10 font-bold text-green-900 hover:bg-background-600 transition ease-in-out">
-          <img src="/images/image-line.svg" alt="image" className="w-5 h-5 m-2" />
-        </button>
-        <div className="border-x border-green-900" />
+      <div className="flex justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
+        <div className="flex items-center">
+          <Menu as="div" className="relative w- inline-block text-left">
+            <div>
+              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold">
+                  {heading}
+                </div> 
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  <form onClick={(event) => {
+                    editor?.commands.toggleHeading({ level: 1 });
+                    editor?.commands.focus();
+                    setHeading('Heading 1');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Heading 1</div>
+                          <img src="/images/h-1.svg" alt="h-1" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.toggleHeading({ level: 2 });
+                    editor?.commands.focus();
+                    setHeading('Heading 2');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Heading 2</div>
+                          <img src="/images/h-2.svg" alt="h-2" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.toggleHeading({ level: 3 });
+                    editor?.commands.focus();
+                    setHeading('Heading 3');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Heading 3</div>
+                          <img src="/images/h-3.svg" alt="h-3" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.toggleHeading({ level: 4 });
+                    editor?.commands.focus();
+                    setHeading('Heading 4');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Heading 4</div>
+                          <img src="/images/h-4.svg" alt="h-4" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.toggleHeading({ level: 5 });
+                    editor?.commands.focus();
+                    setHeading('Heading 5');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Heading 5</div>
+                          <img src="/images/h-5.svg" alt="h-5" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.toggleHeading({ level: 6 });
+                    editor?.commands.focus();
+                    setHeading('Heading 6');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Heading 6</div>
+                          <img src="/images/h-6.svg" alt="h-6" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img 
+            src="/images/bold.svg"
+            alt="bold"
+            title="Bold"
+            onClick={() => {
+              editor?.commands.toggleBold();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img 
+            src="/images/italic.svg"
+            alt="italic"
+            title="Italic"
+            onClick={() => {
+              editor?.commands.toggleItalic();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/underline.svg"
+            alt="underline"
+            title="Underline"
+            onClick={() => {
+              editor?.commands.toggleUnderline();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/strikethrough.svg"
+            alt="strikethrough"
+            title="Strike"
+            onClick={() => {
+              editor?.commands.toggleStrike();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img
+            src="/images/mark-pen-line.svg"
+            alt="mark-pen-line"
+            title="Highlight"
+            onClick={() => {
+              editor?.commands.toggleHighlight({ color: "#f1e740" });
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img
+            src="/images/align-left.svg"
+            alt="align left"
+            title="Left align"
+            onClick={() => {
+              editor?.commands.setTextAlign("left");
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/align-center.svg"
+            alt="align center"
+            title="Center align"
+            onClick={() => {
+              editor?.commands.setTextAlign("center");
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/align-right.svg"
+            alt="align right"
+            title="Right align"
+            onClick={() => {
+              editor?.commands.setTextAlign("right");
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/align-justify.svg"
+            alt="align justify"
+            title="Justify"
+            onClick={() => {
+              editor?.commands.setTextAlign("justify");
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/code-box-line.svg"
+            alt="code block"
+            title="Code"
+            onClick={() => {
+              editor?.commands.toggleCode();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img
+            src="/images/list-unordered.svg"
+            alt="list-unordered"
+            title="Bullet List"
+            onClick={() => {
+              editor?.commands.toggleBulletList();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/list-ordered.svg"
+            alt="list-ordered"
+            title="Ordered List"
+            onClick={() => {
+              editor?.commands.toggleOrderedList();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/double-quotes-l.svg"
+            alt="double-quotes"
+            title="Blockquote"
+            onClick={() => {
+              editor?.commands.toggleBlockquote();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+        </div>
+        
+        <div className="flex items-center">
+          <Popover className="relative">
+            {({ open }) => (
+              <>
+                <Popover.Button className="flex justify-center items-center">
+                  <img
+                    src="/images/image-line.svg"
+                    alt="image"
+                    title="Insert image"
+                    className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+                  />
+                </Popover.Button>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
+                >
+                  <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                      <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
+                        {images.length > 0 ? images.map((image) => (
+                          <a
+                            key={image.name}
+                            className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                          >
+                            <div className="text-sm font-medium text-gray-900">
+                              {image.name}
+                            </div>
+                          </a>
+                        )) : <div>You have no images on this tour.</div>}
+                      </div>
+                      <div className="bg-gray-50 p-4">
+                        <input/>
+                        <button
+                          className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        >
+                          <div className="flex items-center">
+                            <div className="text-sm font-medium text-gray-900">
+                              Upload
+                            </div>
+                          </div>
+                          <div className="block text-sm text-gray-500">
+                            Upload an image or video.
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </Popover.Panel>
+                </Transition>
+              </>
+            )}
+          </Popover>
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img
+            src="/images/arrow-go-back-line.svg"
+            alt="arrow-go-backwards"
+            title="Undo"
+            onClick={() => {
+              editor?.commands.undo();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/arrow-go-forward-line.svg"
+            alt="arrow-go-forward"
+            title="Redo"
+            onClick={() => {
+              editor?.commands.redo();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+        </div>
       </div>
     </>
   );
