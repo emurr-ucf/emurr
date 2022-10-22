@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FormType } from '../pages/login';
 
 interface ForgotPasswordProps {
@@ -5,9 +6,46 @@ interface ForgotPasswordProps {
 }
 
 export const ForgotPassword = (props: ForgotPasswordProps) => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [color, setColor] = useState("");
+  
+  const error = (message: string) => {
+    setColor("text-red-800");
+    setMessage(message);
+  }
+
+  const success = (message: string) => {
+    setColor("text-green-600");
+    setMessage(message);
+  }
+
+  const doForgotPassword = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (typeof (email) !== 'string') {
+      error("Please input a valid email.");
+      return;
+    }
+
+    const body = {email};
+    fetch("api/forgotPassword", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    }).then((response: Response) => {
+      if (response.status === 200) {
+        success("Email sent. Please check your inbox to reset your password.");
+      }
+      else {
+        response.json().then((json) => error(json.error));
+      }
+    });
+  }
+
   return (
     <>
-      <form action="/api/forgotPassword" method="POST" className="flex flex-col w-64 gap-6">
+      <form onSubmit={doForgotPassword} className="flex flex-col w-64 gap-6">
         <div className="text-3xl">
           Forgot Password
         </div>
@@ -17,6 +55,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
             autoComplete="on"
             placeholder="Email"
             className="h-12 appearance-none border border-stone-800 rounded px-3"
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="flex justify-center">
@@ -34,6 +73,9 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
           >
             Send Email
           </button>
+        </div>
+        <div className="text-center">
+          <span className={color}>{message}</span>
         </div>
       </form>
     </>
