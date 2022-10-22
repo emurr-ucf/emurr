@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from '../../lib/prisma'
 import generateRandString from '../../lib/generateRandString';
 import hashPass from '../../lib/hashPassword';
-import sendEmail from "../../lib/sendEmail";
+import sendEmail from '../../lib/sendEmail';
 
 // API Post Inputs.
 export interface PostForgotPasswordRequestType {
