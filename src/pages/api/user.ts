@@ -93,33 +93,8 @@ export default async function handler (
         // Creates a random string.
         const emailTok = generateRandString();
 
+        // Sends the verifcation email.
         const emailSend = sendEmail(firstName, email, emailTok, 'Verify');
-
-        // Sends the verification email.
-        // const nodemailer = require('nodemailer')
-
-        // var transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-            
-        //     auth: {
-        //         user: 'donotreply.emurr@gmail.com',
-        //         pass: process.env.NODEMAILER_KEY
-        //     },
-        // });
-        // var mailOptions = {
-        //     from: 'donotreply.emurr@gmail.com',
-        //     to: 'gian.alvarez2000@gmail.com',
-        //     subject: 'Thank You For Registering!',
-        //     text: 'Hi ' + firstName + '!\nThank you for registering. Please follow the link below to verify your account:\n\nlocalhost:3000/api/verifyEmail?emailToken=' + emailTok + '\n\nThank you.',
-        // };
-
-        // transporter.sendMail(mailOptions, function(error:any, info:any){
-        //     if (error) {
-        //         console.log(error);
-        //     } else {
-        //         console.log('Email sent: ' + info.response);
-        //     }
-        // });
 
         // Hash password.
         const hashedPass = hashPass(password);

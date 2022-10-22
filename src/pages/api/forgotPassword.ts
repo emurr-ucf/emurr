@@ -45,31 +45,6 @@ export default async function handler (
         // Sends the verification email.
         const emailSend = sendEmail('None', email, passwordTok, 'Forgot');
         
-        // const nodemailer = require('nodemailer')
-
-        // var transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-            
-        //     auth: {
-        //         user: 'donotreply.emurr@gmail.com',
-        //         pass: process.env.NODEMAILER_KEY
-        //     },
-        // });
-        // var mailOptions = {
-        //     from: 'donotreply.emurr@gmail.com',
-        //     to: 'gian.alvarez2000@gmail.com',
-        //     subject: 'Reset Password',
-        //     text: 'Hi, we recently got a reset password request. To do so, please follow the following link.\n\nlocalhost:3000/forgotPasswordReset?resPassToken=' + passwordTok +'\n\nThank you.',
-        // };
-
-        // transporter.sendMail(mailOptions, function(error:any, info:any){
-        //     if (error) {
-        //         console.log(error);
-        //     } else {
-        //         console.log('Email sent: ' + info.response);
-        //     }
-        // });
-        
         // Insert Token in Database.
         const user = await prisma.user.update({
             where: {
