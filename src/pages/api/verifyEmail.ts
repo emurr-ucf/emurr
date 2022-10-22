@@ -37,5 +37,5 @@ export default async function handler (
     if(user)
         return res.status(200).json({});
     else
-        return res.status(409).json({error: "Could not verify email."})
+        return res.status(409).json({error: "Could not verify email."});
 }
