@@ -11,7 +11,7 @@ import { propTypesSelected } from "@material-tailwind/react/types/components/sel
 
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-    const res = await fetch('http://localhost:3000/api/user/getUserById', {
+    const res = await fetch('http://localhost:3000/api/user/getUserId', {
         // method: "POST"
     }); //idk what to do for this tbh
     const data = await res.json();
