@@ -1,4 +1,4 @@
-import { EditorContent, useEditor } from "@tiptap/react";
+import { EditorContent, getAttributes, useEditor } from "@tiptap/react";
 // The below extensions are included on StarterKit
 import Blockquote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -32,8 +32,9 @@ import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
-import { EditorMenu } from "../../components/EditorMenu";
+import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
 import React, { useCallback } from "react";
+import { unzip } from "unzipit";
 
 interface PageType {
   page: Page;
@@ -49,6 +50,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [tour, setTour] = useState(propTour);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
+  //! This will change
+  const [tourImages, setTourImages] = useState<TourSiteImageType[]>([]);
   const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
@@ -77,7 +80,31 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
         types: ["heading", "paragraph"],
       }),
       History,
-      Image.extend({}),
+      Image.extend({
+    //     addAttributes() {
+    //       return {
+    //         src: {
+    //           renderHTML: attributes => {
+    //             if (attributes.src) {
+    //               const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.src);
+    //               if (src) {
+    //                 const name = src[0];
+    //                 tourImages.forEach((image) => {
+    //                   if (image.name === name) {
+    //                     console.log(image.bloburl);
+    //                     return {
+    //                       src: image.bloburl,
+    //                     }
+    //                   }
+    //                 });
+                    
+    //               }
+    //             }
+    //           },
+    //         }
+    //       }
+    //     }
+      }),
     ],
     editorProps: {
       attributes: {
@@ -91,6 +118,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       setWordCount(editor?.storage.characterCount.words());
     },
   });
+
+
+
+
+
 
   useEffect(() => {
     const warningText =
@@ -108,11 +140,36 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     };
     window.addEventListener('beforeunload', handleWindowClose);
     Router.events.on('routeChangeStart', handleBrowseAway);
+
+    const getImages = async () => {
+      const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
+        method: "GET",
+      });
+
+      const res = await tours.blob();
+      const { entries } = await unzip(res);
+
+      const images: TourSiteImageType[] = [];
+
+      Object.entries(entries).forEach(async ([name, entry]) => {
+        const blob = await entry.blob();
+        const bloburl = URL.createObjectURL(blob);
+        images.push({ name, bloburl });
+      });
+
+      setTourImages(images);
+    }
+    getImages();
+
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose);
       Router.events.off('routeChangeStart', handleBrowseAway);
     };
   }, [unsavedChanges]);
+
+
+
+
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
@@ -258,7 +315,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
-                <EditorMenu editor={editor} />
+                <EditorMenu
+                  tourid={tour.id}
+                  editor={editor}
+                  images={tourImages}
+                />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
                 </div>

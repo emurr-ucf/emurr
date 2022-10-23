@@ -1,23 +1,31 @@
 import { Editor } from "@tiptap/react";
 import { useCallback, useState } from "react";
-import { Menu, Transition, Popover } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Menu, Transition, Popover } from "@headlessui/react";
+import { Fragment } from "react";
+import { unzip } from "unzipit";
 
-interface TourSiteCardProps {
-  editor: Editor | null;
+export interface TourSiteImageType {
+  name: string;
+  bloburl: string;
 }
 
-export const EditorMenu = ({ editor }: TourSiteCardProps) => {
+interface TourSiteCardProps {
+  tourid: string;
+  editor: Editor | null;
+  images: TourSiteImageType[];
+}
+
+export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
   const [heading, setHeading] = useState("Heading 1");
-  const [images, setImages] = useState([]);
+  const [tourImages, setTourImages] = useState(images);
 
   const addImage = useCallback(() => {
-    const url = window.prompt("Enter image URL");
+    const url = window.prompt('URL')
 
     if (url) {
-      editor?.chain().focus().setImage({ src: url }).run();
+      editor?.chain().focus().setImage({ src: url }).run()
     }
-  }, [editor]);
+  }, [editor])
 
   return (
     <>
@@ -301,23 +309,46 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
                 >
                   <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                      <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
-                        {images.length > 0 ? images.map((image) => (
-                          <a
-                            key={image.name}
-                            className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                          >
-                            <div className="text-sm font-medium text-gray-900">
-                              {image.name}
-                            </div>
-                          </a>
-                        )) : <div>You have no images on this tour.</div>}
+                      <div className="flex-col gap-8 bg-white p-7">
+                        {tourImages.length > 0 ?
+                          tourImages.map((image: TourSiteImageType) => (
+                            <button
+                              key={image.name}
+                              onClick={() => {
+                                addImage();
+                                //editor?.chain().focus().setImage({ src: "./images/" + image.name }).run();
+                              }
+                            }
+                              className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                            >
+                              <div className="text-sm font-medium text-gray-900">
+                                {image.name}
+                              </div>
+                            </button>
+                          ))
+                          :
+                          <div>You have no images on this tour.</div>
+                        }
                       </div>
                       <div className="bg-gray-50 p-4">
-                        <input/>
-                        <button
+                        <label
                           className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                         >
+                          <input
+                            type="file"
+                            onChange={async (event) => {
+                              if (!event.target.files) return;
+
+                              const formData = new FormData();
+                              formData.append("file", event.target.files[0]);
+
+                              const tours = await fetch(`/api/tourImage?tourId=${tourid}`, {
+                                method: "POST",
+                                body: formData,
+                              });
+                            }}
+                            className="hidden"
+                          />
                           <div className="flex items-center">
                             <div className="text-sm font-medium text-gray-900">
                               Upload
@@ -326,7 +357,7 @@ export const EditorMenu = ({ editor }: TourSiteCardProps) => {
                           <div className="block text-sm text-gray-500">
                             Upload an image or video.
                           </div>
-                        </button>
+                        </label>
                       </div>
                     </div>
                   </Popover.Panel>

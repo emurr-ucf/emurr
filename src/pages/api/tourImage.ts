@@ -5,6 +5,7 @@ import { returnTour } from '../../lib/returnTour';
 import multer from 'multer';
 import fs from 'fs'
 import { Page, Tour } from "@prisma/client";
+const archiver = require('archiver');
 
 // Post API Inputs.
 export interface PostFileRequestType {
@@ -50,7 +51,7 @@ export default async function handler (
         //const savedPage = await prisma.page.create({data: pageData});
         //const tour = await returnTour(tourId, token.id);
 
-        const destination = "./websites/" + tourId; 
+        const destination = "./websites/" + tourId + "/images/";
 
         // Upload page multer instance.
         const createPage = multer({
@@ -75,13 +76,21 @@ export default async function handler (
         if (typeof tourId != "string") return res.status(400).json({ error: "Tour ID cannot be blank." });
         
         // Returns file.
-        const path = "./websites/" + tourId + "/images";
-        const dir = fs.readdirSync(path);
-        for await (let file of dir) {
-            const rs = fs.createReadStream(path)
-            res.setHeader('Content-Disposition', 'attachement; filename="' + file)
-            rs.pipe(res);
-        }
+        const path = "./websites/" + tourId + "/images/";
+        
+        // Sets what kind of folder we want the files to be downloaded as.
+        var archive = archiver('zip');
+            
+        // Checks if archiver fails.
+        archive.on('error', function(err: any){
+            throw err;
+        });
+
+        archive.pipe(res);
+        // Append files from a sub-directory, putting its contents at the root of archive
+        archive.directory(path, false);
+        // Closes the archiver session.
+        archive.finalize();
     }
 }
 
