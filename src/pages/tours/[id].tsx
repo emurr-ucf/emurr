@@ -35,18 +35,24 @@ import { getToken } from "next-auth/jwt";
 import { EditorMenu } from "../../components/EditorMenu";
 import React from "react";
 
-interface PageType {
-  page: Page;
-  content: string;
-}
-
 class ContentManager {
-  static allContent: any = {};
-  static set = (id: string, content: string) => {
-    ContentManager.allContent[id] = content;
+  static editedContent: any = {};
+  static savedContent: any = {};
+
+  static write = (id: string, content: string) => {
+    this.editedContent[id] = content;
   }
-  static get = (id: string) => {
-    return ContentManager.allContent[id];
+
+  static read = (id: string) => {
+    return this.editedContent[id];
+  }
+
+  static save = (id: string, content: string) => {
+    this.savedContent[id] = this.editedContent[id] = content;
+  }
+
+  static isSaved = (id: string) => {
+    return this.savedContent[id] === this.editedContent[id];
   }
 }
 
@@ -61,6 +67,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [tourTitle, setTourTitle] = useState(tour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
+  const [unsavedPages, setUnsavedPages] = useState<any>({});
 
   const editor = useEditor({
     extensions: [
@@ -146,6 +153,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     method: "PUT",
                     body: formData,
                   });
+
+                  // mark current page as saved
+                  if (res.status === 200) {
+                    const newUnsavedPages = Object.assign({}, unsavedPages);
+                    newUnsavedPages[currentPageId] = false;
+                    setUnsavedPages(newUnsavedPages);
+                    ContentManager.save(currentPageId, data);
+                  }
                 }
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
@@ -193,16 +208,26 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
-                      ContentManager.set(currentPageId, editor?.getHTML() || "");
+                      // stash changes with content manager
+                      if (editor)
+                        ContentManager.write(currentPageId, editor.getHTML());
+                      
+                      // Update "unsaved" state for old page
+                      const newUnsavedPages = Object.assign({}, unsavedPages);
+                      newUnsavedPages[currentPageId] = !ContentManager.isSaved(currentPageId);
+                      setUnsavedPages(newUnsavedPages);
 
+                      // if we're renaming this page, don't switch to it
                       if (pageRename === page.id) return;
 
-                      if (ContentManager.get(page.id)) {
-                        editor?.commands.setContent(ContentManager.get(page.id));
+                      // restore stashed changes from ContentManager, if possible
+                      if (ContentManager.read(page.id)) {
+                        editor?.commands.setContent(ContentManager.read(page.id));
                         setCurrentPageId(page.id);
                         return;
                       }
 
+                      // otherwise, fetch content from api
                       const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${page.id}`, {
                         method: "GET",
                       });
@@ -211,6 +236,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                       if (res.status === 200) {
                         setCurrentPageId(page.id);
+                        ContentManager.save(page.id, resHTML);
                         editor?.commands.setContent(resHTML == "" ? "" : resHTML);
                       }
 
@@ -219,13 +245,13 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   >
                     {/* Rename page title */}
                     <input 
-                      defaultValue={page.title === "" ? "Untitled" : page.title} 
+                      defaultValue={page.title === "" ? "Untitled" : page.title}
                       disabled={pageRename != page.id}
                       autoFocus={true}
                       onChange={(event) => {
                         setPageTitle(event.target.value);
                       }}
-                      className="w-full" 
+                      className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }
                     />
                   </button>
                   
