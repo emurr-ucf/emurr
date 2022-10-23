@@ -9,6 +9,7 @@ export const OAuth = () => {
     ClientSafeProvider
   > | null>();
  
+  const isProd = process.env.NODE_ENV === 'production';
 
   useEffect(() => {
     const setTheProviders = async () => {
@@ -27,7 +28,7 @@ export const OAuth = () => {
             className="flex items-center justify-center gap-2 py-3 px-4 w-52 shadow-sm text-sm font-medium rounded-md text-white bg-slate-900 hover:bg-slate-700"
           >
             <div>Login with GitHub</div>
-            <img src="/images/github.png" className="w-6 h-6"/>
+            <img src={ `${ isProd ? "/emurr/images/github.png" : "/images/github.png" }` } alt="" className="w-6 h-6" />
           </button>
         )}
         {providers?.github && (
@@ -36,7 +37,7 @@ export const OAuth = () => {
             className="flex items-center justify-center gap-2 py-3 px-4 w-52 shadow-sm text-sm font-medium border border-slate-200 rounded-md text-black hover:bg-neutral-100"
           >
             <div>Login with Google</div>
-            <img src="/images/google.png" className="w-6 h-6"/>
+            <img src={ `${isProd ? "/emurr/images/google.png" : "/images/google.png"}` } alt="" className="w-6 h-6"/>
           </button>
         )}
       </div>
