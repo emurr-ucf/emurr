@@ -41,8 +41,6 @@ interface PageType {
 }
 
 const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [charCount, setCharCount] = useState(0);
-  const [wordCount, setWordCount] = useState(0);
   const { data: session, status } = useSession();
   const [page, setPage] = useState("");
 
@@ -87,14 +85,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     autofocus: "start",
     onUpdate: () => {
       setUnsavedChanges(true);
-      setCharCount(editor?.storage.characterCount.characters());
-      setWordCount(editor?.storage.characterCount.words());
     },
   });
 
   useEffect(() => {
-    const warningText =
-      'You have unsaved changes.\nAre you sure you wish to leave this page?';
+    const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!unsavedChanges) return;
       e.preventDefault();
@@ -103,14 +98,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     const handleBrowseAway = () => {
       if (!unsavedChanges) return;
       if (window.confirm(warningText)) return;
-      Router.events.emit('routeChangeError');
-      throw 'routeChange aborted.';
+      Router.events.emit("routeChangeError");
+      throw "routeChange aborted.";
     };
-    window.addEventListener('beforeunload', handleWindowClose);
-    Router.events.on('routeChangeStart', handleBrowseAway);
+    window.addEventListener("beforeunload", handleWindowClose);
+    Router.events.on("routeChangeStart", handleBrowseAway);
     return () => {
-      window.removeEventListener('beforeunload', handleWindowClose);
-      Router.events.off('routeChangeStart', handleBrowseAway);
+      window.removeEventListener("beforeunload", handleWindowClose);
+      Router.events.off("routeChangeStart", handleBrowseAway);
     };
   }, [unsavedChanges]);
 
@@ -213,19 +208,13 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     }}
                     className="w-full"
                   >
-                    <input 
-                      defaultValue={page.title === "" ? "Untitled" : page.title} 
-                      disabled={pageRename != page.id}
-                      autoFocus={true}
-                      onChange={(event) => setPageTitle(event.target.value)}
-                      className="w-full" 
-                    />
+                    <input defaultValue={page.title === "" ? "Untitled" : page.title} disabled={pageRename != page.id} autoFocus={true} onChange={(event) => setPageTitle(event.target.value)} className="w-full" />
                   </button>
                   <button
                     onClick={() => {
                       setPageRename(page.id);
                     }}
-                    className={`${(pageRename === page.id || pageRename != "") ? "hidden" : ""} invisible group-hover:visible`}
+                    className={`${pageRename === page.id || pageRename != "" ? "hidden" : ""} invisible group-hover:visible`}
                   >
                     Edit
                   </button>
@@ -261,6 +250,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 <EditorMenu editor={editor} />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
+                  <div className="text-right text-sm text-gray-400 pr-6">
+                    {editor?.storage.characterCount.characters()} characters
+                    <br />
+                    {editor?.storage.characterCount.words()} words
+                  </div>
                 </div>
               </>
             )}
