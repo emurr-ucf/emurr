@@ -33,18 +33,28 @@ import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { EditorMenu } from "../../components/EditorMenu";
-import React, { useCallback } from "react";
+import React from "react";
 
 interface PageType {
   page: Page;
   content: string;
 }
 
+class ContentManager {
+  static allContent: any = {};
+  static set = (id: string, content: string) => {
+    ContentManager.allContent[id] = content;
+  }
+  static get = (id: string) => {
+    return ContentManager.allContent[id];
+  }
+}
+
 const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [charCount, setCharCount] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const { data: session, status } = useSession();
-  const [page, setPage] = useState("");
+  const [currentPageId, setCurrentPageId] = useState("");
 
   const [tour, setTour] = useState(propTour);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
@@ -97,6 +107,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       <div className="flex flex-col w-full h-screen">
         <Navbar>
           <>
+            {/* Tour title */}
             <input
               type="text"
               defaultValue={tour.tourTitle}
@@ -106,6 +117,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               }}
               className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
+
+            {/* Save button */}
             <button
               onClick={async () => {
                 if (updatedTourTitle) {
@@ -122,14 +135,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                 const data = editor?.getHTML();
 
-                if (data && page) {
+                if (data && currentPageId) {
                   const file = new File([data], "blank.html");
 
                   const formData = new FormData();
 
                   formData.append("file", file);
 
-                  const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${page}`, {
+                  const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${currentPageId}`, {
                     method: "PUT",
                     body: formData,
                   });
@@ -139,12 +152,18 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             >
               Save
             </button>
+
+            {/* Download button */}
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Download</button>
+
+            {/* Publish button */}
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
           </>
         </Navbar>
         <div className="flex pt-4 px-4 overflow-hidden">
           <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
+
+            {/* Create new page button */}
             <button
               onClick={async () => {
                 const file = new File([], "blank.html");
@@ -167,12 +186,22 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               Create New Page
             </button>
 
+            {/* Page titles on sidebar */}
             {tour.tourPages.map((page: Page) => {
               return (
                 <div key={page.id} className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300">
+                  {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
+                      ContentManager.set(currentPageId, editor?.getHTML() || "");
+
                       if (pageRename === page.id) return;
+
+                      if (ContentManager.get(page.id)) {
+                        editor?.commands.setContent(ContentManager.get(page.id));
+                        setCurrentPageId(page.id);
+                        return;
+                      }
 
                       const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${page.id}`, {
                         method: "GET",
@@ -181,28 +210,36 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                       const resHTML = await res.text();
 
                       if (res.status === 200) {
-                        setPage(page.id);
+                        setCurrentPageId(page.id);
                         editor?.commands.setContent(resHTML == "" ? "" : resHTML);
                       }
+
                     }}
                     className="w-full"
                   >
+                    {/* Rename page title */}
                     <input 
                       defaultValue={page.title === "" ? "Untitled" : page.title} 
                       disabled={pageRename != page.id}
                       autoFocus={true}
-                      onChange={(event) => setPageTitle(event.target.value)}
+                      onChange={(event) => {
+                        setPageTitle(event.target.value);
+                      }}
                       className="w-full" 
                     />
                   </button>
+                  
+                  {/* Edit title button */}
                   <button
                     onClick={() => {
                       setPageRename(page.id);
                     }}
-                    className={`${(pageRename === page.id || pageRename != "") ? "hidden" : ""} invisible group-hover:visible`}
+                    className={`${(pageRename === page.id || pageRename != "") ? "hidden" : ""} invisible2 group-hover:visible`}
                   >
                     Edit
                   </button>
+
+                  {/* Save title button */}
                   <button
                     onClick={async () => {
                       const body = { pageId: page.id, name: pageTitle };
@@ -227,8 +264,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               );
             })}
           </div>
+
+          {/* Editor */}
           <div className="flex flex-[4_1_0] flex-col overflow-auto">
-            {page === "" ? (
+            {currentPageId === "" ? (
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
