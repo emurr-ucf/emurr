@@ -33,7 +33,7 @@ import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
 
 interface PageType {
@@ -49,7 +49,9 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
   //! This will change
-  const [tourImages, setTourImages] = useState<TourSiteImageType[]>([]);
+  const isSavingTour = useRef(false);
+  const [isLoadingStartup, setIsLoadingStartup] = useState(true);
+  const tourImages = useRef<TourSiteImageType[]>([]);
   const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
@@ -79,29 +81,38 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       }),
       History,
       Image.extend({
-    //     addAttributes() {
-    //       return {
-    //         src: {
-    //           renderHTML: attributes => {
-    //             if (attributes.src) {
-    //               const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.src);
-    //               if (src) {
-    //                 const name = src[0];
-    //                 tourImages.forEach((image) => {
-    //                   if (image.name === name) {
-    //                     console.log(image.bloburl);
-    //                     return {
-    //                       src: image.bloburl,
-    //                     }
-    //                   }
-    //                 });
-                    
-    //               }
-    //             }
-    //           },
-    //         }
-    //       }
-    //     }
+        renderHTML({ HTMLAttributes }) {
+          if (isSavingTour.current) {
+            HTMLAttributes.src = HTMLAttributes.alt;
+            return ["img", HTMLAttributes];
+          } else {
+            tourImages.current.forEach((image) => {
+              if (image.name === HTMLAttributes.name) {
+                HTMLAttributes.src = image.bloburl;
+              }
+            });
+            return ["img", HTMLAttributes];
+          }
+          
+        },
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            name: {
+              renderHTML: attributes => {
+                if (attributes.src) {
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  if (src) {
+                    const name = src[0];
+                    return {
+                      name,
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
       }),
     ],
     editorProps: {
@@ -145,14 +156,16 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       const { entries } = await unzip(res);
 
       const images: TourSiteImageType[] = [];
+      const objs = Object.entries(entries);
 
-      Object.entries(entries).forEach(async ([name, entry]) => {
+      for (const [name, entry] of objs) {
         const blob = await entry.blob();
         const bloburl = URL.createObjectURL(blob);
         images.push({ name, bloburl });
-      });
+      }
 
-      setTourImages(images);
+      tourImages.current = images;
+      setIsLoadingStartup(false);
     }
     getImages();
 
@@ -165,8 +178,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
 
 
-
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading" || isLoadingStartup) return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
   return (
     <>
@@ -196,6 +208,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   setUpdatedTourTitle(false);
                 }
 
+                editor?.setEditable(false);
+                isSavingTour.current = true;
                 const data = editor?.getHTML();
 
                 if (data && page) {
@@ -212,6 +226,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                   setUnsavedChanges(false);
                 }
+
+                isSavingTour.current = false;
+                editor?.commands.setContent(data ? data : "");
+                editor?.setEditable(true);
+                
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
             >
@@ -307,7 +326,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 <EditorMenu
                   tourid={tour.id}
                   editor={editor}
-                  images={tourImages}
+                  images={tourImages.current}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />

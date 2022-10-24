@@ -159,7 +159,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleBold();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("bold") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img 
             src="/images/italic.svg"
@@ -169,7 +169,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleItalic();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("italic") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/underline.svg"
@@ -179,7 +179,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleUnderline();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("underline") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/strikethrough.svg"
@@ -189,7 +189,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleStrike();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("strike") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -200,7 +200,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleHighlight({ color: "#f1e740" });
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("highlight") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -211,7 +211,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.setTextAlign("left");
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive({ textAlign: "left" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/align-center.svg"
@@ -221,7 +221,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.setTextAlign("center");
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive({ textAlign: "center" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/align-right.svg"
@@ -231,7 +231,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.setTextAlign("right");
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive({ textAlign: "right" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/align-justify.svg"
@@ -241,7 +241,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.setTextAlign("justify");
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive({ textAlign: "justify" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/code-box-line.svg"
@@ -251,7 +251,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleCode();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("code") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -262,7 +262,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleBulletList();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("bulletList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/list-ordered.svg"
@@ -272,7 +272,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleOrderedList();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("orderedList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src="/images/double-quotes-l.svg"
@@ -282,7 +282,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               editor?.commands.toggleBlockquote();
               editor?.commands.focus();
             }}
-            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+            className={`${editor?.isActive("blockquote") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
         </div>
         
@@ -315,8 +315,8 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                             <button
                               key={image.name}
                               onClick={() => {
-                                addImage();
-                                //editor?.chain().focus().setImage({ src: "./images/" + image.name }).run();
+                                //addImage();
+                                editor?.chain().focus().setImage({ src: image.bloburl, alt: "./images/" + image.name }).run();
                               }
                             }
                               className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
