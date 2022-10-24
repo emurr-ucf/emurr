@@ -38,15 +38,15 @@ const NewPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<ty
     }, [query]);
     
     if (status === "loading") return <div>Loading...</div>;
-    if (status === "unauthenticated" && !changing) 
+    else if (status === "unauthenticated" && !changing) 
     {
       setChanging(true);
       Router.push("/");
     }
-    if (session?.user.id === userid && !changing)
+    else if (session?.user.id === userid && !changing)
     {
       setChanging(true);
-      Router.push("");
+      Router.push("/tours/");
     }
   
     return (
