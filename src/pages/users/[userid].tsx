@@ -38,6 +38,7 @@ const NewPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<ty
       queryTours();
     }, [query]);
     
+    // routing for: status, if changing, and if query (userid) is session id
     if (status === "loading") return <div>Loading...</div>;
     else if (status === "unauthenticated" && !changing) 
     {
@@ -114,6 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = await getToken(context);
     const { userid } = context.query;
 
+    // if valid token and userid query find user to display
     if (token && typeof userid === "string") {
       const user = await prisma.user.findFirst({
         where: {
@@ -124,6 +126,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       // if no user then 404 their ass
       if (!user) return { props: { propTours: [], userid: null} }
 
+      // if user then grab all their tours and return 
       const propTours = await prisma.tour.findMany({
         where: {
           tourAuthorId: userid,
