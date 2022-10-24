@@ -8,6 +8,7 @@ import { getToken } from 'next-auth/jwt';
 import { prisma } from "../../lib/prisma";
 import { CreateTourResponseType } from '../api/tour';
 import { useEffect, useState } from 'react';
+import Error from 'next/error';
 
 
 const NewPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -47,6 +48,11 @@ const NewPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<ty
     {
       setChanging(true);
       Router.push("/tours/");
+      console.log(session?.user.id  + " " + userid);
+    }
+    else if (!userid && !changing)
+    {
+      return (<Error statusCode={404}></Error>)
     }
   
     return (
@@ -115,7 +121,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
       });
 
-      if (!user) return { props: { propTours: [], userid: token.id} }
+      // if no user then 404 their ass
+      if (!user) return { props: { propTours: [], userid: null} }
 
       const propTours = await prisma.tour.findMany({
         where: {
