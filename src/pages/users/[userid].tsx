@@ -142,9 +142,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: { propTours, userid }
       }
     }
-  
+    
+    // fallback case so next isn't angry
     return {
-      props: { propTours: [] }
+      props: { propTours: [], userid: null }
     }
   };
 
