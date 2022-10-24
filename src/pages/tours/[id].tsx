@@ -1,4 +1,4 @@
-import { EditorContent, useEditor } from "@tiptap/react";
+import { EditorContent, getAttributes, useEditor } from "@tiptap/react";
 // The below extensions are included on StarterKit
 import Blockquote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -25,15 +25,16 @@ import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../lib/prisma";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
-import { EditorMenu } from "../../components/EditorMenu";
+import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
 import React, { useCallback } from "react";
+import { unzip } from "unzipit";
 
 interface PageType {
   page: Page;
@@ -41,42 +42,67 @@ interface PageType {
 }
 
 const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [charCount, setCharCount] = useState(0);
-  const [wordCount, setWordCount] = useState(0);
   const { data: session, status } = useSession();
   const [page, setPage] = useState("");
 
   const [tour, setTour] = useState(propTour);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
-  const [tourTitle, setTourTitle] = useState(tour.tourTitle);
+  //! This will change
+  const [tourImages, setTourImages] = useState<TourSiteImageType[]>([]);
+  const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
 
   const editor = useEditor({
     extensions: [
+      Blockquote,
+      BulletList,
       CodeBlock,
+      Document,
+      HardBreak,
+      Heading,
+      HorizontalRule,
+      ListItem,
+      OrderedList,
+      Paragraph,
+      Text,
       Bold,
       Code,
       Italic,
       Strike,
-      Document,
-      Paragraph,
-      Text,
       CharacterCount,
       Underline,
       Highlight.configure({ multicolor: true }),
-      Heading.configure({
-        levels: [1, 2],
-      }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
-      BulletList,
-      OrderedList,
-      ListItem,
-      Blockquote,
-      // History,
-      Image,
+      History,
+      Image.extend({
+    //     addAttributes() {
+    //       return {
+    //         src: {
+    //           renderHTML: attributes => {
+    //             if (attributes.src) {
+    //               const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.src);
+    //               if (src) {
+    //                 const name = src[0];
+    //                 tourImages.forEach((image) => {
+    //                   if (image.name === name) {
+    //                     console.log(image.bloburl);
+    //                     return {
+    //                       src: image.bloburl,
+    //                     }
+    //                   }
+    //                 });
+                    
+    //               }
+    //             }
+    //           },
+    //         }
+    //       }
+    //     }
+      }),
     ],
     editorProps: {
       attributes: {
@@ -85,10 +111,60 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     },
     autofocus: "start",
     onUpdate: () => {
-      setCharCount(editor?.storage.characterCount.characters());
-      setWordCount(editor?.storage.characterCount.words());
+      setUnsavedChanges(true);
     },
   });
+
+
+
+
+
+
+  useEffect(() => {
+    const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!unsavedChanges) return;
+      e.preventDefault();
+      return (e.returnValue = warningText);
+    };
+    const handleBrowseAway = () => {
+      if (!unsavedChanges) return;
+      if (window.confirm(warningText)) return;
+      Router.events.emit("routeChangeError");
+      throw "routeChange aborted.";
+    };
+    window.addEventListener('beforeunload', handleWindowClose);
+    Router.events.on('routeChangeStart', handleBrowseAway);
+
+    const getImages = async () => {
+      const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
+        method: "GET",
+      });
+
+      const res = await tours.blob();
+      const { entries } = await unzip(res);
+
+      const images: TourSiteImageType[] = [];
+
+      Object.entries(entries).forEach(async ([name, entry]) => {
+        const blob = await entry.blob();
+        const bloburl = URL.createObjectURL(blob);
+        images.push({ name, bloburl });
+      });
+
+      setTourImages(images);
+    }
+    getImages();
+
+    return () => {
+      window.removeEventListener("beforeunload", handleWindowClose);
+      Router.events.off("routeChangeStart", handleBrowseAway);
+    };
+  }, [unsavedChanges]);
+
+
+
+
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
@@ -133,6 +209,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     method: "PUT",
                     body: formData,
                   });
+
+                  setUnsavedChanges(false);
                 }
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
@@ -226,9 +304,18 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
-                <EditorMenu editor={editor} />
-                <div className="h-screen bg-background-200 border-x border-t border-green-900 overflow-y-auto">
+                <EditorMenu
+                  tourid={tour.id}
+                  editor={editor}
+                  images={tourImages}
+                />
+                <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
+                  <div className="text-right text-sm text-gray-400 pr-6">
+                    {editor?.storage.characterCount.characters()} characters
+                    <br />
+                    {editor?.storage.characterCount.words()} words
+                  </div>
                 </div>
               </>
             )}
