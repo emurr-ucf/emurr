@@ -4,9 +4,8 @@ import { Logo } from "../components/Logo";
 
 const HomePage: NextPage = () => {
 
-  const isProduction = process.env.NODE_ENV === 'production';
-  const imagePrefix = isProduction ? "/emurr" : "";
-  // console.log( imagePrefix );
+  const isProd = process.env.NODE_ENV === 'production';
+  const imagePrefix = isProd ? "/emurr" : "";
 
   return (
     <>
