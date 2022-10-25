@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
+import { getImageSize } from "next/dist/server/image-optimizer";
 
 export interface TourSiteImageType {
   name: string;
@@ -13,19 +14,11 @@ interface TourSiteCardProps {
   tourid: string;
   editor: Editor | null;
   images: TourSiteImageType[];
+  getImages: () => {};
 }
 
-export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
+export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardProps) => {
   const [heading, setHeading] = useState("Heading 1");
-  const [tourImages, setTourImages] = useState(images);
-
-  const addImage = useCallback(() => {
-    const url = window.prompt('URL')
-
-    if (url) {
-      editor?.chain().focus().setImage({ src: url }).run()
-    }
-  }, [editor])
 
   return (
     <>
@@ -142,6 +135,22 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                         >
                           <div>Heading 6</div>
                           <img src="/images/h-6.svg" alt="h-6" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.setParagraph();
+                    editor?.commands.focus();
+                    setHeading('Paragraph');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Paragraph</div>
+                          <img src="/images/paragraph.svg" alt="h-6" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -310,13 +319,20 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                   <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="flex-col gap-8 bg-white p-7">
-                        {tourImages.length > 0 ?
-                          tourImages.map((image: TourSiteImageType) => (
+                        {images.length > 0 ?
+                          images.map((image: TourSiteImageType) => (
                             <button
                               key={image.name}
                               onClick={() => {
-                                //addImage();
-                                editor?.chain().focus().setImage({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                                const arr = image.name.match(/\.[0-9a-z]+$/i);
+                                if (arr) {
+                                  console.log(arr[0])
+                                  if (arr[0] === ".mp4") {
+                                    editor?.chain().focus().setVideo({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                                  } else {
+                                    editor?.chain().focus().setImage({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                                  }
+                                }
                               }
                             }
                               className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
@@ -346,6 +362,8 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                                 method: "POST",
                                 body: formData,
                               });
+
+                              getImages();
                             }}
                             className="hidden"
                           />

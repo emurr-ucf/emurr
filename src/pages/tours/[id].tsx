@@ -23,6 +23,7 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
+import Video from "../../lib/extensions/video";
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -114,6 +115,40 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
           }
         }
       }),
+      Video.extend({
+        renderHTML({ HTMLAttributes }) {
+          if (isSavingTour.current) {
+            HTMLAttributes.src = HTMLAttributes.alt;
+            return ["video", HTMLAttributes];
+          } else {
+            tourImages.current.forEach((image) => {
+              if (image.name === HTMLAttributes.name) {
+                HTMLAttributes.src = image.bloburl;
+              }
+            });
+            return ["video", HTMLAttributes];
+          }
+          
+        },
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            name: {
+              renderHTML: attributes => {
+                if (attributes.src) {
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  if (src) {
+                    const name = src[0];
+                    return {
+                      name,
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
+      }),
     ],
     editorProps: {
       attributes: {
@@ -124,12 +159,33 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     onUpdate: () => {
       setUnsavedChanges(true);
     },
+    onSelectionUpdate: () => {
+      console.log("Test")
+    }
   });
 
 
 
+  const getImages = async () => {
+    const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
+      method: "GET",
+    });
 
+    const res = await tours.blob();
+    const { entries } = await unzip(res);
 
+    const images: TourSiteImageType[] = [];
+    const objs = Object.entries(entries);
+
+    for (const [name, entry] of objs) {
+      const blob = await entry.blob();
+      const bloburl = URL.createObjectURL(blob);
+      images.push({ name, bloburl });
+    }
+
+    tourImages.current = images;
+    setIsLoadingStartup(false);
+  }
 
   useEffect(() => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
@@ -147,33 +203,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     window.addEventListener('beforeunload', handleWindowClose);
     Router.events.on('routeChangeStart', handleBrowseAway);
 
-    const getImages = async () => {
-      const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
-        method: "GET",
-      });
-
-      const res = await tours.blob();
-      const { entries } = await unzip(res);
-
-      const images: TourSiteImageType[] = [];
-      const objs = Object.entries(entries);
-
-      for (const [name, entry] of objs) {
-        const blob = await entry.blob();
-        const bloburl = URL.createObjectURL(blob);
-        images.push({ name, bloburl });
-      }
-
-      tourImages.current = images;
-      setIsLoadingStartup(false);
-    }
     getImages();
+    console.log(tourImages.current);
 
     return () => {
       window.removeEventListener("beforeunload", handleWindowClose);
       Router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, [unsavedChanges]);
+  }, [unsavedChanges, tourImages.current]);
 
 
 
@@ -318,23 +355,23 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               );
             })}
           </div>
-          <div className="flex flex-[4_1_0] flex-col overflow-auto">
+          <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
             {page === "" ? (
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
+                <div className="absolute z-10 flex flex-col justify-end items-end w-full h-full py-6 px-12 text-sm text-gray-400 select-none pointer-events-none">
+                  <div>{editor?.storage.characterCount.characters()} characters</div>
+                  <div>{editor?.storage.characterCount.words()} words</div>
+                </div>
                 <EditorMenu
                   tourid={tour.id}
                   editor={editor}
                   images={tourImages.current}
+                  getImages={getImages}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
-                  <div className="text-right text-sm text-gray-400 pr-6">
-                    {editor?.storage.characterCount.characters()} characters
-                    <br />
-                    {editor?.storage.characterCount.words()} words
-                  </div>
                 </div>
               </>
             )}
