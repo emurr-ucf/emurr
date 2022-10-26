@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 
 export const EditProfile = () => {
 	const { data: session, status } = useSession();
+	const isProd = process.env.NODE_ENV === 'production';
+
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [show, setShow] = useState(false);
@@ -56,8 +58,6 @@ export const EditProfile = () => {
 		}
 	}
   
-	const isProd = process.env.NODE_ENV === 'production';
-
 	return (
 	  <>
 	    <Box image={ isProd ? "/emurr/images/profile/profile.svg" : "/images/profile/profile.svg" } title="Edit profile" description="Edit your profile information, such as your name and profile picture" onClick={handleShow} />
