@@ -31,7 +31,7 @@ const HomePage: NextPage = () => {
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />             <img src="/emurr/images/logo_vert_5.png" alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
