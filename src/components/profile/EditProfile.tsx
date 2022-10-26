@@ -56,9 +56,11 @@ export const EditProfile = () => {
 		}
 	}
   
+	const isProd = process.env.NODE_ENV === 'production';
+
 	return (
 	  <>
-	    <Box image="/images/profile/profile.svg" title="Edit profile" description="Edit your profile information, such as your name and profile picture" onClick={handleShow} />
+	    <Box image={ isProd ? "/emurr/images/profile/profile.svg" : "/images/profile/profile.svg" } title="Edit profile" description="Edit your profile information, such as your name and profile picture" onClick={handleShow} />
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Edit profile</Modal.Title>

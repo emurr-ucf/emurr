@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
 import { prisma } from '../../lib/prisma';
 import generateRandString from '../../lib/generateRandString';
+import comparePass from "../../lib/comparePassword";
 import hashPass from '../../lib/hashPassword';
 
 // Post API Inputs.
@@ -34,13 +35,25 @@ export interface PutUserResponseType {
     error?: string;
 }
 
+// Get API Inputs.
+export interface GetUserRequestType {
+}
+
+// Put API Outputs.
+export interface GetUserResponseType {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    error?: string;
+}
+
 // Delete API Inputs.
-export interface DeleteSuperUserRequestType {
+export interface DeleteUserRequestType {
     userID: string;
 }
 
 // Delete API Outputs.
-export interface DeleteSuperUserResponseType {
+export interface DeleteUserResponseType {
     error?: string;
 }
 
@@ -54,24 +67,24 @@ export default async function handler (
 
         // Error: Not a valid email.
         if(!email || (typeof email != 'string') || (!email.includes('@')) || (!email.includes('.')))
-            return res.status(400).json({ error: "Please input a valid email." });
+            return res.status(400).json({error: "Please input a valid email."});
 
-        // Error: Email already exists.
+        // Error: User already exists.
         const user = await prisma.user.findFirst({
             where: {
                 email,
             },
         })
         if(user)
-            return res.status(409).json({ error: "User already exists." });
+            return res.status(409).json({error: "User already exists."});
 
         // Error: Not all fields are filled out.
         if(!firstName || !lastName || !password)
-            return res.status(400).json({ error: "Please add all fields." });
+            return res.status(400).json({error: "Please add all fields."});
 
         // Error: Name values are not strings.
         if((typeof firstName !== 'string') || (typeof lastName !== 'string'))
-            return res.status(400).json({ error: "Please input a proper name." });
+            return res.status(400).json({error: "Please input a proper name."});
 
         // If all checks are passed.
         
@@ -102,69 +115,109 @@ export default async function handler (
                     console.error(error)
                 })
 
-        // Hash Password.
+        // Hash password.
         const hashedPass = hashPass(password);
 
-        // Save New User.
+        // Saves New User.
         const userData = {name: firstName, lastName, email, password:hashedPass, verifyEmail:false, emailToken: emailTok, resPassword:0, resPassToken:''};
         const savedUser = await prisma.user.create({data:userData});
         if (savedUser)
             return res.status(200).json({});
         else
-            return res.status(409).json({ error: "User was not registered." });
+            return res.status(409).json({error: "User was not registered."});
     } 
     
-    // Updates user information.
+    // Updates User Information.
     if (req.method === "PUT") {
         // Checks JWT token.
         const token = await getToken({req});
         if (!token)
-            return res.status(401).json({ error: "User is not logged in." });
+            return res.status(401).json({error: "User is not logged in."});
 
         const { firstName, lastName } = req.body;
 
         // Error: Not all fields are filled out.
         if(!firstName || !lastName)
-            return res.status(400).json({ error: "Please fill out all fields." });
+            return res.status(400).json({error: "Please fill out all fields."});
 
         // Error: Name values are not strings.
         if((typeof firstName !== 'string') || (typeof lastName !== 'string'))
-            return res.status(400).json({ error: "Please input a proper name." });
+            return res.status(400).json({error: "Please input a proper name."});
 
         // If all checks are passed.
-
-        const user = await prisma.user.update({
+        // Updates User.
+        const updatedUser = await prisma.user.update({
             where: {
-                email:token.email,
+                id:token.id,
             },
             data: {
                 name: firstName,
                 lastName,
             }
         })
-        if(user)
+        if(updatedUser)
             return res.status(200).json({});
         else
             return res.status(409).json({error: "Could not update information"})
     }
 
-    // Deletes a user.
+    // Retrieves a User's Information.
+    if (req.method === "GET") {
+        // Checks JWT token.
+        const token = await getToken({req});
+        if (!token)
+            return res.status(401).json({error: "User is not logged in."});
+        
+        // Gets User.
+        const getUser = await prisma.user.findFirst({
+            where: {
+                id:token.id,
+            },
+        });
+
+        if (getUser)
+            return res.status(200).json({firstName: getUser.name, lastName: getUser.lastName, email: getUser.email});
+        else
+            return res.status(404).json({error: "User not found."});
+    }
+
+    // Deletes User's Account.
     if (req.method === "DELETE") {
         // Checks JWT token.
         const token = await getToken({req});
         if (!token)
-            return res.status(401).json({ error: "User is not logged in." });
+            return res.status(401).json({error: "User is not logged in."});
         
-        // Deletes a user.
-        const deleteUser = await prisma.user.delete({
+        const { password } =  req.body;
+
+        // Error: Password was wrong or was not sent.
+        if (!password || typeof password != "string")
+            return res.status(400).json({ error: "Password is incorrect or missing." });
+        
+        const user = await prisma.user.findFirst({
             where: {
                 id: token.id,
             },
         });
 
-        if (deleteUser)
-            return res.status(200).json({});
+        if (user) {
+           if (user.password && comparePass(password, user.password)) {
+                // Deletes User.
+                const deleteUser = await prisma.user.delete({
+                    where: {
+                        id: token.id,
+                    },
+                });
+
+                if (deleteUser)
+                    return res.status(200).json({});
+                else
+                    return res.status(409).json({error: "User was not deleted."});
+           }
+           else
+               return res.status(401).json({error: "Password is incorrect"});
+        }
         else
-            return res.status(409).json({ error: "User was not deleted." });
+            return res.status(409).json({error: "User was not found."})  
     }
 }

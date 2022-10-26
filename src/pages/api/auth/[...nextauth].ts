@@ -25,12 +25,12 @@ export default NextAuth({
 			// Credentials needed.
 			credentials: {
 				email: { label: "Email", type: "text", placeholder: "email@email.com" },
-				password: {  label: "Password", type: "password", placeholder: "Password..." }
+				password: {  label: "Password", type: "password", placeholder: "Password..." },
 			},
 			async authorize(credentials, req) {
 				// API Request.
 				if(credentials) {
-					const res = await fetch("http://localhost:3000/api/user/login", {
+					const res = await fetch("http://localhost:3000/api/login", {
 						method: 'POST',
 						body: JSON.stringify(credentials),
 						headers: { "Content-Type": "application/json" }

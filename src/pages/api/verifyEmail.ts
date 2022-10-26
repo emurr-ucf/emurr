@@ -1,27 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from '../../../lib/prisma'
+import { prisma } from '../../lib/prisma'
 
 // API Inputs.
-export interface RegisterRequestType {
+export interface GetVeryifyEmailRequestType {
     emailToken: string;
 }
 
 // API Outputs.
-export interface RegisterResponseType {
-    error: string;
+export interface GetVerifyEmailResponseType {
+    error?: string;
 }
 
 export default async function handler (
     req: NextApiRequest,
-    res: NextApiResponse<RegisterResponseType>
+    res: NextApiResponse,
 ) {
-    const { emailToken } = req.body;
+    const { emailToken } = req.query;
 
     // Error: Token was not sent.
     if(!emailToken)
         res.status(400).json({ error: "No token was sent." });
 
-    // If all Checks are passed.
+    // If All Checks are Passed.
 
     // Count Email as Verified.
     const user = await prisma.user.updateMany({
@@ -35,7 +35,7 @@ export default async function handler (
         }
     })
     if(user)
-        return res.status(200).json({error: ""});
+        return res.status(200).json({});
     else
-        return res.status(200).json({error: "Could not verify email."})
+        return res.status(409).json({error: "Could not verify email."})
 }
