@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
-import { Box } from '../Box';
+import { ProfileCard } from './ProfileCard';
 
 export const ManageAccount = () => {
 	const isProd = process.env.NODE_ENV === 'production';
@@ -34,7 +34,7 @@ export const ManageAccount = () => {
 
 	return (
 		<>
-			<Box image={ isProd ? "/emurr/images/profile/write.svg" : "/images/profile/write.svg" } title="Manage account" description="Edit or delete your account" onClick={ handleShow } />
+			<ProfileCard image={ isProd ? "/emurr/images/profile/write.svg" : "/images/profile/write.svg" } title="Manage account" description="Edit or delete your account" onClick={ handleShow } />
 			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Manage account</Modal.Title>

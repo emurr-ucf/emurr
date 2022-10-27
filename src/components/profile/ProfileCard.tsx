@@ -1,13 +1,13 @@
 import { MouseEventHandler } from "react";
 
-export interface BoxProps {
+export interface ProfileCardProps {
   image: string;
   title: string;
   description: string;
   onClick: MouseEventHandler<HTMLDivElement>;
 }
 
-export const Box = (props: BoxProps) => {
+export const ProfileCard = (props: ProfileCardProps) => {
 	return (
 		<div className="shadow-hard border-2 border-green-800 sm:rounded-md cursor-pointer w-2/5 bg-white p-2 m-2" onClick={props.onClick}>
 			<span>

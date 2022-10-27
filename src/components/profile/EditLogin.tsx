@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
-import { Box } from '../Box';
+import { ProfileCard } from './ProfileCard';
 
 export const EditLogin = () => {
 	const [ show, setShow ] = useState( false );
@@ -16,7 +16,7 @@ export const EditLogin = () => {
 
 	return (
 		<>
-			<Box image={ isProd ? "/emurr/images/profile/mail.svg" : "/images/profile/mail.svg" } title="Edit email" description="Edit your login email" onClick={ handleShow } />
+			<ProfileCard image={ isProd ? "/emurr/images/profile/mail.svg" : "/images/profile/mail.svg" } title="Edit email" description="Edit your login email" onClick={ handleShow } />
 			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Edit email</Modal.Title>

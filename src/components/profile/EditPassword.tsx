@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
-import { Box } from '../Box';
+import { ProfileCard } from './ProfileCard';
 
 export const EditPassword = () => {
 	const isProd = process.env.NODE_ENV === 'production';
@@ -16,7 +16,7 @@ export const EditPassword = () => {
 		event.preventDefault();
 
 		const res = await fetch('/api/resetPassword', {
-			method: "POST",
+			method: "PUT",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify({
 				currentPassword,
@@ -37,7 +37,7 @@ export const EditPassword = () => {
 
 	return (
 		<>
-			<Box image={ isProd ? "/emurr/images/profile/shield.svg" : "/images/profile/shield.svg" } title="Edit password" description="Edit your login password" onClick={ handleShow } />
+			<ProfileCard image={ isProd ? "/emurr/images/profile/shield.svg" : "/images/profile/shield.svg" } title="Edit password" description="Edit your login password" onClick={ handleShow } />
 			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Edit password</Modal.Title>

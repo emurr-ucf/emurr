@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
-import { Box } from '../Box';
+import { ProfileCard } from './ProfileCard';
 import { useSession } from 'next-auth/react';
 
 export const EditProfile = () => {
@@ -60,7 +60,7 @@ export const EditProfile = () => {
   
 	return (
 	  <>
-	    <Box image={ isProd ? "/emurr/images/profile/profile.svg" : "/images/profile/profile.svg" } title="Edit profile" description="Edit your profile information, such as your name and profile picture" onClick={handleShow} />
+	    <ProfileCard image={ isProd ? "/emurr/images/profile/profile.svg" : "/images/profile/profile.svg" } title="Edit profile" description="Edit your profile information, such as your name and profile picture" onClick={handleShow} />
 		<Modal show={show} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Edit profile</Modal.Title>
