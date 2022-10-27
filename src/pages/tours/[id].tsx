@@ -75,7 +75,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
   //! This will change
   const [ tourImages, setTourImages ] = useState<TourSiteImageType[]>( [] );
-  const [ tourTitle, setTourTitle ] = useState( propTour.tourTitle );
+  const [ tourTitle, setTourTitle ] = useState( propTour?.tourTitle );
   const [ pageRename, setPageRename ] = useState( "" );
   const [ pageTitle, setPageTitle ] = useState( "" );
 
@@ -189,7 +189,8 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
 
       setTourImages( images );
     }
-    getImages();
+    if (tour)
+      getImages();
 
     return () => {
       window.removeEventListener( "beforeunload", handleWindowClose );
