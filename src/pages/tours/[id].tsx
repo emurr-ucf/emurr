@@ -67,9 +67,9 @@ class ContentManager {
 
 const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof getServerSideProps> ) => {
   const { data: session, status } = useSession();
-  const [currentPageId, setCurrentPageId] = useState("");
+  const [ currentPageId, setCurrentPageId ] = useState("");
 
-  const [unsavedPages, setUnsavedPages] = useState<any>({});
+  const [ unsavedPages, setUnsavedPages ] = useState<any>({});
   const [ unsavedChanges, setUnsavedChanges ] = useState( false );
   const [ tour, setTour ] = useState( propTour );
   const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
