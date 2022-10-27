@@ -49,7 +49,7 @@ export const Navbar = ( props: NavbarProps ) => {
                   onClick={ so }
                   className="flex justify-center items-center"
                 >
-                  <img src={ session?.user.image ? session?.user.image : "images/google.png" }
+                  <img src={ session?.user.image ? session?.user.image : "/images/google.png" }
                     className="w-7 h-7 rounded-full cursor-pointer" alt=""
                   />
                 </button>
@@ -68,7 +68,7 @@ export const Navbar = ( props: NavbarProps ) => {
         <div className="flex justify-between h-auto py-2 px-10">
           <div className="flex flex-row justify-center items-center gap-4">
             <img
-              src={ `${ isProd ? "/emurr/images/logo_vert_5.png" : "images/logo_vert_5.png" }` }
+              src={ `${ isProd ? "/emurr/images/logo_vert_5.png" : "/images/logo_vert_5.png" }` }
               alt="An SVG of the Emurr Logo"
               className="w-10 h-10"
             />
