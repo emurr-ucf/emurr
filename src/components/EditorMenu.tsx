@@ -270,6 +270,26 @@ export const EditorMenu = ( { tourid, editor, images }: TourSiteCardProps ) => {
             } }
             className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
           />
+          <img
+            src="/images/subscript.svg"
+            alt="subscript"
+            title="Subscript"
+            onClick={ () => {
+              editor?.commands.toggleSubscript();
+              editor?.commands.focus();
+            } }
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
+            src="/images/superscript.svg"
+            alt="superscript"
+            title="Superscript"
+            onClick={ () => {
+              editor?.commands.toggleSuperscript();
+              editor?.commands.focus();
+            } }
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
             src="/images/mark-pen-line.svg"

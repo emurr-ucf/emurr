@@ -25,6 +25,8 @@ import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
 import FontFamily from '@tiptap/extension-font-family'
 import TextStyle from '@tiptap/extension-text-style'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -82,6 +84,8 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
       History,
       FontFamily,
       TextStyle,
+      Subscript,
+      Superscript,
       Image.extend( {
         //     addAttributes() {
         //       return {
