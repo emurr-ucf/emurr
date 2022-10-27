@@ -363,6 +363,16 @@ export const EditorMenu = ( { tourid, editor, images }: TourSiteCardProps ) => {
             } }
             className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
           />
+          <img
+            src="/images/separator.svg"
+            alt="Horizontal Ruler"
+            title="Horizontal Ruler"
+            onClick={ () => {
+              editor?.commands.setHorizontalRule();
+              editor?.commands.focus();
+            } }
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
         </div>
 
         <div className="flex items-center">
