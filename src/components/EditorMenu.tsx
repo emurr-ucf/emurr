@@ -446,6 +446,17 @@ export const EditorMenu = ( { tourid, editor, images }: TourSiteCardProps ) => {
           </Popover>
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
+            src="/images/format-clear.svg"
+            alt="format-clear"
+            title="Clear Format"
+            onClick={ () => {
+              editor?.commands.clearNodes();
+              editor?.commands.unsetAllMarks();
+              editor?.commands.focus();
+            } }
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
+          <img
             src="/images/arrow-go-back-line.svg"
             alt="arrow-go-backwards"
             title="Undo"
