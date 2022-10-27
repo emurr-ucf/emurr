@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import Error from 'next/error';
 
 
-const NewPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const ViewOtherPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const router = useRouter();
     const { data: session, status } = useSession();
     const [tours, setTours] = useState(propTours);
@@ -150,4 +150,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 
 
-export default NewPage
+export default ViewOtherPage;
