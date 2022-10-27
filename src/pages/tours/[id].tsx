@@ -241,18 +241,24 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                       }
 
                     }}
-                    className="w-full"
+                    className="w-full text-left"
                   >
                     {/* Rename page title */}
-                    <input 
-                      defaultValue={page.title === "" ? "Untitled" : page.title}
-                      disabled={pageRename != page.id}
-                      autoFocus={true}
-                      onChange={(event) => {
-                        setPageTitle(event.target.value);
-                      }}
-                      className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }
-                    />
+                    {
+                      pageRename === page.id ? (
+                        <input 
+                          defaultValue={page.title === "" ? "Untitled" : page.title}
+                          autoFocus={true}
+                          onChange={(event) => {
+                            setPageTitle(event.target.value);
+                          }}
+                          className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }
+                        />
+                      ) : 
+                        <span className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }>
+                          {page.title === "" ? "Untitled" : page.title}
+                        </span>
+                    }
                   </button>
                   
                   {/* Edit title button */}
