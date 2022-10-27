@@ -70,7 +70,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   const [currentPageId, setCurrentPageId] = useState("");
 
   const [unsavedPages, setUnsavedPages] = useState<any>({});
-
+  const [ unsavedChanges, setUnsavedChanges ] = useState( false );
   const [ tour, setTour ] = useState( propTour );
   const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
   //! This will change
@@ -79,7 +79,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   const [ pageRename, setPageRename ] = useState( "" );
   const [ pageTitle, setPageTitle ] = useState( "" );
 
-  const unsavedChanges = () => {
+  const anyUnsavedPages = () => {
     return Object.values(ContentManager.unsavedPages).includes(true);
   }
 
@@ -148,6 +148,9 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
       const pageId = ContentManager.currentPageId;
       ContentManager.unsavedPages[pageId] = true;
       setUnsavedPages(ContentManager.unsavedPages);
+
+      // update global unsaved flag
+      setUnsavedChanges(true);
     },
   } );
 
@@ -155,12 +158,12 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   useEffect( () => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = ( e: BeforeUnloadEvent ) => {
-      if ( !unsavedChanges() ) return;
+      if ( !unsavedChanges ) return;
       e.preventDefault();
       return ( e.returnValue = warningText );
     };
     const handleBrowseAway = () => {
-      if ( !unsavedChanges() ) return;
+      if ( !unsavedChanges ) return;
       if ( window.confirm( warningText ) ) return;
       Router.events.emit( "routeChangeError" );
       throw "routeChange aborted.";
@@ -192,7 +195,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
       window.removeEventListener( "beforeunload", handleWindowClose );
       Router.events.off( "routeChangeStart", handleBrowseAway );
     };
-  });
+  }, [ unsavedChanges ] );
 
 
   if (status === "loading") return <div>Loading...</div>;
@@ -251,6 +254,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                     // mark current page as saved
                     ContentManager.save(currentPageId, data);
                     setUnsavedPages(ContentManager.unsavedPages);
+                    setUnsavedChanges(false);
                   }
                 }
               } }
@@ -304,6 +308,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                       if (editor && currentPageId)
                         ContentManager.write(currentPageId, editor.getHTML());
                       setUnsavedPages(ContentManager.unsavedPages);
+                      setUnsavedChanges(anyUnsavedPages());
 
                       // if we're renaming this page, don't switch to it
                       if (pageRename === page.id) return;
