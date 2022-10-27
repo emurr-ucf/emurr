@@ -41,11 +41,14 @@ import React, { useCallback } from "react";
 import { unzip } from "unzipit";
 
 class ContentManager {
+  static currentPageId: string;
+  static unsavedPages: any = {};
   static editedContent: any = {};
   static savedContent: any = {};
 
   static write = (id: string, content: string) => {
     this.editedContent[id] = content;
+    this.unsavedPages[id] = !this.isSaved(id);
   }
 
   static read = (id: string) => {
@@ -54,6 +57,7 @@ class ContentManager {
 
   static save = (id: string, content: string) => {
     this.savedContent[id] = this.editedContent[id] = content;
+    this.unsavedPages[id] = false;
   }
 
   static isSaved = (id: string) => {
@@ -68,13 +72,16 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   const [unsavedPages, setUnsavedPages] = useState<any>({});
 
   const [ tour, setTour ] = useState( propTour );
-  const [ unsavedChanges, setUnsavedChanges ] = useState( false );
   const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
   //! This will change
   const [ tourImages, setTourImages ] = useState<TourSiteImageType[]>( [] );
   const [ tourTitle, setTourTitle ] = useState( propTour.tourTitle );
   const [ pageRename, setPageRename ] = useState( "" );
   const [ pageTitle, setPageTitle ] = useState( "" );
+
+  const unsavedChanges = () => {
+    return Object.values(ContentManager.unsavedPages).includes(true);
+  }
 
   const editor = useEditor( {
     extensions: [
@@ -137,7 +144,10 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
     },
     autofocus: "start",
     onUpdate: () => {
-      setUnsavedChanges( true );
+      // mark page as unsaved
+      const pageId = ContentManager.currentPageId;
+      ContentManager.unsavedPages[pageId] = true;
+      setUnsavedPages(ContentManager.unsavedPages);
     },
   } );
 
@@ -145,12 +155,12 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   useEffect( () => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = ( e: BeforeUnloadEvent ) => {
-      if ( !unsavedChanges ) return;
+      if ( !unsavedChanges() ) return;
       e.preventDefault();
       return ( e.returnValue = warningText );
     };
     const handleBrowseAway = () => {
-      if ( !unsavedChanges ) return;
+      if ( !unsavedChanges() ) return;
       if ( window.confirm( warningText ) ) return;
       Router.events.emit( "routeChangeError" );
       throw "routeChange aborted.";
@@ -182,7 +192,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
       window.removeEventListener( "beforeunload", handleWindowClose );
       Router.events.off( "routeChangeStart", handleBrowseAway );
     };
-  }, [ unsavedChanges ] );
+  });
 
 
   if (status === "loading") return <div>Loading...</div>;
@@ -237,14 +247,11 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                     body: formData,
                   });
 
-                  // mark current page as saved
                   if (res.status === 200) {
-                    const newUnsavedPages = Object.assign({}, unsavedPages);
-                    newUnsavedPages[currentPageId] = false;
-                    setUnsavedPages(newUnsavedPages);
+                    // mark current page as saved
                     ContentManager.save(currentPageId, data);
+                    setUnsavedPages(ContentManager.unsavedPages);
                   }
-                  setUnsavedChanges( false );
                 }
               } }
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
@@ -293,13 +300,10 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                   <button
                     onClick={async () => {
                       // stash changes with content manager
-                      if (editor)
-                        ContentManager.write(currentPageId, editor.getHTML());
-                      
                       // Update "unsaved" state for old page
-                      const newUnsavedPages = Object.assign({}, unsavedPages);
-                      newUnsavedPages[currentPageId] = !ContentManager.isSaved(currentPageId);
-                      setUnsavedPages(newUnsavedPages);
+                      if (editor && currentPageId)
+                        ContentManager.write(currentPageId, editor.getHTML());
+                      setUnsavedPages(ContentManager.unsavedPages);
 
                       // if we're renaming this page, don't switch to it
                       if (pageRename === page.id) return;
@@ -307,23 +311,28 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                       // restore stashed changes from ContentManager, if possible
                       if (ContentManager.read(page.id)) {
                         editor?.commands.setContent(ContentManager.read(page.id));
-                        setCurrentPageId(page.id);
-                        return;
                       }
-
                       // otherwise, fetch content from api
-                      const res = await fetch( `/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
-                        method: "GET",
-                      } );
-
-                      const resHTML = await res.text();
-
-                      if ( res.status === 200 ) {
-                        setCurrentPageId( page.id );
-                        ContentManager.save( page.id, resHTML );
-                        editor?.commands.setContent( resHTML == "" ? "" : resHTML );
+                      else {
+                        const res = await fetch( `/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
+                          method: "GET",
+                        } );
+  
+                        const resHTML = await res.text();
+  
+                        if ( res.status === 200 ) {
+                          ContentManager.save( page.id, resHTML );
+                          editor?.commands.setContent( resHTML == "" ? "" : resHTML );
+                        }
+                        else {
+                          alert("Failed to load content");
+                          return;
+                        }
                       }
 
+                      // update current page id
+                      setCurrentPageId(page.id);
+                      ContentManager.currentPageId = page.id;
                     }}
                     className="w-full text-left"
                   >
