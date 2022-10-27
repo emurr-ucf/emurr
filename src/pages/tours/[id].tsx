@@ -62,15 +62,9 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const { data: session, status } = useSession();
   const [currentPageId, setCurrentPageId] = useState("");
 
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") {
-    Router.push("/");
-    return <div>Redirecting...</div>
-  }
-  
   const [tour, setTour] = useState(propTour);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
-  const [tourTitle, setTourTitle] = useState(tour.tourTitle);
+  const [tourTitle, setTourTitle] = useState(tour?.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
   const [unsavedPages, setUnsavedPages] = useState<any>({});
@@ -112,6 +106,12 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       setWordCount(editor?.storage.characterCount.words());
     },
   });
+
+  if (status === "loading") return <div>Loading...</div>;
+  if (status === "unauthenticated") {
+    Router.push("/");
+    return <div>Redirecting...</div>
+  }
 
   return (
     <>
