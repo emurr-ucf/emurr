@@ -62,6 +62,12 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const { data: session, status } = useSession();
   const [currentPageId, setCurrentPageId] = useState("");
 
+  if (status === "loading") return <div>Loading...</div>;
+  if (status === "unauthenticated") {
+    Router.push("/");
+    return <div>Redirecting...</div>
+  }
+  
   const [tour, setTour] = useState(propTour);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
   const [tourTitle, setTourTitle] = useState(tour.tourTitle);
@@ -107,8 +113,6 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     },
   });
 
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") Router.push("/");
   return (
     <>
       <div className="flex flex-col w-full h-screen">
