@@ -40,6 +40,7 @@ import { getToken } from "next-auth/jwt";
 import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
 import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
+import { urlPath } from "../../lib/urlPath";
 
 interface PageType {
   page: Page;
@@ -206,7 +207,6 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     };
     window.addEventListener('beforeunload', handleWindowClose);
     Router.events.on('routeChangeStart', handleBrowseAway);
-
     getImages();
     console.log(tourImages.current);
 
@@ -240,7 +240,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 if (updatedTourTitle) {
                   const body = { tourId: tour.id, name: tourTitle };
 
-                  await fetch("/api/tour", {
+                  await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -260,7 +260,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                   formData.append("file", file);
 
-                  const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${page}`, {
+                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${page}`, {
                     method: "PUT",
                     body: formData,
                   });
@@ -291,7 +291,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                 formData.append("file", file);
 
-                const res = await fetch(`/api/page?tourId=${tour.id}`, {
+                const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}`, {
                   method: "POST",
                   body: formData,
                 });
@@ -312,7 +312,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     onClick={async () => {
                       if (pageRename === page.id) return;
 
-                      const res = await fetch(`/api/page?tourId=${tour.id}&pageId=${page.id}`, {
+                      const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${page.id}`, {
                         method: "GET",
                       });
 
@@ -339,7 +339,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     onClick={async () => {
                       const body = { pageId: page.id, name: pageTitle };
 
-                      const res = await fetch("/api/pagedb", {
+                      const res = await fetch(`${urlPath}/api/pagedb`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(body),

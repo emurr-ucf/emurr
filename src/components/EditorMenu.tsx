@@ -4,6 +4,7 @@ import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
 import { ChevronDownIcon } from "@heroicons/react/solid"
+import { urlLocalPath } from "../lib/urlPath";
 
 export interface TourSiteImageType {
   name: string;
@@ -59,7 +60,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div>Heading 1</div>
-                          <img src="/images/h-1.svg" alt="h-1" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/h-1.svg`} alt="h-1" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -75,7 +76,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div>Heading 2</div>
-                          <img src="/images/h-2.svg" alt="h-2" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/h-2.svg`} alt="h-2" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -91,7 +92,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div>Heading 3</div>
-                          <img src="/images/h-3.svg" alt="h-3" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/h-3.svg`} alt="h-3" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -107,7 +108,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div>Heading 4</div>
-                          <img src="/images/h-4.svg" alt="h-4" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/h-4.svg`} alt="h-4" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -123,7 +124,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div>Heading 5</div>
-                          <img src="/images/h-5.svg" alt="h-5" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/h-5.svg`} alt="h-5" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -139,7 +140,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div>Heading 6</div>
-                          <img src="/images/h-6.svg" alt="h-6" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/h-6.svg`} alt="h-6" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
@@ -239,7 +240,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
           </Menu>
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
-            src="/images/bold.svg"
+            src={`${urlLocalPath}/images/bold.svg`}
             alt="bold"
             title="Bold"
             onClick={() => {
@@ -249,7 +250,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("bold") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/italic.svg"
+            src={`${urlLocalPath}/images/italic.svg`}
             alt="italic"
             title="Italic"
             onClick={() => {
@@ -259,7 +260,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("italic") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/underline.svg"
+            src={`${urlLocalPath}/images/underline.svg`}
             alt="underline"
             title="Underline"
             onClick={() => {
@@ -269,7 +270,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("underline") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/strikethrough.svg"
+            src={`${urlLocalPath}/images/strikethrough.svg`}
             alt="strikethrough"
             title="Strike"
             onClick={() => {
@@ -279,7 +280,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("strike") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/subscript.svg"
+            src={`${urlLocalPath}/images/subscript.svg`}
             alt="subscript"
             title="Subscript"
             onClick={() => {
@@ -289,7 +290,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("subscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/superscript.svg"
+            src={`${urlLocalPath}/images/superscript.svg`}
             alt="superscript"
             title="Superscript"
             onClick={() => {
@@ -300,7 +301,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
-            src="/images/mark-pen-line.svg"
+            src={`${urlLocalPath}/images/mark-pen-line.svg`}
             alt="mark-pen-line"
             title="Highlight"
             onClick={() => {
@@ -311,7 +312,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
-            src="/images/align-left.svg"
+            src={`${urlLocalPath}/images/align-left.svg`}
             alt="align left"
             title="Left align"
             onClick={() => {
@@ -321,7 +322,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive({ textAlign: "left" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/align-center.svg"
+            src={`${urlLocalPath}/images/align-center.svg`}
             alt="align center"
             title="Center align"
             onClick={() => {
@@ -331,7 +332,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive({ textAlign: "center" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/align-right.svg"
+            src={`${urlLocalPath}/images/align-right.svg`}
             alt="align right"
             title="Right align"
             onClick={() => {
@@ -341,7 +342,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive({ textAlign: "right" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/align-justify.svg"
+            src={`${urlLocalPath}/images/align-justify.svg`}
             alt="align justify"
             title="Justify"
             onClick={() => {
@@ -351,7 +352,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive({ textAlign: "justify" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/code-box-line.svg"
+            src={`${urlLocalPath}/images/code-box-line.svg`}
             alt="code block"
             title="Code"
             onClick={() => {
@@ -362,7 +363,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
-            src="/images/list-unordered.svg"
+            src={`${urlLocalPath}/images/list-unordered.svg`}
             alt="list-unordered"
             title="Bullet List"
             onClick={() => {
@@ -372,7 +373,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("bulletList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/list-ordered.svg"
+            src={`${urlLocalPath}/images/list-ordered.svg`}
             alt="list-ordered"
             title="Ordered List"
             onClick={() => {
@@ -382,7 +383,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("orderedList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
-            src="/images/double-quotes-l.svg"
+            src={`${urlLocalPath}/images/double-quotes-l.svg`}
             alt="double-quotes"
             title="Blockquote"
             onClick={() => {
@@ -390,6 +391,16 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
               editor?.commands.focus();
             }}
             className={`${editor?.isActive("blockquote") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+          />
+          <img
+            src={`${urlLocalPath}/images/separator.svg`}
+            alt="Horizontal Ruler"
+            title="Horizontal Ruler"
+            onClick={() => {
+              editor?.commands.setHorizontalRule();
+              editor?.commands.focus();
+            }}
+            className={`${editor?.isActive("horizontalRule") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
         </div>
 
@@ -399,7 +410,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
               <>
                 <Popover.Button className="flex justify-center items-center">
                   <img
-                    src="/images/image-line.svg"
+                    src={`${urlLocalPath}/images/image-line.svg`}
                     alt="image"
                     title="Insert image"
                     className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
@@ -455,7 +466,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                               const formData = new FormData();
                               formData.append("file", event.target.files[0]);
 
-                              const tours = await fetch(`/api/tourImage?tourId=${tourid}`, {
+                              const tours = await fetch(`${urlLocalPath}/api/tourImage?tourId=${tourid}`, {
                                 method: "POST",
                                 body: formData,
                               });
@@ -482,7 +493,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
           </Popover>
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
-            src="/images/format-clear.svg"
+            src={`${urlLocalPath}/images/format-clear.svg`}
             alt="format-clear"
             title="Clear Format"
             onClick={() => {
@@ -493,7 +504,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
           />
           <img
-            src="/images/arrow-go-back-line.svg"
+            src={`${urlLocalPath}/images/arrow-go-back-line.svg`}
             alt="arrow-go-backwards"
             title="Undo"
             onClick={() => {
@@ -503,7 +514,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
           />
           <img
-            src="/images/arrow-go-forward-line.svg"
+            src={`${urlLocalPath}/images/arrow-go-forward-line.svg`}
             alt="arrow-go-forward"
             title="Redo"
             onClick={() => {
