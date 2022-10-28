@@ -81,6 +81,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Strike,
       CharacterCount,
       Underline,
+      FontFamily,
+      TextStyle,
+      Subscript,
+      Superscript,
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
