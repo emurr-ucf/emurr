@@ -1,6 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 import { Box } from '../Box';
+import { urlLocalPath } from '../../lib/urlPath';
 
 export const ManageAccount = () => {
 	const [show, setShow] = useState(false);
