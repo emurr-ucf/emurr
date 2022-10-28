@@ -3,26 +3,26 @@ import { useState } from "react";
 import { Box } from '../Box';
 
 export const ManageAccount = () => {
-	const [ show, setShow ] = useState( false );
-	const handleShow = () => setShow( true );
-	const handleClose = () => setShow( false );
+	const [show, setShow] = useState(false);
+	const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
 	const handleSave = () => {
 		// TODO make a request and show response
-		alert( "Submitted" );
-		setShow( false );
+		alert("Submitted");
+		setShow(false);
 	}
 
 	const isProd = process.env.NODE_ENV === 'production';
 
 	return (
 		<>
-			<Box image={ `${ isProd ? "/emurr/images/key.png" : "/images/key.png" } ` } title="Manage account" description="Edit or delete your account" action="" onClick={ handleShow } />
-			<Modal show={ show } onHide={ handleClose }>
+			<Box image={`${urlLocalPath}/images/key.png`} title="Manage account" description="Edit or delete your account" action="" onClick={handleShow} />
+			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title>Manage account</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form onSubmit={ handleSave }>
+					<form onSubmit={handleSave}>
 						<div className="flex flex-col gap-6">
 							<input
 								type="password"

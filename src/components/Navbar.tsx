@@ -15,15 +15,13 @@ export const Navbar = (props: NavbarProps) => {
     signOut();
   }
 
-  const isProd = process.env.NODE_ENV === 'production';
-
   if (status === "authenticated") {
     return (
       <>
         <nav className="sticky top-0 z-50 border-b border-brown backdrop-blur-md bg-background-400">
           <div className="flex justify-between h-auto py-2 px-10">
             <div className="flex flex-row justify-center items-center gap-4">
-              <img src={`${isProd ? "/emurr/images/logo_vert_5.png" : "/images/logo_vert_5.png"}`} alt="An SVG of the Emurr Logo" className="w-10 h-10" />
+              <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="An SVG of the Emurr Logo" className="w-10 h-10" />
               {props.children ?
                 props.children
                 :
@@ -70,7 +68,7 @@ export const Navbar = (props: NavbarProps) => {
         <div className="flex justify-between h-auto py-2 px-10">
           <div className="flex flex-row justify-center items-center gap-4">
             <img
-              src={`${isProd ? "/emurr/images/logo_vert_5.png" : "images/logo_vert_5.png"}`}
+              src={`${urlLocalPath}images/logo_vert_5.png`}
               alt="An SVG of the Emurr Logo"
               className="w-10 h-10"
             />
