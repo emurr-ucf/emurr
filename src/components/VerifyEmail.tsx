@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { urlPath } from '../lib/urlPath';
 
 export const VerifyEmail = () => {
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
-  
+
   const router = useRouter();
   let eT = router.query.eT;
 
@@ -21,11 +22,11 @@ export const VerifyEmail = () => {
 
   const doVerifyEmail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const body = {emailToken: eT};
-    
-    fetch("api/verifyEmail", {
+    const body = { emailToken: eT };
+
+    fetch(`${urlPath}/api/verifyEmail`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     }).then((response: Response) => {
       if (response.status === 200) {
@@ -59,7 +60,7 @@ export const VerifyEmail = () => {
             Back to login
           </Link>
         </div>
-        
+
         <div className="text-center">
           <span className={color}>{message}</span>
         </div>
