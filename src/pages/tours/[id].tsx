@@ -115,7 +115,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     ],
     editorProps: {
       attributes: {
-        class: "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+        class: "font-serif prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
