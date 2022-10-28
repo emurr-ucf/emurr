@@ -20,7 +20,7 @@ const LoginPage: NextPage = () => {
   }
 
   if (session) {
-    Router.push(`${urlPath}/tours`);
+    Router.push("/tours");
   }
 
   return (

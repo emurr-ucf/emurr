@@ -41,7 +41,7 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
                 </>
                 :
                 <>
-                  <Link href={`/tours/${props.id}`}>
+                  <Link href={`${urlPath}/tours/${props.id}`}>
                     <button className="flex justify-center items-center w-full hover:bg-slate-100 transition ease-in-out">
                       EDIT
                     </button>

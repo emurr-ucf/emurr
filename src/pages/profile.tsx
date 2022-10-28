@@ -11,7 +11,7 @@ import Router from "next/router";
 const ProfilePage: NextPage = () => {
   const { data: session, status } = useSession();
 
-  if (status === "unauthenticated") Router.push(`${urlPath}/`);
+  if (status === "unauthenticated") Router.push("/");
 
 
   return (

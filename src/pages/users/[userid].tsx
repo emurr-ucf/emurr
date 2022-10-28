@@ -3,10 +3,9 @@ import { Navbar } from '../../components/Navbar';
 import { useSession } from 'next-auth/react';
 import { TourSiteCard } from '../../components/TourSiteCard';
 import Router, { useRouter } from 'next/router';
-import { Tour, User } from '@prisma/client';
+import { Tour } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
 import { prisma } from "../../lib/prisma";
-import { CreateTourResponseType } from '../api/tour';
 import { useEffect, useState } from 'react';
 import Error from 'next/error';
 import { urlPath } from '../../lib/urlPath';
@@ -43,11 +42,11 @@ const ViewOtherPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsT
   if (status === "loading") return <div>Loading...</div>;
   else if (status === "unauthenticated" && !changing) {
     setChanging(true);
-    Router.push(`${urlPath}/`);
+    Router.push("/");
   }
   else if (session?.user.id === userid && !changing) {
     setChanging(true);
-    Router.push(`${urlPath}/tours/`);
+    Router.push("/tours/");
     console.log(session?.user.id + " " + userid);
   }
   else if (!userid && !changing) {

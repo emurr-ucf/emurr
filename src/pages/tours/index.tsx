@@ -46,7 +46,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
   }, [query, sortQuery])
 
   if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") Router.push(`${urlPath}/`);
+  if (status === "unauthenticated") Router.push("/");
 
   return (
     <>
@@ -74,7 +74,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                   const body: CreateTourResponseType = await res.json();
 
                   if (!body.error)
-                    Router.push(`${urlPath}/tours/${body.tourId}`);
+                    Router.push("/tours/${body.tourId}");
                 }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >

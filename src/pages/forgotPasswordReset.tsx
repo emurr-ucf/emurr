@@ -10,7 +10,7 @@ const ForgotPasswordResetPage: NextPage = () => {
   const { data: session, status } = useSession();
 
   if (session) {
-    Router.push(`${urlPath}/tours`);
+    Router.push("/tours");
   }
 
   return (
