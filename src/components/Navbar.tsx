@@ -34,8 +34,7 @@ export const Navbar = (props: NavbarProps) => {
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
               <div className={`py-1 px-2 rounded-md ${props.page === "dashboard" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                {/* <Link href="/tours"> */}
-                <Link href={`${urlPath}/tours`}>
+                <Link href={`${urlLocalPath}/tours`}>
                   dashboard
                 </Link>
               </div>
