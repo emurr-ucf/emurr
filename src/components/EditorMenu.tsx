@@ -182,21 +182,6 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <form onClick={(event) => {
-                    editor?.commands.setFontFamily('Arial');
-                    editor?.commands.focus();
-                    setFontFamily("Arial");
-                  }}>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
-                          <div className="font-sans">Arial</div>
-                        </div>
-                      )}
-                    </Menu.Item>
-                  </form>
-                  <form onClick={(event) => {
                     editor?.commands.setFontFamily('serif');
                     editor?.commands.focus();
                     setFontFamily("Times");
@@ -207,6 +192,21 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                           className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
                         >
                           <div className="font-serif">Times</div>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.setFontFamily('Arial');
+                    editor?.commands.focus();
+                    setFontFamily("Arial");
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div className="font-sans">Arial</div>
                         </div>
                       )}
                     </Menu.Item>
