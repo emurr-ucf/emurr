@@ -2,7 +2,7 @@ import { useState } from "react"
 import Link from "next/link";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { urlPath } from "../lib/urlPath";
+import { urlLocalPath, urlPath } from "../lib/urlPath";
 
 interface TourSiteCardProps {
   id: string;
@@ -41,7 +41,7 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
                 </>
                 :
                 <>
-                  <Link href={`${urlPath}/tours/${props.id}`}>
+                  <Link href={`${urlLocalPath}/tours/${props.id}`}>
                     <button className="flex justify-center items-center w-full hover:bg-slate-100 transition ease-in-out">
                       EDIT
                     </button>
