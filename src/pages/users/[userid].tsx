@@ -43,11 +43,11 @@ const ViewOtherPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsT
   if (status === "loading") return <div>Loading...</div>;
   else if (status === "unauthenticated" && !changing) {
     setChanging(true);
-    Router.push("/");
+    Router.push(`${urlPath}/`);
   }
   else if (session?.user.id === userid && !changing) {
     setChanging(true);
-    Router.push("/tours/");
+    Router.push(`${urlPath}/tours/`);
     console.log(session?.user.id + " " + userid);
   }
   else if (!userid && !changing) {

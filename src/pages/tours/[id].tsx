@@ -176,7 +176,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
 
   if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") Router.push("/");
+  if (status === "unauthenticated") Router.push(`${urlPath}/`);
   return (
     <>
       <div className="flex flex-col w-full h-screen">

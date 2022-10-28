@@ -4,18 +4,19 @@ import { OAuth } from '../components/OAuth';
 import Router from 'next/router';
 import { useSession } from 'next-auth/react';
 import { ForgotPasswordReset } from '../components/ForgotPasswordReset';
+import { urlPath } from '../lib/urlPath';
 
 const ForgotPasswordResetPage: NextPage = () => {
   const { data: session, status } = useSession();
 
   if (session) {
-    Router.push('/tours');
+    Router.push(`${urlPath}/tours`);
   }
 
   return (
     <>
       <div className="min-h-screen">
-        <Navbar 
+        <Navbar
           page="forgotPasswordReset"
         />
         <div className="flex justify-center text-green-800">

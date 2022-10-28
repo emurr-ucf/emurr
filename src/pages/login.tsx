@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { Register } from '../components/Register';
 import { ForgotPassword } from '../components/ForgotPassword';
+import { urlPath } from '../lib/urlPath';
 
 export enum FormType { LOGIN = 1, REGISTER, FORGOT_PASSWORD };
 
@@ -19,13 +20,13 @@ const LoginPage: NextPage = () => {
   }
 
   if (session) {
-    Router.push('/tours');
+    Router.push(`${urlPath}/tours`);
   }
 
   return (
     <>
       <div className="min-h-screen">
-        <Navbar 
+        <Navbar
           page="login"
         />
         <div className="flex justify-center text-green-800">
