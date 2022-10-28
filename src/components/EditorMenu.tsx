@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
-import { getImageSize } from "next/dist/server/image-optimizer";
+import { ChevronDownIcon } from "@heroicons/react/solid"
 
 export interface TourSiteImageType {
   name: string;
@@ -19,6 +19,7 @@ interface TourSiteCardProps {
 
 export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardProps) => {
   const [heading, setHeading] = useState("Heading 1");
+  const [fontFamily, setFontFamily] = useState("Arial");
 
   return (
     <>
@@ -27,9 +28,13 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
               <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold">
+                <div className="font-bold inline-flex">
                   {heading}
-                </div> 
+                  <ChevronDownIcon
+                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
+                    aria-hidden="true"
+                  />
+                </div>
               </Menu.Button>
             </div>
             <Transition
@@ -160,7 +165,80 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             </Transition>
           </Menu>
           <div className="border-x h-3/5 border-green-200 mx-2" />
-          <img 
+          <Menu as="div" className="relative w- inline-block text-left">
+            <div>
+              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold inline-flex">
+                  {fontFamily}
+                  <ChevronDownIcon
+                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
+                    aria-hidden="true"
+                  />
+                </div>
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  <form onClick={(event) => {
+                    editor?.commands.setFontFamily('Arial');
+                    editor?.commands.focus();
+                    setFontFamily("Arial");
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div className="font-sans">Arial</div>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.setFontFamily('serif');
+                    editor?.commands.focus();
+                    setFontFamily("Times");
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div className="font-serif">Times</div>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form onClick={(event) => {
+                    editor?.commands.setFontFamily('Courier New');
+                    editor?.commands.focus();
+                    setFontFamily("Courier New");
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div className="font-mono">Courier New</div>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img
             src="/images/bold.svg"
             alt="bold"
             title="Bold"
@@ -170,7 +248,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             }}
             className={`${editor?.isActive("bold") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
-          <img 
+          <img
             src="/images/italic.svg"
             alt="italic"
             title="Italic"
@@ -199,6 +277,26 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
               editor?.commands.focus();
             }}
             className={`${editor?.isActive("strike") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+          />
+          <img
+            src="/images/subscript.svg"
+            alt="subscript"
+            title="Subscript"
+            onClick={() => {
+              editor?.commands.toggleSubscript();
+              editor?.commands.focus();
+            }}
+            className={`${editor?.isActive("subscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+          />
+          <img
+            src="/images/superscript.svg"
+            alt="superscript"
+            title="Superscript"
+            onClick={() => {
+              editor?.commands.toggleSuperscript();
+              editor?.commands.focus();
+            }}
+            className={`${editor?.isActive("superscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -294,7 +392,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             className={`${editor?.isActive("blockquote") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
         </div>
-        
+
         <div className="flex items-center">
           <Popover className="relative">
             {({ open }) => (
@@ -326,7 +424,6 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                               onClick={() => {
                                 const arr = image.name.match(/\.[0-9a-z]+$/i);
                                 if (arr) {
-                                  console.log(arr[0])
                                   if (arr[0] === ".mp4") {
                                     editor?.chain().focus().setVideo({ src: image.bloburl, alt: "./images/" + image.name }).run();
                                   } else {
@@ -334,7 +431,7 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
                                   }
                                 }
                               }
-                            }
+                              }
                               className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                             >
                               <div className="text-sm font-medium text-gray-900">
@@ -384,6 +481,17 @@ export const EditorMenu = ({ tourid, editor, images, getImages }: TourSiteCardPr
             )}
           </Popover>
           <div className="border-x h-3/5 border-green-200 mx-2" />
+          <img
+            src="/images/format-clear.svg"
+            alt="format-clear"
+            title="Clear Format"
+            onClick={() => {
+              editor?.commands.clearNodes();
+              editor?.commands.unsetAllMarks();
+              editor?.commands.focus();
+            }}
+            className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+          />
           <img
             src="/images/arrow-go-back-line.svg"
             alt="arrow-go-backwards"

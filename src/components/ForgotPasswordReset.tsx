@@ -10,7 +10,7 @@ export const ForgotPasswordReset = () => {
   const [color, setColor] = useState("");
   
   const router = useRouter();
-  let resPassToken = router.query.resPassToken;
+  let rPT = router.query.rPT;
 
   const error = (message: string) => {
     setColor("text-red-800");
@@ -35,7 +35,7 @@ export const ForgotPasswordReset = () => {
       return;
     }
 
-    const body = {newPassword, resPassToken};
+    const body = {newPassword, resPassToken: rPT};
     fetch("api/forgotPassword", {
       method: "PUT",
       headers: {"Content-Type": "application/json"},

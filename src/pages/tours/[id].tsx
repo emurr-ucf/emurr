@@ -24,6 +24,10 @@ import TextAlign from "@tiptap/extension-text-align";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
 import Video from "../../lib/extensions/video";
+import FontFamily from '@tiptap/extension-font-family'
+import TextStyle from '@tiptap/extension-text-style'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -94,7 +98,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             });
             return ["img", HTMLAttributes];
           }
-          
+
         },
         addAttributes() {
           return {
@@ -128,7 +132,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             });
             return ["video", HTMLAttributes];
           }
-          
+
         },
         addAttributes() {
           return {
@@ -267,7 +271,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 isSavingTour.current = false;
                 editor?.commands.setContent(data ? data : "");
                 editor?.setEditable(true);
-                
+
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
             >

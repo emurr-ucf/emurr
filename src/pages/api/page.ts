@@ -107,9 +107,10 @@ export default async function handler (
         // @ts-ignore-end
 
         // Updates the last modified date.
-        const updatePage = await prisma.page.update({
+        const updatePage = await prisma.page.updateMany({
             where: {
                 id: pageId,
+                authorId: token.id
             },
             data: {
                 pageUpdatedAt: new Date(),
