@@ -19,7 +19,7 @@ interface TourSiteCardProps {
 
 export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
   const [heading, setHeading] = useState("Heading 1");
-  const [fontFamily, setFontFamily] = useState("Arial");
+  const [fontFamily, setFontFamily] = useState("Times");
   const [tourImages, setTourImages] = useState(images);
 
   const addImage = useCallback(() => {
