@@ -1,12 +1,9 @@
 import type { NextPage } from "next";
 import { Navbar } from "../components/Navbar";
 import { Logo } from "../components/Logo";
+import { urlLocalPath } from "../lib/urlPath";
 
 const HomePage: NextPage = () => {
-
-  const isProd = process.env.NODE_ENV === 'production';
-  const imagePrefix = isProd ? "/emurr" : "";
-
   return (
     <>
       <div className="h-full">
@@ -27,44 +24,44 @@ const HomePage: NextPage = () => {
             <div className="text-2xl text-center font-light">Royal Court of House CHDR</div>
             <div className="flex justify-center my-10 gap-10">
               <div className="gap-10">
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
             </div>
             <div className="text-2xl text-center font-light">Knights of House CHDR</div>
             <div className="flex justify-center my-10 gap-10">
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
             </div>
             <div className="flex justify-center my-10 gap-10">
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
               <div>
-                <img src={ `${ imagePrefix }/images/logo_vert_5.png` } alt="EMURR-Logo" className="w-40 h-40" />
+                <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="w-40 h-40" />
                 <div className="text-center font-semibold">EMURR EMURR</div>
               </div>
             </div>
