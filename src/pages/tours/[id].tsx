@@ -44,6 +44,7 @@ import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
 import React, { useCallback } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
+import download from "downloadjs";
 
 interface PageType {
   page: Page;
@@ -232,11 +233,25 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                   setUnsavedChanges( false );
                 }
               } }
-              className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
+              className={`py-1 w-24 ${unsavedChanges ? "bg-red-700" : "bg-green-700"} text-background-200 rounded-sm`}
             >
               Save
             </button>
-            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Download</button>
+            <button
+              onClick={async () => {
+                const res = await fetch(`${ urlPath }/api/download`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ tourId: tour.id }),
+                });
+
+                const blob = await res.blob();
+                download(blob, "toursite.zip", "file/zip");
+              }}
+              className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
+            >
+              Download
+            </button>
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
           </>
         </Navbar>
@@ -296,7 +311,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                   </button>
                   <button
                     onClick={ async () => {
-                      const body = { pageId: page.id, name: pageTitle };
+                      const body = { pageId: page.id, tourId: tour.id, name: pageTitle };
 
                       const res = await fetch( `${ urlPath }/api/pagedb`, {
                         method: "PUT",
@@ -324,7 +339,8 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
             ) : (
               <>
                 <EditorMenu
-                  tourid={ tour.id }
+                  tourId={ tour.id }
+                  pageId={page}
                   editor={ editor }
                   images={ tourImages }
                 />

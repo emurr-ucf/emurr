@@ -5,19 +5,21 @@ import { Fragment } from "react";
 import { unzip } from "unzipit";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { urlLocalPath } from "../lib/urlPath";
+import { CustomUrlModal } from "./CustomUrlModal";
 
 export interface TourSiteImageType {
   name: string;
   bloburl: string;
 }
 
-interface TourSiteCardProps {
-  tourid: string;
+interface EditorMenuProps {
+  tourId: string;
+  pageId: string;
   editor: Editor | null;
   images: TourSiteImageType[];
 }
 
-export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
+export const EditorMenu = ({ tourId, pageId, editor, images }: EditorMenuProps) => {
   const [heading, setHeading] = useState("Heading 1");
   const [fontFamily, setFontFamily] = useState("Times");
   const [tourImages, setTourImages] = useState(images);
@@ -486,6 +488,10 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
         </div>
 
         <div className="flex items-center">
+          <CustomUrlModal 
+            pageId={pageId}
+            tourId={tourId}
+          />
           <Popover className="relative">
             {({ open }) => (
               <>
@@ -531,7 +537,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                               const formData = new FormData();
                               formData.append("file", event.target.files[0]);
 
-                              const tours = await fetch(`${urlLocalPath}/api/tourImage?tourId=${tourid}`, {
+                              const tours = await fetch(`${urlLocalPath}/api/tourImage?tourId=${tourId}`, {
                                 method: "POST",
                                 body: formData,
                               });
