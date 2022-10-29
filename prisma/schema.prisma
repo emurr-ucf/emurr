@@ -24,6 +24,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId], map: "Account_userId_fkey")
 }
 
 model Session {
@@ -32,29 +33,30 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Session_userId_fkey")
 }
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  // firstName String?
   lastName      String?
   email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  writtenPosts  Page[]    @relation("WrittenPages")
-  favoritePosts Page[]    @relation("FavPages")
-  tours         Tour[]
-  comments      Comment[]
-  role          Role      @default(USER)
   password      String?
-  verifyEmail   Boolean?  @default(false) // oldField emailVerified renamed to verifyEmail
   emailToken    String?
   resPassword   Int?
   resPassToken  String?
+  image         String?
+  name          String?
   registeredAt  DateTime? @default(now())
+  role          Role      @default(USER)
+  verifyEmail   Boolean?  @default(false)
+  emailVerified DateTime?
+  accounts      Account[]
+  comments      Comment[]
+  writtenPosts  Page[]    @relation("WrittenPages")
+  favoritePosts Page[]    @relation("FavPages")
+  sessions      Session[]
+  tours         Tour[]
 }
 
 model VerificationToken {
@@ -67,19 +69,24 @@ model VerificationToken {
 
 model Page {
   id            String    @id @default(cuid())
+  customURL     String?   @db.VarChar(255)
   pageCreatedAt DateTime  @default(now())
   pageUpdatedAt DateTime  @updatedAt
   title         String    @db.VarChar(255)
   content       String?   @db.Text
   published     Boolean   @default(false)
-  deletable     Boolean   @default(true)
-  author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  authorId      String // relation scalar field  (used in the `@relation` attribute above)
-  favoritedBy   User?     @relation("FavPages", fields: [favoritedById], references: [id])
+  authorId      String
   favoritedById String?
-  tours         Tour?     @relation(fields: [tourId], references: [id])
   tourId        String?
+  deletable     Boolean   @default(true)
+  author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade)
+  favoritedBy   User?     @relation("FavPages", fields: [favoritedById], references: [id])
+  tours         Tour?     @relation(fields: [tourId], references: [id])
   comments      Comment[]
+
+  @@index([authorId], map: "Page_authorId_fkey")
+  @@index([favoritedById], map: "Page_favoritedById_fkey")
+  @@index([tourId], map: "Page_tourId_fkey")
 }
 
 model Tour {
@@ -88,18 +95,23 @@ model Tour {
   tourUpdatedAt   DateTime @updatedAt
   tourTitle       String
   tourDescription String?  @db.VarChar(255)
-  tourPages       Page[]
-  tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   tourAuthorId    String
+  tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade)
+  tourPages       Page[]
+
+  @@index([tourAuthorId], map: "Tour_tourAuthorId_fkey")
 }
 
 model Comment {
   id              String  @id @default(cuid())
   content         String
-  commentAuthor   User    @relation(fields: [commentAuthorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   commentAuthorId String
-  commentPage     Page?   @relation(fields: [commentPageId], references: [id])
   commentPageId   String?
+  commentAuthor   User    @relation(fields: [commentAuthorId], references: [id], onDelete: Cascade)
+  commentPage     Page?   @relation(fields: [commentPageId], references: [id])
+
+  @@index([commentAuthorId], map: "Comment_commentAuthorId_fkey")
+  @@index([commentPageId], map: "Comment_commentPageId_fkey")
 }
 
 enum Role {
