@@ -65,19 +65,39 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
   const editor = useEditor({
     extensions: [
-      Blockquote,
-      BulletList,
+      Blockquote.configure({
+        HTMLAttributes: {
+          style: "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
+        },
+      }),
+      BulletList.configure({
+        HTMLAttributes: {
+          style: "list-style: disc; margin-left: 1rem;",
+        },
+      }), // tag: ul
       CodeBlock,
       Document,
       HardBreak,
-      Heading,
+      Heading.configure({
+        HTMLAttributes: {
+          style: "font-weight: bolder;",
+        },
+      }),
       HorizontalRule,
       ListItem,
-      OrderedList,
+      OrderedList.configure({
+        HTMLAttributes: {
+          style: "list-style: decimal; margin-left: 1rem;",
+        },
+      }), // tag: ol
       Paragraph,
       Text,
       Bold,
-      Code,
+      Code.configure({
+        HTMLAttributes: {
+          style: "color: inherit",
+        },
+      }),
       Italic,
       Strike,
       CharacterCount,

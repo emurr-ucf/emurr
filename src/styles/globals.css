@@ -18,10 +18,6 @@ a:hover {
 
 
 /* override tiptap nonsense with headers... this is probably a bad way of doing this */
-h1,h2,h3,h4,h5,h6 {
-	font-weight: bolder;
-}
-
 h1 {
 	font-size: 2em;
 }
@@ -39,27 +35,6 @@ h5 {
 }
 h6 {
 	font-size: 0.67em;
-}
-
-/* override tiptap nonsense with lists as well... this is probably a bad way of doing this */
-ul {
-	list-style: disc;
-	margin-left: 1rem;
-}
-ol {
-	list-style: decimal;
-	margin-left: 1rem;
-}
-
-/* another sloppy tiptap override*/
-blockquote {
-	background: #F6F2EE;
-	border-left: 0.25rem solid #ccc;
-	padding: 0 0.5rem;
-}
-
-code {
-	color: inherit;
 }
 
 /* shamelessly stolen from bootstrap.min.css to fix the close button not appearing in modals */
