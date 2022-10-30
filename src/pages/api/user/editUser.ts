@@ -3,59 +3,38 @@ import { getToken } from "next-auth/jwt";
 import { prisma } from '../../../lib/prisma'
 
 // API Inputs.
-export interface RegisterRequestType {
+export interface EditUserRequestType {
     firstName: string;
     lastName: string;
-    email: string;
 }
 
 // API Outputs.
-export interface RegisterResponseType {
+export interface EditUserResponseType {
     error: string;
 }
 
 export default async function handler (
     req: NextApiRequest,
-    res: NextApiResponse<RegisterResponseType>
+    res: NextApiResponse<EditUserResponseType>
 ) {
     const token = await getToken({req});
 
     if(!token)
         return res.status(400).json({error:"Not signed in"});
-    else 
-        return res.status(200).json({ error: JSON.stringify(token) })
-    
 
-    const { firstName, lastName, email } = req.body;
-
-    // Error: Email was not received.
-    if(!email) {
-        res.status(400);
-
-        throw new Error("Email was not received.");
-    }
+    const { firstName, lastName } = req.body;
 
     // Error: Not all fields are filled out.
-    if(!firstName || !lastName) {
-        res.status(400);
-
-        throw new Error("Please fill out all fields.");
-    }
-
-    // Error: Name values are not strings.
-    if((typeof firstName !== 'string') || (typeof lastName !== 'string')) {
-        res.status(400);
-
-        throw new Error("Please input a proper name.");
-    }
+    if(!firstName || !lastName)
+        return res.status(400).json({error: "Please fill out all fields."});
 
     // If all checks are passed.
-
     const user = await prisma.user.update({
         where: {
-            email,
+            id: token.id,
         },
         data: {
+            name: firstName,
             lastName,
         }
     })

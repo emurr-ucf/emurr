@@ -1,5 +1,6 @@
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link'
+import { UserMenu } from './UserMenu'
 import { useEffect, useState } from 'react';
 import { urlLocalPath, urlPath } from '../lib/urlPath';
 
@@ -11,11 +12,7 @@ export interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   const { data: session, status } = useSession();
 
-  const so = () => {
-    signOut();
-  }
-
-  if (status === "authenticated") {
+  if ( status === "authenticated" ) {
     return (
       <>
         <nav className="sticky top-0 z-50 border-b border-brown backdrop-blur-md bg-background-400">
@@ -44,14 +41,7 @@ export const Navbar = (props: NavbarProps) => {
                 </Link>
               </div>
               <div>
-                <button
-                  onClick={so}
-                  className="flex justify-center items-center"
-                >
-                  <img src={session.user.image ? session.user.image : "/images/google.png"}
-                    className="w-7 h-7 rounded-full cursor-pointer" alt=""
-                  />
-                </button>
+                <UserMenu />
               </div>
             </div>
           </div>

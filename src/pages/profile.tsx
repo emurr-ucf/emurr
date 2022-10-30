@@ -5,14 +5,13 @@ import { EditProfile } from "../components/profile/EditProfile";
 import { Navbar } from '../components/Navbar'
 import { ManageAccount } from "../components/profile/ManageAccount";
 import { useSession } from "next-auth/react";
-import { urlPath } from "../lib/urlPath";
 import Router from "next/router";
 
 const ProfilePage: NextPage = () => {
   const { data: session, status } = useSession();
 
+  if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated") Router.push("/");
-
 
   return (
     <>
