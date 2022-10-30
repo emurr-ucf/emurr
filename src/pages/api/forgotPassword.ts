@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from '../../lib/prisma'
 import generateRandString from '../../lib/generateRandString';
 import hashPass from '../../lib/hashPassword';
+import sendEmail from '../../lib/sendEmail';
 
 // API Post Inputs.
 export interface PostForgotPasswordRequestType {
@@ -41,27 +42,8 @@ export default async function handler (
         // Creates a random string.
         var passwordTok = generateRandString();
         
-        // Sends the Verification Email.
-        const sgMail = require('@sendgrid/mail')
-            sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-            const msg = {
-                // Decides sender and recipient of outgoing email and which template from sendgrid is being used.
-                to: email,
-                from: 'cop43318@gmail.com',
-                template_id: 'd-32c150b4de8043edba973cd21ace99f5',
-                // Information being sent in the email.
-                dynamic_template_data: {
-                    ahjst: passwordTok
-                }
-            }
-            sgMail
-                .send(msg)
-                .then(() => {
-                    console.log('Email sent')
-                })
-                .catch((error: string) => {
-                    console.error(error)
-                })
+        // Sends the verification email.
+        const emailSend = sendEmail('None', email, passwordTok, 'Forgot');
         
         // Insert Token in Database.
         const user = await prisma.user.update({

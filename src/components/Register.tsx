@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { urlPath } from '../lib/urlPath';
 import { FormType } from '../pages/login';
 
 interface RegisterProps {
@@ -32,10 +33,10 @@ export const Register = (props: RegisterProps) => {
       return;
     }
 
-    const body = {firstName, lastName, email, password};
-    fetch("api/user", {
+    const body = { firstName, lastName, email, password };
+    fetch(`${urlPath}/api/user`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     }).then((response: Response) => {
       if (response.status === 200) {

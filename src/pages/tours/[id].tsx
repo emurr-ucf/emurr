@@ -23,10 +23,14 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
-import FontFamily from '@tiptap/extension-font-family'
-import TextStyle from '@tiptap/extension-text-style'
-import Subscript from '@tiptap/extension-subscript'
-import Superscript from '@tiptap/extension-superscript'
+import FontFamily from "@tiptap/extension-font-family";
+import TextStyle from "@tiptap/extension-text-style";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -39,6 +43,7 @@ import { getToken } from "next-auth/jwt";
 import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
 import React, { useCallback } from "react";
 import { unzip } from "unzipit";
+import { urlPath } from "../../lib/urlPath";
 
 class ContentManager {
   static currentPageId: string;
@@ -65,7 +70,7 @@ class ContentManager {
   }
 }
 
-const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof getServerSideProps> ) => {
+const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
   const [ currentPageId, setCurrentPageId ] = useState("");
 
@@ -85,33 +90,74 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
 
   const editor = useEditor( {
     extensions: [
-      Blockquote,
-      BulletList,
+      Blockquote.configure({
+        HTMLAttributes: {
+          style: "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
+        },
+      }),
+      BulletList.configure({
+        HTMLAttributes: {
+          style: "list-style: disc; margin-left: 1rem;",
+        },
+      }), // tag: ul
       CodeBlock,
       Document,
       HardBreak,
-      Heading,
+      Heading.configure({
+        HTMLAttributes: {
+          style: "font-weight: bolder;",
+        },
+      }),
       HorizontalRule,
       ListItem,
-      OrderedList,
+      OrderedList.configure({
+        HTMLAttributes: {
+          style: "list-style: decimal; margin-left: 1rem;",
+        },
+      }), // tag: ol
       Paragraph,
       Text,
       Bold,
-      Code,
+      Code.configure({
+        HTMLAttributes: {
+          style: "color: inherit",
+        },
+      }),
       Italic,
       Strike,
       CharacterCount,
       Underline,
-      Highlight.configure( { multicolor: true } ),
-      TextAlign.configure( {
-        types: [ "heading", "paragraph" ],
-      } ),
+      Highlight.configure({ multicolor: true }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       History,
       FontFamily,
       TextStyle,
       Subscript,
       Superscript,
-      Image.extend( {
+      // tag: table
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: {
+          style: "border-collapse: collapse; margin: 0; overflow: hidden; table-layout: fixed; width: 100%;",
+        },
+      }),
+      // tag: tr
+      TableRow,
+      // tag: th
+      TableHeader.configure({
+        HTMLAttributes: {
+          style: "background-color: #f1f3f5; font-weight: bold; text-align: left; border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+        },
+      }),
+      // tag: td
+      TableCell.configure({
+        HTMLAttributes: {
+          style: "border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+        },
+      }),
+      Image.extend({
         //     addAttributes() {
         //       return {
         //         src: {
@@ -128,18 +174,17 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
         //                     }
         //                   }
         //                 });
-
         //               }
         //             }
         //           },
         //         }
         //       }
         //     }
-      } ),
+      }),
     ],
     editorProps: {
       attributes: {
-        class: "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+        class: "font-serif prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
@@ -152,40 +197,40 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
       // update global unsaved flag
       setUnsavedChanges(true);
     },
-  } );
+  });
 
 
   useEffect( () => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
-    const handleWindowClose = ( e: BeforeUnloadEvent ) => {
-      if ( !unsavedChanges ) return;
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!unsavedChanges) return;
       e.preventDefault();
-      return ( e.returnValue = warningText );
+      return (e.returnValue = warningText);
     };
     const handleBrowseAway = () => {
-      if ( !unsavedChanges ) return;
-      if ( window.confirm( warningText ) ) return;
-      Router.events.emit( "routeChangeError" );
+      if (!unsavedChanges) return;
+      if (window.confirm(warningText)) return;
+      Router.events.emit("routeChangeError");
       throw "routeChange aborted.";
     };
-    window.addEventListener( 'beforeunload', handleWindowClose );
-    Router.events.on( 'routeChangeStart', handleBrowseAway );
+    window.addEventListener("beforeunload", handleWindowClose);
+    Router.events.on("routeChangeStart", handleBrowseAway);
 
     const getImages = async () => {
-      const tours = await fetch( `/api/tourImage?tourId=${ tour.id }`, {
+      const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
         method: "GET",
-      } );
+      });
 
       const res = await tours.blob();
-      const { entries } = await unzip( res );
+      const { entries } = await unzip(res);
 
       const images: TourSiteImageType[] = [];
 
-      Object.entries( entries ).forEach( async ( [ name, entry ] ) => {
+      Object.entries(entries).forEach(async ([name, entry]) => {
         const blob = await entry.blob();
-        const bloburl = URL.createObjectURL( blob );
-        images.push( { name, bloburl } );
-      } );
+        const bloburl = URL.createObjectURL(blob);
+        images.push({ name, bloburl });
+      });
 
       setTourImages( images );
     }
@@ -193,10 +238,10 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
       getImages();
 
     return () => {
-      window.removeEventListener( "beforeunload", handleWindowClose );
-      Router.events.off( "routeChangeStart", handleBrowseAway );
+      window.removeEventListener("beforeunload", handleWindowClose);
+      Router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, [ unsavedChanges ] );
+  }, [unsavedChanges]);
 
 
   if (status === "loading") return <div>Loading...</div>;
@@ -214,27 +259,27 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
             {/* Tour title */}
             <input
               type="text"
-              defaultValue={ tour.tourTitle }
-              onChange={ ( event ) => {
-                setTourTitle( event.target.value );
-                setUpdatedTourTitle( true );
-              } }
+              defaultValue={tour.tourTitle}
+              onChange={(event) => {
+                setTourTitle(event.target.value);
+                setUpdatedTourTitle(true);
+              }}
               className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
 
             {/* Save button */}
             <button
-              onClick={ async () => {
-                if ( updatedTourTitle ) {
+              onClick={async () => {
+                if (updatedTourTitle) {
                   const body = { tourId: tour.id, name: tourTitle };
 
-                  await fetch( "/api/tour", {
+                  await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify( body ),
-                  } );
+                    body: JSON.stringify(body),
+                  });
 
-                  setUpdatedTourTitle( false );
+                  setUpdatedTourTitle(false);
                 }
 
                 const data = editor?.getHTML();
@@ -244,9 +289,9 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
 
                   const formData = new FormData();
 
-                  formData.append( "file", file );
+                  formData.append("file", file);
 
-                  const res = await fetch(`/api/page?tourId=${ tour.id }&pageId=${ currentPageId }`, {
+                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`, {
                     method: "PUT",
                     body: formData,
                   });
@@ -258,7 +303,7 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
                     setUnsavedChanges(false);
                   }
                 }
-              } }
+              }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
             >
               Save
@@ -276,22 +321,22 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
 
             {/* Create new page button */}
             <button
-              onClick={ async () => {
-                const file = new File( [], "blank.html" );
+              onClick={async () => {
+                const file = new File([], "blank.html");
 
                 const formData = new FormData();
 
-                formData.append( "file", file );
+                formData.append("file", file);
 
-                const res = await fetch( `/api/page?tourId=${ tour.id }`, {
+                const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}`, {
                   method: "POST",
                   body: formData,
-                } );
+                });
 
                 const resJSON = await res.json();
 
-                if ( resJSON.tour ) setTour( resJSON.tour );
-              } }
+                if (resJSON.tour) setTour(resJSON.tour);
+              }}
               className="w-full py-1 px-4 mb-2 text-background-200 bg-green-700 rounded-sm"
             >
               Create New Page
@@ -372,28 +417,28 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
 
                   {/* Save title button */}
                   <button
-                    onClick={ async () => {
+                    onClick={async () => {
                       const body = { pageId: page.id, name: pageTitle };
 
-                      const res = await fetch( "/api/pagedb", {
+                      const res = await fetch(`${urlPath}/api/pagedb`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify( body ),
-                      } );
+                        body: JSON.stringify(body),
+                      });
 
                       const resJSON = await res.json();
 
-                      if ( resJSON.tour ) setTour( resJSON.tour );
+                      if (resJSON.tour) setTour(resJSON.tour);
 
-                      setPageRename( "" );
-                    } }
-                    className={ `${ pageRename != page.id ? "hidden" : "" }` }
+                      setPageRename("");
+                    }}
+                    className={`${pageRename != page.id ? "hidden" : ""}`}
                   >
                     Save
                   </button>
                 </div>
               );
-            } ) }
+            })}
           </div>
 
           {/* Editor */}
@@ -402,21 +447,17 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
-                <EditorMenu
-                  tourid={ tour.id }
-                  editor={ editor }
-                  images={ tourImages }
-                />
+                <EditorMenu tourid={tour.id} editor={editor} images={tourImages} />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
-                  <EditorContent editor={ editor } />
+                  <EditorContent editor={editor} />
                   <div className="text-right text-sm text-gray-400 pr-6">
-                    { editor?.storage.characterCount.characters() } characters
+                    {editor?.storage.characterCount.characters()} characters
                     <br />
-                    { editor?.storage.characterCount.words() } words
+                    {editor?.storage.characterCount.words()} words
                   </div>
                 </div>
               </>
-            ) }
+            )}
           </div>
         </div>
       </div>
@@ -424,12 +465,12 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ( context ) => {
-  const token = await getToken( context );
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = await getToken(context);
   const { id } = context.query;
 
-  if ( token && typeof id === "string" ) {
-    const propTour = await prisma.tour.findFirst( {
+  if (token && typeof id === "string") {
+    const propTour = await prisma.tour.findFirst({
       where: {
         id,
         tourAuthorId: token.id,
@@ -446,7 +487,7 @@ export const getServerSideProps: GetServerSideProps = async ( context ) => {
           },
         },
       },
-    } );
+    });
 
     return {
       props: { propTour },

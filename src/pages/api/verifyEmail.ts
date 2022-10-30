@@ -15,11 +15,11 @@ export default async function handler (
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
-    const { emailToken } = req.query;
+    const { emailToken } = req.body;
 
     // Error: Token was not sent.
     if(!emailToken)
-        res.status(400).json({ error: "No token was sent." });
+        return res.status(400).json({ error: "No token was sent." });
 
     // If All Checks are Passed.
 
@@ -37,5 +37,5 @@ export default async function handler (
     if(user)
         return res.status(200).json({});
     else
-        return res.status(409).json({error: "Could not verify email."})
+        return res.status(409).json({error: "Could not verify email."});
 }

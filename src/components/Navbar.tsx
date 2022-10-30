@@ -1,29 +1,28 @@
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link'
 import { useEffect, useState } from 'react';
+import { urlLocalPath, urlPath } from '../lib/urlPath';
 
 export interface NavbarProps {
   page?: string;
   children?: JSX.Element;
 }
 
-export const Navbar = ( props: NavbarProps ) => {
+export const Navbar = (props: NavbarProps) => {
   const { data: session, status } = useSession();
 
   const so = () => {
     signOut();
   }
 
-  const isProd = process.env.NODE_ENV === 'production';
-
-  if ( status === "authenticated" ) {
+  if (status === "authenticated") {
     return (
       <>
         <nav className="sticky top-0 z-50 border-b border-brown backdrop-blur-md bg-background-400">
           <div className="flex justify-between h-auto py-2 px-10">
             <div className="flex flex-row justify-center items-center gap-4">
-              <img src={ `${ isProd ? "/emurr/images/logo_vert_5.png" : "/images/logo_vert_5.png" }` } alt="An SVG of the Emurr Logo" className="w-10 h-10" />
-              { props.children ?
+              <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="An SVG of the Emurr Logo" className="w-10 h-10" />
+              {props.children ?
                 props.children
                 :
                 <>
@@ -34,23 +33,22 @@ export const Navbar = ( props: NavbarProps ) => {
               }
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
-              <div className={ `py-1 px-2 rounded-md ${ props.page === "dashboard" ? "font-semibold hover:font-semibold" : "" } hover:bg-background-600 transition ease-in-out delay-50` }>
-                {/* <Link href="/tours"> */ }
-                <Link href={ `${ isProd ? "/emurr/tours" : "/tours" }` }>
+              <div className={`py-1 px-2 rounded-md ${props.page === "dashboard" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
+                <Link href={`${urlLocalPath}/tours`}>
                   dashboard
                 </Link>
               </div>
-              <div className={ `py-1 px-2 rounded-md ${ props.page === "profile" ? "font-semibold hover:font-semibold" : "" } hover:bg-background-600 transition ease-in-out delay-50` }>
-                <Link href={ `${ isProd ? "/emurr/profile" : "/profile" }` }>
+              <div className={`py-1 px-2 rounded-md ${props.page === "profile" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
+                <Link href={`${urlLocalPath}/profile`}>
                   profile
                 </Link>
               </div>
               <div>
                 <button
-                  onClick={ so }
+                  onClick={so}
                   className="flex justify-center items-center"
                 >
-                  <img src={ session.user.image ? session.user.image : "/images/google.png" }
+                  <img src={session.user.image ? session.user.image : "/images/google.png"}
                     className="w-7 h-7 rounded-full cursor-pointer" alt=""
                   />
                 </button>
@@ -69,7 +67,7 @@ export const Navbar = ( props: NavbarProps ) => {
         <div className="flex justify-between h-auto py-2 px-10">
           <div className="flex flex-row justify-center items-center gap-4">
             <img
-              src={ `${ isProd ? "/emurr/images/logo_vert_5.png" : "/images/logo_vert_5.png" }` }
+              src={`${urlLocalPath}/images/logo_vert_5.png`}
               alt="An SVG of the Emurr Logo"
               className="w-10 h-10"
             />
@@ -78,18 +76,18 @@ export const Navbar = ( props: NavbarProps ) => {
             </div>
           </div>
           <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
-            <div className={ `py-1 px-2 rounded-md ${ props.page === "home" ? "font-semibold hover:font-semibold" : "" } hover:bg-background-600 transition ease-in-out delay-50` }>
-              <Link href="/">
+            <div className={`py-1 px-2 rounded-md ${props.page === "home" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
+              <Link href={`${urlLocalPath}/`}>
                 home
               </Link>
             </div>
-            <div className={ `py-1 px-2 rounded-md ${ props.page === "about" ? "font-semibold hover:font-semibold" : "" } hover:bg-background-600 transition ease-in-out delay-50` }>
-              <Link href={ `${ isProd ? "/emurr/about" : "/about" }` } className="m-5">
+            <div className={`py-1 px-2 rounded-md ${props.page === "about" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
+              <Link href={`${urlLocalPath}/about`} className="m-5">
                 about
               </Link>
             </div>
-            <div className={ `py-1 px-2 rounded-md ${ props.page === "login" ? "font-semibold hover:font-semibold" : "" } hover:bg-background-600 transition ease-in-out delay-50` }>
-              <Link href="/login" className="m-5">
+            <div className={`py-1 px-2 rounded-md ${props.page === "login" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
+              <Link href={`${urlLocalPath}/login`} className="m-5">
                 login
               </Link>
             </div>
