@@ -16,6 +16,11 @@ a:hover {
 	color: inherit;
 }
 
+/* invisible class that's not '!important' (used in tours/[id].tsx) */
+.invisible2 {
+	visibility: hidden;
+}
+
 
 /* override tiptap nonsense with headers... this is probably a bad way of doing this */
 h1 {

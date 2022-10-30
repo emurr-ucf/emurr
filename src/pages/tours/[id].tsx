@@ -45,25 +45,50 @@ import React, { useCallback } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
 
-interface PageType {
-  page: Page;
-  content: string;
+class ContentManager {
+  static currentPageId: string;
+  static unsavedPages: any = {};
+  static editedContent: any = {};
+  static savedContent: any = {};
+
+  static write = (id: string, content: string) => {
+    this.editedContent[id] = content;
+    this.unsavedPages[id] = !this.isSaved(id);
+  }
+
+  static read = (id: string) => {
+    return this.editedContent[id];
+  }
+
+  static save = (id: string, content: string) => {
+    this.savedContent[id] = this.editedContent[id] = content;
+    this.unsavedPages[id] = false;
+  }
+
+  static isSaved = (id: string) => {
+    return this.savedContent[id] === this.editedContent[id];
+  }
 }
 
 const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
-  const [page, setPage] = useState("");
+  const [ currentPageId, setCurrentPageId ] = useState("");
 
-  const [tour, setTour] = useState(propTour);
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
-  const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
+  const [ unsavedPages, setUnsavedPages ] = useState<any>({});
+  const [ unsavedChanges, setUnsavedChanges ] = useState( false );
+  const [ tour, setTour ] = useState( propTour );
+  const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
   //! This will change
-  const [tourImages, setTourImages] = useState<TourSiteImageType[]>([]);
-  const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
-  const [pageRename, setPageRename] = useState("");
-  const [pageTitle, setPageTitle] = useState("");
+  const [ tourImages, setTourImages ] = useState<TourSiteImageType[]>( [] );
+  const [ tourTitle, setTourTitle ] = useState( propTour?.tourTitle );
+  const [ pageRename, setPageRename ] = useState( "" );
+  const [ pageTitle, setPageTitle ] = useState( "" );
 
-  const editor = useEditor({
+  const anyUnsavedPages = () => {
+    return Object.values(ContentManager.unsavedPages).includes(true);
+  }
+
+  const editor = useEditor( {
     extensions: [
       Blockquote.configure({
         HTMLAttributes: {
@@ -164,11 +189,18 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     },
     autofocus: "start",
     onUpdate: () => {
+      // mark page as unsaved
+      const pageId = ContentManager.currentPageId;
+      ContentManager.unsavedPages[pageId] = true;
+      setUnsavedPages(ContentManager.unsavedPages);
+
+      // update global unsaved flag
       setUnsavedChanges(true);
     },
   });
 
-  useEffect(() => {
+
+  useEffect( () => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!unsavedChanges) return;
@@ -200,9 +232,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
         images.push({ name, bloburl });
       });
 
-      setTourImages(images);
-    };
-    getImages();
+      setTourImages( images );
+    }
+    if (tour)
+      getImages();
 
     return () => {
       window.removeEventListener("beforeunload", handleWindowClose);
@@ -210,13 +243,20 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     };
   }, [unsavedChanges]);
 
+
   if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") Router.push("/");
+  if (status === "unauthenticated") {
+    Router.push("/");
+    return <div>Redirecting...</div>
+  }
+
+
   return (
     <>
       <div className="flex flex-col w-full h-screen">
         <Navbar>
           <>
+            {/* Tour title */}
             <input
               type="text"
               defaultValue={tour.tourTitle}
@@ -226,6 +266,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               }}
               className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
+
+            {/* Save button */}
             <button
               onClick={async () => {
                 if (updatedTourTitle) {
@@ -242,31 +284,42 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                 const data = editor?.getHTML();
 
-                if (data && page) {
-                  const file = new File([data], "blank.html");
+                if ( data && currentPageId ) {
+                  const file = new File( [ data ], "blank.html" );
 
                   const formData = new FormData();
 
                   formData.append("file", file);
 
-                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${page}`, {
+                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`, {
                     method: "PUT",
                     body: formData,
                   });
 
-                  setUnsavedChanges(false);
+                  if (res.status === 200) {
+                    // mark current page as saved
+                    ContentManager.save(currentPageId, data);
+                    setUnsavedPages(ContentManager.unsavedPages);
+                    setUnsavedChanges(false);
+                  }
                 }
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
             >
               Save
             </button>
+
+            {/* Download button */}
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Download</button>
+
+            {/* Publish button */}
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
           </>
         </Navbar>
         <div className="flex pt-4 px-4 overflow-hidden">
           <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
+
+            {/* Create new page button */}
             <button
               onClick={async () => {
                 const file = new File([], "blank.html");
@@ -289,36 +342,80 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               Create New Page
             </button>
 
-            {tour.tourPages.map((page: Page) => {
+            {/* Page titles on sidebar */}
+            {tour.tourPages.map( ( page: Page ) => {
               return (
                 <div key={page.id} className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300">
+                  {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
+                      // stash changes with content manager
+                      // Update "unsaved" state for old page
+                      if (editor && currentPageId)
+                        ContentManager.write(currentPageId, editor.getHTML());
+                      setUnsavedPages(ContentManager.unsavedPages);
+                      setUnsavedChanges(anyUnsavedPages());
+
+                      // if we're renaming this page, don't switch to it
                       if (pageRename === page.id) return;
 
-                      const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${page.id}`, {
-                        method: "GET",
-                      });
-
-                      const resHTML = await res.text();
-
-                      if (res.status === 200) {
-                        setPage(page.id);
-                        editor?.commands.setContent(resHTML == "" ? "" : resHTML);
+                      // restore stashed changes from ContentManager, if possible
+                      if (ContentManager.read(page.id)) {
+                        editor?.commands.setContent(ContentManager.read(page.id));
                       }
+                      // otherwise, fetch content from api
+                      else {
+                        const res = await fetch( `/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
+                          method: "GET",
+                        } );
+  
+                        const resHTML = await res.text();
+  
+                        if ( res.status === 200 ) {
+                          ContentManager.save( page.id, resHTML );
+                          editor?.commands.setContent( resHTML == "" ? "" : resHTML );
+                        }
+                        else {
+                          alert("Failed to load content");
+                          return;
+                        }
+                      }
+
+                      // update current page id
+                      setCurrentPageId(page.id);
+                      ContentManager.currentPageId = page.id;
                     }}
-                    className="w-full"
+                    className="w-full text-left"
                   >
-                    <input defaultValue={page.title === "" ? "Untitled" : page.title} disabled={pageRename != page.id} autoFocus={true} onChange={(event) => setPageTitle(event.target.value)} className="w-full" />
+                    {/* Rename page title */}
+                    {
+                      pageRename === page.id ? (
+                        <input 
+                          defaultValue={page.title === "" ? "Untitled" : page.title}
+                          autoFocus={true}
+                          onChange={(event) => {
+                            setPageTitle(event.target.value);
+                          }}
+                          className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }
+                        />
+                      ) : 
+                        <span className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }>
+                          {page.title === "" ? "Untitled" : page.title}
+                        </span>
+                    }
                   </button>
+                  
+                  {/* Edit title button */}
                   <button
-                    onClick={() => {
-                      setPageRename(page.id);
-                    }}
-                    className={`${pageRename === page.id || pageRename != "" ? "hidden" : ""} invisible group-hover:visible`}
+                    onClick={ () => {
+                      setPageRename( page.id );
+                    } }
+                    className={ `${ pageRename === page.id || pageRename != "" ? "hidden" : "" } invisible2 group-hover:visible` }
                   >
                     Edit
                   </button>
+
+                  {/* Save title button */}
                   <button
                     onClick={async () => {
                       const body = { pageId: page.id, name: pageTitle };
@@ -343,8 +440,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               );
             })}
           </div>
+
+          {/* Editor */}
           <div className="flex flex-[4_1_0] flex-col overflow-auto">
-            {page === "" ? (
+            { currentPageId === "" ? (
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
