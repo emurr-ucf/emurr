@@ -9,7 +9,7 @@ interface TourSiteCardProps {
   isVisitor?: boolean;
   title: string;
   description: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export const TourSiteCard = (props: TourSiteCardProps) => {
@@ -20,7 +20,7 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
           <div className="flex flex-col w-full p-2">
             <div className="text-2xl">{props.title}</div>
             <div className="text-sm">{props.description}</div>
-            <div className="text-sm">{props.createdAt}</div>
+            <div className="text-sm">{props.createdAt.toString()}</div>
           </div>
           <div>
             <div className="border-t-2 w- border-stone-400" />
