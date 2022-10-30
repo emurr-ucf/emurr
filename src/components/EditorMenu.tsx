@@ -32,7 +32,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
 
   return (
     <>
-      <div className="flex justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
+      <div className="flex flex-col 2xl:flex-row justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
         <div className="flex items-center">
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
@@ -227,9 +227,10 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold inline-flex">
-                  <img src={`${urlLocalPath}/images/table-line.svg`} alt="table" title="Insert Table" />
+              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold inline-flex items-center">
+                  Table
+                  <img className="w-7 h-7 p-1" src={`${urlLocalPath}/images/table-line.svg`} alt="table" title="Insert Table" />
                   <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
