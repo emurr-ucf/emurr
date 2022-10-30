@@ -143,7 +143,6 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                   key={tour.id}
                   title={tour.tourTitle}
                   description={ tour.tourDescription ? tour.tourDescription : "No description..." }
-                  createdAt={tour.tourCreatedAt}
                 />
               })}
             </div>

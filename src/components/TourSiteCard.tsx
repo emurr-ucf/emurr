@@ -9,7 +9,6 @@ interface TourSiteCardProps {
   isVisitor?: boolean;
   title: string;
   description: string;
-  createdAt: Date;
 }
 
 export const TourSiteCard = (props: TourSiteCardProps) => {
