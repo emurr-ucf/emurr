@@ -48,16 +48,18 @@ export interface DeleteTourResponseType {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetTourResponseType | CreateTourResponseType | UpdateTourResponseType | DeleteTourResponseType>
+  res: NextApiResponse<GetTourResponseType | CreateTourResponseType | UpdateTourResponseType | DeleteTourResponseType>,
+  // context
 ) {
   // Checks JWT token.
   const token = await getToken({req});
+
   if (!token)
       return res.status(401).json({ error: "User is not logged in." });
 
   // Used for querying tours.
   if (req.method === "GET") {
-    const { query, sortQuery } = req.query;
+    const { query, userid, sortQuery } = req.query;
 
     // If a query is sent, tours that contain that query are searched.
     if (typeof query === "string" && typeof sortQuery === "string") {
@@ -77,11 +79,11 @@ export default async function handler(
         where: {
           AND: [
             {
-              tourAuthorId: token.id,
+              tourAuthorId: typeof userid === "string" ? userid : token.id,
             },
             {
-              OR: [
-                {
+              OR: [ 
+                { 
                   tourTitle: {
                     contains: query,
                   }
@@ -106,7 +108,7 @@ export default async function handler(
     else {
       const tours = await prisma.tour.findMany({
         where: {
-          tourAuthorId: token.id,
+          tourAuthorId: typeof userid === "string" ? userid : token.id,
         }
       });
   

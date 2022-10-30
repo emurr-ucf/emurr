@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { urlLocalPath, urlPath } from '../lib/urlPath';
 
 
 export const ForgotPasswordReset = () => {
@@ -8,9 +9,9 @@ export const ForgotPasswordReset = () => {
   const [newPassword2, setNewPassword2] = useState("");
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
-  
+
   const router = useRouter();
-  let resPassToken = router.query.resPassToken;
+  let rPT = router.query.rPT;
 
   const error = (message: string) => {
     setColor("text-red-800");
@@ -25,7 +26,7 @@ export const ForgotPasswordReset = () => {
   const doForgotPasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if ((typeof(newPassword) !== 'string') && (typeof(newPassword2) !== 'string')) {
+    if ((typeof (newPassword) !== 'string') && (typeof (newPassword2) !== 'string')) {
       error("Please input a valid password.");
       return;
     }
@@ -35,10 +36,10 @@ export const ForgotPasswordReset = () => {
       return;
     }
 
-    const body = {newPassword, resPassToken};
-    fetch("api/forgotPassword", {
+    const body = { newPassword, resPassToken: rPT };
+    fetch(`${urlPath}/api/forgotPassword`, {
       method: "PUT",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     }).then((response: Response) => {
       if (response.status === 200) {
@@ -76,7 +77,7 @@ export const ForgotPasswordReset = () => {
         </div>
         <div className="flex justify-center">
           <Link
-            href="/login"
+            href={`${urlLocalPath}/login`}
             className="cursor-pointer select-none text-brown hover:text-background-900"
           >
             Back to login

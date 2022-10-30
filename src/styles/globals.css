@@ -16,12 +16,13 @@ a:hover {
 	color: inherit;
 }
 
-
-/* override tiptap nonsense with headers... this is probably a bad way of doing this */
-h1,h2,h3,h4,h5,h6 {
-	font-weight: bolder;
+/* invisible class that's not '!important' (used in tours/[id].tsx) */
+.invisible2 {
+	visibility: hidden;
 }
 
+
+/* override tiptap nonsense with headers... this is probably a bad way of doing this */
 h1 {
 	font-size: 2em;
 }
@@ -39,16 +40,6 @@ h5 {
 }
 h6 {
 	font-size: 0.67em;
-}
-
-/* override tiptap nonsense with lists as well... this is probably a bad way of doing this */
-ul {
-	list-style: disc;
-	margin-left: 1rem;
-}
-ol {
-	list-style: decimal;
-	margin-left: 1rem;
 }
 
 /* shamelessly stolen from bootstrap.min.css to fix the close button not appearing in modals */

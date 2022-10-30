@@ -1,28 +1,27 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 import { ProfileCard } from './ProfileCard';
+import { urlLocalPath } from '../../lib/urlPath';
 
 export const EditLogin = () => {
-	const [ show, setShow ] = useState( false );
-	const handleShow = () => setShow( true );
-	const handleClose = () => setShow( false );
+	const [show, setShow] = useState(false);
+	const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
 	const handleSave = () => {
 		// TODO make a request and show response
-		alert( "Submitted" );
-		setShow( false );
+		alert("Submitted");
+		setShow(false);
 	}
-
-	const isProd = process.env.NODE_ENV === 'production';
 
 	return (
 		<>
-			<ProfileCard image={ isProd ? "/emurr/images/profile/mail.svg" : "/images/profile/mail.svg" } title="Edit email" description="Edit your login email" onClick={ handleShow } />
+			<ProfileCard image={ `${urlLocalPath}/images/profile/mail.svg` } title="Edit email" description="Edit your login email" onClick={ handleShow } />
 			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Edit email</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form onSubmit={ handleSave }>
+					<form onSubmit={handleSave}>
 						<div className="flex flex-col gap-6">
 							<input
 								type="text"

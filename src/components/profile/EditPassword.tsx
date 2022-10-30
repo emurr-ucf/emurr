@@ -1,6 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 import { ProfileCard } from './ProfileCard';
+import { urlLocalPath } from '../../lib/urlPath';
 
 export const EditPassword = () => {
 	const isProd = process.env.NODE_ENV === 'production';
@@ -37,13 +38,13 @@ export const EditPassword = () => {
 
 	return (
 		<>
-			<ProfileCard image={ isProd ? "/emurr/images/profile/shield.svg" : "/images/profile/shield.svg" } title="Edit password" description="Edit your login password" onClick={ handleShow } />
+			<ProfileCard image={ `${urlLocalPath}/images/profile/shield.svg` } title="Edit password" description="Edit your login password" onClick={ handleShow } />
 			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Edit password</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form onSubmit={ handleSave }>
+					<form onSubmit={handleSave}>
 						<div className="flex flex-col gap-6">
 							<input
 								type="password"

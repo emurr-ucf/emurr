@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Page` ADD COLUMN `customURL` VARCHAR(255) NULL;

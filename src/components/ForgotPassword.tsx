@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { urlPath } from '../lib/urlPath';
 import { FormType } from '../pages/login';
 
 interface ForgotPasswordProps {
@@ -9,7 +10,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
-  
+
   const error = (message: string) => {
     setColor("text-red-800");
     setMessage(message);
@@ -28,10 +29,10 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
       return;
     }
 
-    const body = {email};
-    fetch("api/forgotPassword", {
+    const body = { email };
+    fetch(`${urlPath}/api/forgotPassword`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     }).then((response: Response) => {
       if (response.status === 200) {

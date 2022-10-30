@@ -1,6 +1,7 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
 import { ProfileCard } from './ProfileCard';
+import { urlLocalPath } from '../../lib/urlPath';
 
 export const ManageAccount = () => {
 	const isProd = process.env.NODE_ENV === 'production';
@@ -34,13 +35,13 @@ export const ManageAccount = () => {
 
 	return (
 		<>
-			<ProfileCard image={ isProd ? "/emurr/images/profile/write.svg" : "/images/profile/write.svg" } title="Manage account" description="Edit or delete your account" onClick={ handleShow } />
+			<ProfileCard image={ `${urlLocalPath}/images/profile/write.svg` } title="Manage account" description="Edit or delete your account" onClick={ handleShow } />
 			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Manage account</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form onSubmit={ handleSave }>
+					<form onSubmit={handleSave}>
 						<div className="flex flex-col gap-6">
 							<input
 								type="password"
