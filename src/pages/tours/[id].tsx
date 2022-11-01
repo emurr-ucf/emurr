@@ -365,7 +365,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                       }
                       // otherwise, fetch content from api
                       else {
-                        const res = await fetch( `/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
+                        const res = await fetch( `${urlPath}/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
                           method: "GET",
                         } );
   
