@@ -1,14 +1,14 @@
 import { signOut, useSession } from "next-auth/react";
 import { Dropdown } from 'react-bootstrap';
+import { urlLocalPath, urlPath } from '../lib/urlPath';
 
 export const UserMenu = () => {
 	const { data: session, status } = useSession();
-	const isProd = process.env.NODE_ENV === 'production';
 
 	return (
 		<Dropdown>
 			<Dropdown.Toggle as="img"
-				src={session?.user.image || (isProd ? "/emurr/images/google.png" : "/images/google.png")}
+				src={session?.user.image || `${urlLocalPath}/images/google.png`}
 				className="w-7 h-7 rounded-full cursor-pointer"
 			/>
 			<Dropdown.Menu>
