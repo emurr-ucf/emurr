@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
 import { prisma } from '../../lib/prisma';
 import { returnTour } from '../../lib/returnTour';
-import { Tour } from "@prisma/client";
 
 export interface UpdatePageRequestType {
   pageId: string;
-  name: string;
+  title?: string;
+  customURL?: string;
 }
 
 export interface UpdatePageResponseType {
@@ -35,16 +35,31 @@ export default async function handler(
 
   if (req.method == "PUT") {
     
-    const { pageId, name } = req.body;
+    const { tourId, pageId, title, customURL } = req.body;
 
-    if (!pageId || !name) return res.status(400).json({ error: "Page ID and name fields cannot be blank." });
+    if (!pageId || !tourId) return res.status(400).json({ error: "Page ID and Tour ID fields cannot be blank." });
+
+    if (customURL) {
+      const pages = await prisma.page.findMany({
+        where: {
+          tourId,
+        }
+      });
+
+      for (const page of pages) {
+        if (page.customURL != "" && page.customURL === customURL) {
+          return res.status(400).json({ error: "Already a page with that custom URL" });
+        }
+      }
+    }
 
     const page = await prisma.page.update({
       where: {
         id: pageId,
       },
       data: {
-        title: name,
+        title,
+        customURL,
       }
     });
 

@@ -45,6 +45,7 @@ import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
 import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
+import download from "downloadjs";
 
 class ContentManager {
   static currentPageId: string;
@@ -371,13 +372,27 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 editor?.setEditable(true);
 
               }}
-              className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
+              className={`py-1 w-24 ${unsavedChanges ? "bg-red-700" : "bg-green-700"} text-background-200 rounded-sm`}
             >
               Save
             </button>
 
             {/* Download button */}
-            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Download</button>
+            <button
+              onClick={async () => {
+                const res = await fetch(`${ urlPath }/api/download`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ tourId: tour.id }),
+                });
+
+                const blob = await res.blob();
+                download(blob, "toursite.zip", "file/zip");
+              }}
+              className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
+            >
+              Download
+            </button>
 
             {/* Publish button */}
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
@@ -484,8 +499,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                   {/* Save title button */}
                   <button
-                    onClick={async () => {
-                      const body = { pageId: page.id, name: pageTitle };
+                    onClick={ async () => {
+                      const body = { pageId: page.id, tourId: tour.id, name: pageTitle };
 
                       const res = await fetch(`${urlPath}/api/pagedb`, {
                         method: "PUT",
@@ -517,7 +532,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   <div>{editor?.storage.characterCount.words()} words</div>
                 </div>
                 <EditorMenu
-                  tourid={tour.id}
+                  tourId={tour.id}
+                  pageId={pageRename}
                   editor={editor}
                   images={tourImages.current}
                   getImages={getImages}
