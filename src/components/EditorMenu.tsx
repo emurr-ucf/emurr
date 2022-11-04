@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
-import { ChevronDownIcon } from "@heroicons/react/solid"
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { urlLocalPath } from "../lib/urlPath";
 
 export interface TourSiteImageType {
@@ -68,17 +68,14 @@ export const EditorMenu = ({
 
   return (
     <>
-      <div className="flex justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
+      <div className="flex flex-col 2xl:flex-row justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
         <div className="flex items-center">
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
               <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 <div className="font-bold inline-flex">
                   {heading}
-                  <ChevronDownIcon
-                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
-                    aria-hidden="true"
-                  />
+                  <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
             </div>
@@ -93,96 +90,96 @@ export const EditorMenu = ({
             >
               <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
-                  <form onClick={(event) => {
-                    editor?.commands.toggleHeading({ level: 1 });
-                    editor?.commands.focus();
-                    setHeading('Heading 1');
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.toggleHeading({ level: 1 });
+                      editor?.commands.focus();
+                      setHeading("Heading 1");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div>Heading 1</div>
                           <img src={`${urlLocalPath}/images/h-1.svg`} alt="h-1" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
                   </form>
-                  <form onClick={(event) => {
-                    editor?.commands.toggleHeading({ level: 2 });
-                    editor?.commands.focus();
-                    setHeading('Heading 2');
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.toggleHeading({ level: 2 });
+                      editor?.commands.focus();
+                      setHeading("Heading 2");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div>Heading 2</div>
                           <img src={`${urlLocalPath}/images/h-2.svg`} alt="h-2" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
                   </form>
-                  <form onClick={(event) => {
-                    editor?.commands.toggleHeading({ level: 3 });
-                    editor?.commands.focus();
-                    setHeading('Heading 3');
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.toggleHeading({ level: 3 });
+                      editor?.commands.focus();
+                      setHeading("Heading 3");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div>Heading 3</div>
                           <img src={`${urlLocalPath}/images/h-3.svg`} alt="h-3" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
                   </form>
-                  <form onClick={(event) => {
-                    editor?.commands.toggleHeading({ level: 4 });
-                    editor?.commands.focus();
-                    setHeading('Heading 4');
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.toggleHeading({ level: 4 });
+                      editor?.commands.focus();
+                      setHeading("Heading 4");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div>Heading 4</div>
                           <img src={`${urlLocalPath}/images/h-4.svg`} alt="h-4" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
                   </form>
-                  <form onClick={(event) => {
-                    editor?.commands.toggleHeading({ level: 5 });
-                    editor?.commands.focus();
-                    setHeading('Heading 5');
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.toggleHeading({ level: 5 });
+                      editor?.commands.focus();
+                      setHeading("Heading 5");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div>Heading 5</div>
                           <img src={`${urlLocalPath}/images/h-5.svg`} alt="h-5" className="w-4 h-4" />
                         </div>
                       )}
                     </Menu.Item>
                   </form>
-                  <form onClick={(event) => {
-                    editor?.commands.toggleHeading({ level: 6 });
-                    editor?.commands.focus();
-                    setHeading('Heading 6');
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.toggleHeading({ level: 6 });
+                      editor?.commands.focus();
+                      setHeading("Heading 6");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div>Heading 6</div>
                           <img src={`${urlLocalPath}/images/h-6.svg`} alt="h-6" className="w-4 h-4" />
                         </div>
@@ -215,10 +212,7 @@ export const EditorMenu = ({
               <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 <div className="font-bold inline-flex">
                   {fontFamily}
-                  <ChevronDownIcon
-                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
-                    aria-hidden="true"
-                  />
+                  <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
             </div>
@@ -233,50 +227,146 @@ export const EditorMenu = ({
             >
               <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
-                  <form onClick={(event) => {
-                    editor?.commands.setFontFamily('Arial');
-                    editor?.commands.focus();
-                    setFontFamily("Arial");
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.setFontFamily('ui-serif, Georgia, Cambria, "Times New Roman", Times, serif');
+                      editor?.commands.focus();
+                      setFontFamily("Times");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
-                          <div className="font-sans">Arial</div>
-                        </div>
-                      )}
-                    </Menu.Item>
-                  </form>
-                  <form onClick={(event) => {
-                    editor?.commands.setFontFamily('serif');
-                    editor?.commands.focus();
-                    setFontFamily("Times");
-                  }}>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div className="font-serif">Times</div>
                         </div>
                       )}
                     </Menu.Item>
                   </form>
-                  <form onClick={(event) => {
-                    editor?.commands.setFontFamily('Courier New');
-                    editor?.commands.focus();
-                    setFontFamily("Courier New");
-                  }}>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.setFontFamily("Arial");
+                      editor?.commands.focus();
+                      setFontFamily("Arial");
+                    }}
+                  >
                     <Menu.Item>
                       {({ active }) => (
-                        <div
-                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                        >
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                          <div className="font-sans">Arial</div>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.setFontFamily("Courier New");
+                      editor?.commands.focus();
+                      setFontFamily("Courier New");
+                    }}
+                  >
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
                           <div className="font-mono">Courier New</div>
                         </div>
                       )}
                     </Menu.Item>
+                  </form>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <Menu as="div" className="relative w- inline-block text-left">
+            <div>
+              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold inline-flex items-center">
+                  Table
+                  <img className="w-7 h-7 p-1" src={`${urlLocalPath}/images/table-line.svg`} alt="table" title="Insert Table" />
+                  <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
+                </div>
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.insertTable({ rows: 3, cols: 3, withHeaderRow: true });
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Insert Table</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.chain().focus().addColumnBefore().run();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Add Column Before</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.chain().focus().addColumnAfter().run();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Add Column After</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.deleteColumn();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Delete Column</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.addRowBefore();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Add Row Before</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.addRowAfter();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Add Row After</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.deleteRow();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Delete Row</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.deleteTable();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Delete Table</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.mergeCells();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Merge Cells</div>}</Menu.Item>
+                  </form>
+                  <form
+                    onClick={(event) => {
+                      editor?.commands.splitCell();
+                    }}
+                  >
+                    <Menu.Item>{({ active }) => <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>Split Cell</div>}</Menu.Item>
                   </form>
                 </div>
               </Menu.Items>
@@ -453,12 +543,7 @@ export const EditorMenu = ({
             {({ open }) => (
               <>
                 <Popover.Button className="flex justify-center items-center">
-                  <img
-                    src={`${urlLocalPath}/images/image-line.svg`}
-                    alt="image"
-                    title="Insert image"
-                    className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
-                  />
+                  <img src={`${urlLocalPath}/images/image-line.svg`} alt="image" title="Insert image" className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out" />
                 </Popover.Button>
                 <Transition
                   as={Fragment}
@@ -497,13 +582,9 @@ export const EditorMenu = ({
                             className="hidden"
                           />
                           <div className="flex items-center">
-                            <div className="text-sm font-medium text-gray-900">
-                              Upload
-                            </div>
+                            <div className="text-sm font-medium text-gray-900">Upload</div>
                           </div>
-                          <div className="block text-sm text-gray-500">
-                            Upload an image or video.
-                          </div>
+                          <div className="block text-sm text-gray-500">Upload an image or video.</div>
                         </label>
                       </div>
                     </div>

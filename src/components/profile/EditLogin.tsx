@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react";
-import { Box } from '../Box';
+import { ProfileCard } from './ProfileCard';
 import { urlLocalPath } from '../../lib/urlPath';
 
 export const EditLogin = () => {
@@ -15,8 +15,8 @@ export const EditLogin = () => {
 
 	return (
 		<>
-			<Box image={`${urlLocalPath}/images/key.png`} title="Edit email" description="Edit your login email" action="" onClick={handleShow} />
-			<Modal show={show} onHide={handleClose}>
+			<ProfileCard image={ `${urlLocalPath}/images/profile/mail.svg` } title="Edit email" description="Edit your login email" onClick={ handleShow } />
+			<Modal show={ show } onHide={ handleClose }>
 				<Modal.Header closeButton>
 					<Modal.Title>Edit email</Modal.Title>
 				</Modal.Header>
