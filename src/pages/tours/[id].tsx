@@ -500,7 +500,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   {/* Save title button */}
                   <button
                     onClick={ async () => {
-                      const body = { pageId: page.id, tourId: tour.id, name: pageTitle };
+                      const body = { pageId: page.id, tourId: tour.id, title: pageTitle };
 
                       const res = await fetch(`${urlPath}/api/pagedb`, {
                         method: "PUT",
