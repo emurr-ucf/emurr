@@ -8,17 +8,9 @@ interface CustomUrlModalProps {
 }
 
 export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [customURL, setCustomURL] = useState("");
   const [error, setError] = useState("");
-
-  function closeModal() {
-    setIsOpen(false)
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
 
   return (
     <>
@@ -27,13 +19,13 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
           src={`${urlLocalPath}/images/image-line.svg`}
           alt="custom url"
           title="Inset Custom URL"
-          onClick={openModal}
+          onClick={() => setIsOpen(true)}
           className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
         />
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -90,11 +82,11 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
 
                         const json = await res.json();
 
-                        if (json.status != 200) {
+                        if (res.status != 200) {
                           setError(json.error);
                         } else {
                           setError("");
-                          closeModal();
+                          setIsOpen(false);
                         }
                       }}
                     >
