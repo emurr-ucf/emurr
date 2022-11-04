@@ -54,6 +54,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [tour, setTour] = useState(propTour);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
   //! This will change
   const isSavingTour = useRef(false);
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
@@ -61,6 +62,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
+
+  // Selection
+  const [heading, setHeading] = useState("Heading 1");
+  const [fontFamily, setFontFamily] = useState("Arial");
 
   const editor = useEditor({
     extensions: [
@@ -168,14 +173,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     onUpdate: () => {
       setUnsavedChanges(true);
     },
-    onSelectionUpdate: () => {
-      console.log("Test")
-    }
+    onSelectionUpdate: ({ editor }) => {}
   });
 
 
-
-  const getImages = async () => {
+  const getImages = useCallback(async () => {
     const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
       method: "GET",
     });
@@ -193,8 +195,9 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     }
 
     tourImages.current = images;
+    setIsUploadingFile(false);
     setIsLoadingStartup(false);
-  }
+  }, [tour.id]);
 
   useEffect(() => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
@@ -211,14 +214,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     };
     window.addEventListener('beforeunload', handleWindowClose);
     Router.events.on('routeChangeStart', handleBrowseAway);
+    
     getImages();
-    console.log(tourImages.current);
 
     return () => {
       window.removeEventListener("beforeunload", handleWindowClose);
       Router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, [unsavedChanges, tourImages.current]);
+  }, [unsavedChanges, getImages]);
 
 
 
@@ -377,6 +380,12 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   editor={editor}
                   images={tourImages.current}
                   getImages={getImages}
+                  isUploadingFile={isUploadingFile}
+                  setIsUploadingFile={setIsUploadingFile}
+                  heading={heading}
+                  setHeading={setHeading}
+                  fontFamily={fontFamily}
+                  setFontFamily={setFontFamily}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
