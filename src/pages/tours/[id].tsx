@@ -23,6 +23,7 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
+import Video from "../../lib/extensions/video";
 import FontFamily from "@tiptap/extension-font-family";
 import TextStyle from "@tiptap/extension-text-style";
 import Subscript from "@tiptap/extension-subscript";
@@ -41,7 +42,7 @@ import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
 
@@ -76,19 +77,26 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
   const [ unsavedPages, setUnsavedPages ] = useState<any>({});
   const [ unsavedChanges, setUnsavedChanges ] = useState( false );
-  const [ tour, setTour ] = useState( propTour );
-  const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
+  const [tour, setTour] = useState(propTour);
+  const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
   //! This will change
-  const [ tourImages, setTourImages ] = useState<TourSiteImageType[]>( [] );
-  const [ tourTitle, setTourTitle ] = useState( propTour?.tourTitle );
-  const [ pageRename, setPageRename ] = useState( "" );
-  const [ pageTitle, setPageTitle ] = useState( "" );
+  const isSavingTour = useRef(false);
+  const [isLoadingStartup, setIsLoadingStartup] = useState(true);
+  const tourImages = useRef<TourSiteImageType[]>([]);
+  const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
+  const [pageRename, setPageRename] = useState("");
+  const [pageTitle, setPageTitle] = useState("");
+
+  // Selection
+  const [heading, setHeading] = useState("Heading 1");
+  const [fontFamily, setFontFamily] = useState("Arial");
 
   const anyUnsavedPages = () => {
     return Object.values(ContentManager.unsavedPages).includes(true);
   }
 
-  const editor = useEditor( {
+  const editor = useEditor({
     extensions: [
       Blockquote.configure({
         HTMLAttributes: {
@@ -127,6 +135,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Strike,
       CharacterCount,
       Underline,
+      FontFamily,
+      TextStyle,
+      Subscript,
+      Superscript,
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -158,28 +170,72 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
         },
       }),
       Image.extend({
-        //     addAttributes() {
-        //       return {
-        //         src: {
-        //           renderHTML: attributes => {
-        //             if (attributes.src) {
-        //               const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.src);
-        //               if (src) {
-        //                 const name = src[0];
-        //                 tourImages.forEach((image) => {
-        //                   if (image.name === name) {
-        //                     console.log(image.bloburl);
-        //                     return {
-        //                       src: image.bloburl,
-        //                     }
-        //                   }
-        //                 });
-        //               }
-        //             }
-        //           },
-        //         }
-        //       }
-        //     }
+        renderHTML({ HTMLAttributes }) {
+          if (isSavingTour.current) {
+            HTMLAttributes.src = HTMLAttributes.alt;
+            return ["img", HTMLAttributes];
+          } else {
+            tourImages.current.forEach((image) => {
+              if (image.name === HTMLAttributes.name) {
+                HTMLAttributes.src = image.bloburl;
+              }
+            });
+            return ["img", HTMLAttributes];
+          }
+
+        },
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            name: {
+              renderHTML: attributes => {
+                if (attributes.src) {
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  if (src) {
+                    const name = src[0];
+                    return {
+                      name,
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
+      }),
+      Video.extend({
+        renderHTML({ HTMLAttributes }) {
+          if (isSavingTour.current) {
+            HTMLAttributes.src = HTMLAttributes.alt;
+            return ["video", HTMLAttributes];
+          } else {
+            tourImages.current.forEach((image) => {
+              if (image.name === HTMLAttributes.name) {
+                HTMLAttributes.src = image.bloburl;
+              }
+            });
+            return ["video", HTMLAttributes];
+          }
+
+        },
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            name: {
+              renderHTML: attributes => {
+                if (attributes.src) {
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  if (src) {
+                    const name = src[0];
+                    return {
+                      name,
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
       }),
     ],
     editorProps: {
@@ -197,10 +253,33 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       // update global unsaved flag
       setUnsavedChanges(true);
     },
+    onSelectionUpdate: ({ editor }) => {}
   });
 
 
-  useEffect( () => {
+  const getImages = useCallback(async () => {
+    const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
+      method: "GET",
+    });
+
+    const res = await tours.blob();
+    const { entries } = await unzip(res);
+
+    const images: TourSiteImageType[] = [];
+    const objs = Object.entries(entries);
+
+    for (const [name, entry] of objs) {
+      const blob = await entry.blob();
+      const bloburl = URL.createObjectURL(blob);
+      images.push({ name, bloburl });
+    }
+
+    tourImages.current = images;
+    setIsUploadingFile(false);
+    setIsLoadingStartup(false);
+  }, [tour.id]);
+
+  useEffect(() => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!unsavedChanges) return;
@@ -213,27 +292,9 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Router.events.emit("routeChangeError");
       throw "routeChange aborted.";
     };
-    window.addEventListener("beforeunload", handleWindowClose);
-    Router.events.on("routeChangeStart", handleBrowseAway);
-
-    const getImages = async () => {
-      const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
-        method: "GET",
-      });
-
-      const res = await tours.blob();
-      const { entries } = await unzip(res);
-
-      const images: TourSiteImageType[] = [];
-
-      Object.entries(entries).forEach(async ([name, entry]) => {
-        const blob = await entry.blob();
-        const bloburl = URL.createObjectURL(blob);
-        images.push({ name, bloburl });
-      });
-
-      setTourImages( images );
-    }
+    window.addEventListener('beforeunload', handleWindowClose);
+    Router.events.on('routeChangeStart', handleBrowseAway);
+    
     if (tour)
       getImages();
 
@@ -241,16 +302,15 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       window.removeEventListener("beforeunload", handleWindowClose);
       Router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, [unsavedChanges]);
+  }, [unsavedChanges, getImages, tour]);
 
 
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading" || isLoadingStartup) return <div>Loading...</div>;
   if (status === "unauthenticated") {
     Router.push("/");
     return <div>Redirecting...</div>
   }
-
-
+  
   return (
     <>
       <div className="flex flex-col w-full h-screen">
@@ -282,6 +342,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   setUpdatedTourTitle(false);
                 }
 
+                editor?.setEditable(false);
+                isSavingTour.current = true;
                 const data = editor?.getHTML();
 
                 if ( data && currentPageId ) {
@@ -303,6 +365,11 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     setUnsavedChanges(false);
                   }
                 }
+
+                isSavingTour.current = false;
+                editor?.commands.setContent(data ? data : "");
+                editor?.setEditable(true);
+
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
             >
@@ -440,21 +507,29 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
               );
             })}
           </div>
-
-          {/* Editor */}
-          <div className="flex flex-[4_1_0] flex-col overflow-auto">
-            { currentPageId === "" ? (
+          <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
+            {currentPageId === "" ? (
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
-                <EditorMenu tourid={tour.id} editor={editor} images={tourImages} />
+                <div className="absolute z-10 flex flex-col justify-end items-end w-full h-full py-6 px-12 text-sm text-gray-400 select-none pointer-events-none">
+                  <div>{editor?.storage.characterCount.characters()} characters</div>
+                  <div>{editor?.storage.characterCount.words()} words</div>
+                </div>
+                <EditorMenu
+                  tourid={tour.id}
+                  editor={editor}
+                  images={tourImages.current}
+                  getImages={getImages}
+                  isUploadingFile={isUploadingFile}
+                  setIsUploadingFile={setIsUploadingFile}
+                  heading={heading}
+                  setHeading={setHeading}
+                  fontFamily={fontFamily}
+                  setFontFamily={setFontFamily}
+                />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
-                  <div className="text-right text-sm text-gray-400 pr-6">
-                    {editor?.storage.characterCount.characters()} characters
-                    <br />
-                    {editor?.storage.characterCount.words()} words
-                  </div>
                 </div>
               </>
             )}
