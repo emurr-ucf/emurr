@@ -58,7 +58,7 @@ export const Login = (props: LoginProps) => {
                   password,
                 })}
                 type="button"
-                className="py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800"
+                className="button-primary"
               >
                 <div>Login</div>
               </button>

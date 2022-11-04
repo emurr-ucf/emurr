@@ -23,14 +23,15 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
-import FontFamily from '@tiptap/extension-font-family'
-import TextStyle from '@tiptap/extension-text-style'
-import Subscript from '@tiptap/extension-subscript'
-import Superscript from '@tiptap/extension-superscript'
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
+import Video from "../../lib/extensions/video";
+import FontFamily from "@tiptap/extension-font-family";
+import TextStyle from "@tiptap/extension-text-style";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
 // End of Additional Extensions
 import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
@@ -41,88 +42,202 @@ import { useSession } from "next-auth/react";
 import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
 import download from "downloadjs";
 
-interface PageType {
-  page: Page;
-  content: string;
+class ContentManager {
+  static currentPageId: string;
+  static unsavedPages: any = {};
+  static editedContent: any = {};
+  static savedContent: any = {};
+
+  static write = (id: string, content: string) => {
+    this.editedContent[id] = content;
+    this.unsavedPages[id] = !this.isSaved(id);
+  }
+
+  static read = (id: string) => {
+    return this.editedContent[id];
+  }
+
+  static save = (id: string, content: string) => {
+    this.savedContent[id] = this.editedContent[id] = content;
+    this.unsavedPages[id] = false;
+  }
+
+  static isSaved = (id: string) => {
+    return this.savedContent[id] === this.editedContent[id];
+  }
 }
 
-const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof getServerSideProps> ) => {
+const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
-  const [ page, setPage ] = useState( "" );
+  const [ currentPageId, setCurrentPageId ] = useState("");
 
-  const [ tour, setTour ] = useState( propTour );
+  const [ unsavedPages, setUnsavedPages ] = useState<any>({});
   const [ unsavedChanges, setUnsavedChanges ] = useState( false );
-  const [ updatedTourTitle, setUpdatedTourTitle ] = useState( false );
+  const [tour, setTour] = useState(propTour);
+  const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
   //! This will change
-  const [ tourImages, setTourImages ] = useState<TourSiteImageType[]>( [] );
-  const [ tourTitle, setTourTitle ] = useState( propTour.tourTitle );
-  const [ pageRename, setPageRename ] = useState( "" );
-  const [ pageTitle, setPageTitle ] = useState( "" );
+  const isSavingTour = useRef(false);
+  const [isLoadingStartup, setIsLoadingStartup] = useState(true);
+  const tourImages = useRef<TourSiteImageType[]>([]);
+  const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
+  const [pageRename, setPageRename] = useState("");
+  const [pageTitle, setPageTitle] = useState("");
 
-  const editor = useEditor( {
+  // Selection
+  const [heading, setHeading] = useState("Heading 1");
+  const [fontFamily, setFontFamily] = useState("Arial");
+
+  const anyUnsavedPages = () => {
+    return Object.values(ContentManager.unsavedPages).includes(true);
+  }
+
+  const editor = useEditor({
     extensions: [
-      Blockquote,
-      BulletList,
+      Blockquote.configure({
+        HTMLAttributes: {
+          style: "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
+        },
+      }),
+      BulletList.configure({
+        HTMLAttributes: {
+          style: "list-style: disc; margin-left: 1rem;",
+        },
+      }), // tag: ul
       CodeBlock,
       Document,
       HardBreak,
-      Heading,
+      Heading.configure({
+        HTMLAttributes: {
+          style: "font-weight: bolder;",
+        },
+      }),
       HorizontalRule,
       ListItem,
-      OrderedList,
+      OrderedList.configure({
+        HTMLAttributes: {
+          style: "list-style: decimal; margin-left: 1rem;",
+        },
+      }), // tag: ol
       Paragraph,
       Text,
       Bold,
-      Code,
+      Code.configure({
+        HTMLAttributes: {
+          style: "color: inherit",
+        },
+      }),
       Italic,
       Strike,
       CharacterCount,
       Underline,
-      Highlight.configure( { multicolor: true } ),
-      TextAlign.configure( {
-        types: [ "heading", "paragraph" ],
-      } ),
+      FontFamily,
+      TextStyle,
+      Subscript,
+      Superscript,
+      Highlight.configure({ multicolor: true }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       History,
       FontFamily,
       TextStyle,
       Subscript,
       Superscript,
-      Table.configure( {
+      // tag: table
+      Table.configure({
         resizable: true,
-      } ),
+        HTMLAttributes: {
+          style: "border-collapse: collapse; margin: 0; overflow: hidden; table-layout: fixed; width: 100%;",
+        },
+      }),
+      // tag: tr
       TableRow,
-      TableHeader,
-      TableCell,
-      Image.extend( {
-        //     addAttributes() {
-        //       return {
-        //         src: {
-        //           renderHTML: attributes => {
-        //             if (attributes.src) {
-        //               const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.src);
-        //               if (src) {
-        //                 const name = src[0];
-        //                 tourImages.forEach((image) => {
-        //                   if (image.name === name) {
-        //                     console.log(image.bloburl);
-        //                     return {
-        //                       src: image.bloburl,
-        //                     }
-        //                   }
-        //                 });
+      // tag: th
+      TableHeader.configure({
+        HTMLAttributes: {
+          style: "background-color: #f1f3f5; font-weight: bold; text-align: left; border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+        },
+      }),
+      // tag: td
+      TableCell.configure({
+        HTMLAttributes: {
+          style: "border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+        },
+      }),
+      Image.extend({
+        renderHTML({ HTMLAttributes }) {
+          if (isSavingTour.current) {
+            HTMLAttributes.src = HTMLAttributes.alt;
+            return ["img", HTMLAttributes];
+          } else {
+            tourImages.current.forEach((image) => {
+              if (image.name === HTMLAttributes.name) {
+                HTMLAttributes.src = image.bloburl;
+              }
+            });
+            return ["img", HTMLAttributes];
+          }
 
-        //               }
-        //             }
-        //           },
-        //         }
-        //       }
-        //     }
-      } ),
+        },
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            name: {
+              renderHTML: attributes => {
+                if (attributes.src) {
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  if (src) {
+                    const name = src[0];
+                    return {
+                      name,
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
+      }),
+      Video.extend({
+        renderHTML({ HTMLAttributes }) {
+          if (isSavingTour.current) {
+            HTMLAttributes.src = HTMLAttributes.alt;
+            return ["video", HTMLAttributes];
+          } else {
+            tourImages.current.forEach((image) => {
+              if (image.name === HTMLAttributes.name) {
+                HTMLAttributes.src = image.bloburl;
+              }
+            });
+            return ["video", HTMLAttributes];
+          }
+
+        },
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            name: {
+              renderHTML: attributes => {
+                if (attributes.src) {
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  if (src) {
+                    const name = src[0];
+                    return {
+                      name,
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
+      }),
     ],
     editorProps: {
       attributes: {
@@ -131,112 +246,138 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
     },
     autofocus: "start",
     onUpdate: () => {
-      setUnsavedChanges( true );
+      // mark page as unsaved
+      const pageId = ContentManager.currentPageId;
+      ContentManager.unsavedPages[pageId] = true;
+      setUnsavedPages(ContentManager.unsavedPages);
+
+      // update global unsaved flag
+      setUnsavedChanges(true);
     },
-  } );
+    onSelectionUpdate: ({ editor }) => {}
+  });
 
 
+  const getImages = useCallback(async () => {
+    const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
+      method: "GET",
+    });
 
+    const res = await tours.blob();
+    const { entries } = await unzip(res);
 
+    const images: TourSiteImageType[] = [];
+    const objs = Object.entries(entries);
 
+    for (const [name, entry] of objs) {
+      const blob = await entry.blob();
+      const bloburl = URL.createObjectURL(blob);
+      images.push({ name, bloburl });
+    }
 
-  useEffect( () => {
+    tourImages.current = images;
+    setIsUploadingFile(false);
+    setIsLoadingStartup(false);
+  }, [tour.id]);
+
+  useEffect(() => {
     const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
-    const handleWindowClose = ( e: BeforeUnloadEvent ) => {
-      if ( !unsavedChanges ) return;
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
+      if (!unsavedChanges) return;
       e.preventDefault();
-      return ( e.returnValue = warningText );
+      return (e.returnValue = warningText);
     };
     const handleBrowseAway = () => {
-      if ( !unsavedChanges ) return;
-      if ( window.confirm( warningText ) ) return;
-      Router.events.emit( "routeChangeError" );
+      if (!unsavedChanges) return;
+      if (window.confirm(warningText)) return;
+      Router.events.emit("routeChangeError");
       throw "routeChange aborted.";
     };
-    window.addEventListener( 'beforeunload', handleWindowClose );
-    Router.events.on( 'routeChangeStart', handleBrowseAway );
-
-    const getImages = async () => {
-      const tours = await fetch( `${ urlPath }/api/tourImage?tourId=${ tour.id }`, {
-        method: "GET",
-      } );
-
-      const res = await tours.blob();
-      const { entries } = await unzip( res );
-
-      const images: TourSiteImageType[] = [];
-
-      Object.entries( entries ).forEach( async ( [ name, entry ] ) => {
-        const blob = await entry.blob();
-        const bloburl = URL.createObjectURL( blob );
-        images.push( { name, bloburl } );
-      } );
-
-      setTourImages( images );
-    }
-    getImages();
+    window.addEventListener('beforeunload', handleWindowClose);
+    Router.events.on('routeChangeStart', handleBrowseAway);
+    
+    if (tour)
+      getImages();
 
     return () => {
-      window.removeEventListener( "beforeunload", handleWindowClose );
-      Router.events.off( "routeChangeStart", handleBrowseAway );
+      window.removeEventListener("beforeunload", handleWindowClose);
+      Router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, [ unsavedChanges ] );
+  }, [unsavedChanges, getImages, tour]);
 
 
-
-
-
-  if ( status === "loading" ) return <div>Loading...</div>;
-  if ( status === "unauthenticated" ) Router.push( "/" );
+  if (status === "loading" || isLoadingStartup) return <div>Loading...</div>;
+  if (status === "unauthenticated") {
+    Router.push("/");
+    return <div>Redirecting...</div>
+  }
+  
   return (
     <>
       <div className="flex flex-col w-full h-screen">
         <Navbar>
           <>
+            {/* Tour title */}
             <input
               type="text"
-              defaultValue={ tour.tourTitle }
-              onChange={ ( event ) => {
-                setTourTitle( event.target.value );
-                setUpdatedTourTitle( true );
-              } }
+              defaultValue={tour.tourTitle}
+              onChange={(event) => {
+                setTourTitle(event.target.value);
+                setUpdatedTourTitle(true);
+              }}
               className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
+
+            {/* Save button */}
             <button
-              onClick={ async () => {
-                if ( updatedTourTitle ) {
+              onClick={async () => {
+                if (updatedTourTitle) {
                   const body = { tourId: tour.id, name: tourTitle };
 
-                  await fetch( `${ urlPath }/api/tour`, {
+                  await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify( body ),
-                  } );
+                    body: JSON.stringify(body),
+                  });
 
-                  setUpdatedTourTitle( false );
+                  setUpdatedTourTitle(false);
                 }
 
+                editor?.setEditable(false);
+                isSavingTour.current = true;
                 const data = editor?.getHTML();
 
-                if ( data && page ) {
+                if ( data && currentPageId ) {
                   const file = new File( [ data ], "blank.html" );
 
                   const formData = new FormData();
 
-                  formData.append( "file", file );
+                  formData.append("file", file);
 
-                  const res = await fetch( `${ urlPath }/api/page?tourId=${ tour.id }&pageId=${ page }`, {
+                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`, {
                     method: "PUT",
                     body: formData,
-                  } );
+                  });
 
-                  setUnsavedChanges( false );
+                  if (res.status === 200) {
+                    // mark current page as saved
+                    ContentManager.save(currentPageId, data);
+                    setUnsavedPages(ContentManager.unsavedPages);
+                    setUnsavedChanges(false);
+                  }
                 }
-              } }
+
+                isSavingTour.current = false;
+                editor?.commands.setContent(data ? data : "");
+                editor?.setEditable(true);
+
+              }}
               className={`py-1 w-24 ${unsavedChanges ? "bg-red-700" : "bg-green-700"} text-background-200 rounded-sm`}
             >
               Save
             </button>
+
+            {/* Download button */}
             <button
               onClick={async () => {
                 const res = await fetch(`${ urlPath }/api/download`, {
@@ -252,108 +393,162 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
             >
               Download
             </button>
+
+            {/* Publish button */}
             <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
           </>
         </Navbar>
         <div className="flex pt-4 px-4 overflow-hidden">
           <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
+
+            {/* Create new page button */}
             <button
-              onClick={ async () => {
-                const file = new File( [], "blank.html" );
+              onClick={async () => {
+                const file = new File([], "blank.html");
 
                 const formData = new FormData();
 
-                formData.append( "file", file );
+                formData.append("file", file);
 
-                const res = await fetch( `${ urlPath }/api/page?tourId=${ tour.id }`, {
+                const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}`, {
                   method: "POST",
                   body: formData,
-                } );
+                });
 
                 const resJSON = await res.json();
 
-                if ( resJSON.tour ) setTour( resJSON.tour );
-              } }
+                if (resJSON.tour) setTour(resJSON.tour);
+              }}
               className="w-full py-1 px-4 mb-2 text-background-200 bg-green-700 rounded-sm"
             >
               Create New Page
             </button>
 
-            { tour.tourPages.map( ( page: Page ) => {
+            {/* Page titles on sidebar */}
+            {tour.tourPages.map( ( page: Page ) => {
               return (
-                <div key={ page.id } className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300">
+                <div key={page.id} className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300">
+                  {/* Load tour page into editor */}
                   <button
-                    onClick={ async () => {
-                      if ( pageRename === page.id ) return;
+                    onClick={async () => {
+                      // stash changes with content manager
+                      // Update "unsaved" state for old page
+                      if (editor && currentPageId)
+                        ContentManager.write(currentPageId, editor.getHTML());
+                      setUnsavedPages(ContentManager.unsavedPages);
+                      setUnsavedChanges(anyUnsavedPages());
 
-                      const res = await fetch( `${ urlPath }/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
-                        method: "GET",
-                      } );
+                      // if we're renaming this page, don't switch to it
+                      if (pageRename === page.id) return;
 
-                      const resHTML = await res.text();
-
-                      if ( res.status === 200 ) {
-                        setPage( page.id );
-                        editor?.commands.setContent( resHTML == "" ? "" : resHTML );
+                      // restore stashed changes from ContentManager, if possible
+                      if (ContentManager.read(page.id)) {
+                        editor?.commands.setContent(ContentManager.read(page.id));
                       }
-                    } }
-                    className="w-full"
+                      // otherwise, fetch content from api
+                      else {
+                        const res = await fetch( `${urlPath}/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
+                          method: "GET",
+                        } );
+  
+                        const resHTML = await res.text();
+  
+                        if ( res.status === 200 ) {
+                          ContentManager.save( page.id, resHTML );
+                          editor?.commands.setContent( resHTML == "" ? "" : resHTML );
+                        }
+                        else {
+                          alert("Failed to load content");
+                          return;
+                        }
+                      }
+
+                      // update current page id
+                      setCurrentPageId(page.id);
+                      ContentManager.currentPageId = page.id;
+                    }}
+                    className="w-full text-left"
                   >
-                    <input defaultValue={ page.title === "" ? "Untitled" : page.title } disabled={ pageRename != page.id } autoFocus={ true } onChange={ ( event ) => setPageTitle( event.target.value ) } className="w-full" />
+                    {/* Rename page title */}
+                    {
+                      pageRename === page.id ? (
+                        <input 
+                          defaultValue={page.title === "" ? "Untitled" : page.title}
+                          autoFocus={true}
+                          onChange={(event) => {
+                            setPageTitle(event.target.value);
+                          }}
+                          className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }
+                        />
+                      ) : 
+                        <span className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }>
+                          {page.title === "" ? "Untitled" : page.title}
+                        </span>
+                    }
                   </button>
+                  
+                  {/* Edit title button */}
                   <button
                     onClick={ () => {
                       setPageRename( page.id );
                     } }
-                    className={ `${ pageRename === page.id || pageRename != "" ? "hidden" : "" } invisible group-hover:visible` }
+                    className={ `${ pageRename === page.id || pageRename != "" ? "hidden" : "" } invisible2 group-hover:visible` }
                   >
                     Edit
                   </button>
+
+                  {/* Save title button */}
                   <button
                     onClick={ async () => {
                       const body = { pageId: page.id, tourId: tour.id, name: pageTitle };
 
-                      const res = await fetch( `${ urlPath }/api/pagedb`, {
+                      const res = await fetch(`${urlPath}/api/pagedb`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify( body ),
-                      } );
+                        body: JSON.stringify(body),
+                      });
 
                       const resJSON = await res.json();
 
-                      if ( resJSON.tour ) setTour( resJSON.tour );
+                      if (resJSON.tour) setTour(resJSON.tour);
 
-                      setPageRename( "" );
-                    } }
-                    className={ `${ pageRename != page.id ? "hidden" : "" }` }
+                      setPageRename("");
+                    }}
+                    className={`${pageRename != page.id ? "hidden" : ""}`}
                   >
                     Save
                   </button>
                 </div>
               );
-            } ) }
+            })}
           </div>
-          <div className="flex flex-[4_1_0] flex-col overflow-auto">
-            { page === "" ? (
+          <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
+            {currentPageId === "" ? (
               <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
+                <div className="absolute z-10 flex flex-col justify-end items-end w-full h-full py-6 px-12 text-sm text-gray-400 select-none pointer-events-none">
+                  <div>{editor?.storage.characterCount.characters()} characters</div>
+                  <div>{editor?.storage.characterCount.words()} words</div>
+                </div>
                 <EditorMenu
-                  tourId={ tour.id }
-                  pageId={page}
-                  editor={ editor }
-                  images={ tourImages }
+                  tourId={tour.id}
+                  pageId={pageRename}
+                  editor={editor}
+                  images={tourImages.current}
+                  getImages={getImages}
+                  isUploadingFile={isUploadingFile}
+                  setIsUploadingFile={setIsUploadingFile}
+                  heading={heading}
+                  setHeading={setHeading}
+                  fontFamily={fontFamily}
+                  setFontFamily={setFontFamily}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
-                  <EditorContent editor={ editor } />
-                  <div className="text-right text-sm text-gray-400 pr-6">
-                    { editor?.storage.characterCount.characters() } characters
-                    <br />
-                    { editor?.storage.characterCount.words() } words
-                  </div>
+                  <EditorContent editor={editor} />
                 </div>
               </>
-            ) }
+            )}
           </div>
         </div>
       </div>
@@ -361,12 +556,12 @@ const TiptapPage: NextPage = ( { propTour }: InferGetServerSidePropsType<typeof 
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ( context ) => {
-  const token = await getToken( context );
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = await getToken(context);
   const { id } = context.query;
 
-  if ( token && typeof id === "string" ) {
-    const propTour = await prisma.tour.findFirst( {
+  if (token && typeof id === "string") {
+    const propTour = await prisma.tour.findFirst({
       where: {
         id,
         tourAuthorId: token.id,
@@ -383,7 +578,7 @@ export const getServerSideProps: GetServerSideProps = async ( context ) => {
           },
         },
       },
-    } );
+    });
 
     return {
       props: { propTour },

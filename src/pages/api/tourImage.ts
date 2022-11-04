@@ -96,6 +96,7 @@ export default async function handler (
 
 export const config = {
     api: {
+      responseLimit: false,
       bodyParser: false, // Disallow body parsing, consume as stream
     },
 };

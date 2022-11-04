@@ -1,5 +1,5 @@
 import { Editor } from "@tiptap/react";
-import { useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
@@ -17,24 +17,61 @@ interface EditorMenuProps {
   pageId: string;
   editor: Editor | null;
   images: TourSiteImageType[];
+  getImages: () => {};
+  isUploadingFile: boolean;
+  setIsUploadingFile: Dispatch<SetStateAction<boolean>>;
+  heading: string;
+  setHeading: Dispatch<SetStateAction<string>>;
+  fontFamily: string;
+  setFontFamily: Dispatch<SetStateAction<string>>;
 }
 
-export const EditorMenu = ({ tourId, pageId, editor, images }: EditorMenuProps) => {
-  const [heading, setHeading] = useState("Heading 1");
-  const [fontFamily, setFontFamily] = useState("Times");
-  const [tourImages, setTourImages] = useState(images);
+export const EditorMenu = ({
+  tourId,
+  pageId,
+  editor,
+  images,
+  getImages,
+  isUploadingFile,
+  setIsUploadingFile,
+  heading,
+  setHeading,
+  fontFamily,
+  setFontFamily,
+}: EditorMenuProps) => {
 
-  const addImage = useCallback(() => {
-    const url = window.prompt("URL");
-
-    if (url) {
-      editor?.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
+  const imageLoad = () => {
+    if (isUploadingFile) {
+      return <div>Uploading File...</div>
+    } else if (images.length > 0)
+      return images.map((image: TourSiteImageType) => (
+        <div key={image.name}>
+          <button
+            onClick={() => {
+              const arr = image.name.match(/\.[0-9a-z]+$/i);
+              if (arr) {
+                if (arr[0] === ".mp4") {
+                  editor?.chain().focus().setVideo({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                } else {
+                  editor?.chain().focus().setImage({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                }
+              }
+            }}
+            className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-background-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+          >
+            <div className="text-sm font-medium text-gray-900">
+              {image.name}
+            </div>
+          </button>
+        </div>
+      ))
+    else
+      return <div>You have no images on this tour.</div>
+  }
 
   return (
     <>
-      <div className="flex justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
+      <div className="flex flex-col 2xl:flex-row justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
         <div className="flex items-center">
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
@@ -152,6 +189,22 @@ export const EditorMenu = ({ tourId, pageId, editor, images }: EditorMenuProps) 
                       )}
                     </Menu.Item>
                   </form>
+                  <form onClick={(event) => {
+                    editor?.commands.setParagraph();
+                    editor?.commands.focus();
+                    setHeading('Paragraph');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Paragraph</div>
+                          <img src="/images/paragraph.svg" alt="h-6" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
                 </div>
               </Menu.Items>
             </Transition>
@@ -229,9 +282,10 @@ export const EditorMenu = ({ tourId, pageId, editor, images }: EditorMenuProps) 
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold inline-flex">
-                  <img src={`${urlLocalPath}/images/table-line.svg`} alt="table" title="Insert Table" />
+              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold inline-flex items-center">
+                  Table
+                  <img className="w-7 h-7 p-1" src={`${urlLocalPath}/images/table-line.svg`} alt="table" title="Insert Table" />
                   <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
@@ -510,28 +564,16 @@ export const EditorMenu = ({ tourId, pageId, editor, images }: EditorMenuProps) 
                   <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="flex-col gap-8 bg-white p-7">
-                        {tourImages.length > 0 ? (
-                          tourImages.map((image: TourSiteImageType) => (
-                            <button
-                              key={image.name}
-                              onClick={() => {
-                                addImage();
-                                //editor?.chain().focus().setImage({ src: "./images/" + image.name }).run();
-                              }}
-                              className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                            >
-                              <div className="text-sm font-medium text-gray-900">{image.name}</div>
-                            </button>
-                          ))
-                        ) : (
-                          <div>You have no images on this tour.</div>
-                        )}
+                        {imageLoad()}
                       </div>
                       <div className="bg-gray-50 p-4">
-                        <label className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                        <label
+                          className="rounded-md px-2 py-2 transition duration-150 ease-in-out hover:cursor-pointer hover:bg-background-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        >
                           <input
                             type="file"
                             onChange={async (event) => {
+                              setIsUploadingFile(true);
                               if (!event.target.files) return;
 
                               const formData = new FormData();
@@ -541,6 +583,8 @@ export const EditorMenu = ({ tourId, pageId, editor, images }: EditorMenuProps) 
                                 method: "POST",
                                 body: formData,
                               });
+
+                              getImages();
                             }}
                             className="hidden"
                           />

@@ -37,9 +37,9 @@ export default async function handler (
         if ((typeof currentPassword !== 'string') || (typeof confirmPassword !== 'string') || (typeof newPassword !== 'string'))
             return res.status(400).json({error: "Please input proper password values."});
 
-        // Error: Current password and confirmation password don't match.
-        if (currentPassword !== confirmPassword)
-            return res.status(400).json({error: "Current password and confirmation password don't match."});
+        // Error: New password and confirmation password don't match.
+        if (newPassword !== confirmPassword)
+            return res.status(400).json({error: "New password and confirmation password don't match."});
         
         // Queries database for the current user. 
         const user = await prisma.user.findFirst({
