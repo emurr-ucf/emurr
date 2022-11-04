@@ -118,28 +118,43 @@ export default async function handler (
         const { firstName, lastName } = req.body;
 
         // Error: Not all fields are filled out.
-        if(!firstName || !lastName)
-            return res.status(400).json({error: "Please fill out all fields."});
+        if(!firstName && !lastName)
+            return res.status(400).json({error: "Please fill out at least one field."});
 
         // Error: Name values are not strings.
         if((typeof firstName !== 'string') || (typeof lastName !== 'string'))
             return res.status(400).json({error: "Please input a proper name."});
 
         // If all checks are passed.
-        // Updates User.
-        const updatedUser = await prisma.user.update({
-            where: {
-                id:token.id,
-            },
-            data: {
-                name: firstName,
-                lastName,
-            }
-        })
-        if(updatedUser)
-            return res.status(200).json({});
-        else
-            return res.status(409).json({error: "Could not update information"})
+        // Updates user based on input.
+        if (firstName) {
+            const updatedUser = await prisma.user.update({
+                where: {
+                    id:token.id,
+                },
+                data: {
+                    name: firstName,
+                }
+            });
+            if(updatedUser)
+                return res.status(200).json({});
+            else
+                return res.status(409).json({error: "Could not update information"});
+        }
+        if (lastName) {
+            const updatedUser = await prisma.user.update({
+                where: {
+                    id:token.id,
+                },
+                data: {
+                    lastName,
+                }
+            });
+            if(updatedUser)
+                return res.status(200).json({});
+            else
+                return res.status(409).json({error: "Could not update information"});
+        }
     }
 
     // Retrieves a User's Information.

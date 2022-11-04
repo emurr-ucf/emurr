@@ -19,12 +19,8 @@ export const EditProfile = () => {
 
 		// TODO consider loading screen while awaiting api call
 		// TODO consider making lastName information part of session information
-		const res = await fetch('/api/user/getUser', {
-			method: "POST",
-			headers: {"Content-Type": "application/json"},
-			body: JSON.stringify({
-				email: session?.user.email || "",
-			})
+		const res = await fetch('/api/user', {
+			method: "GET",
 		})
 		const json = await res.json();
 
@@ -33,15 +29,15 @@ export const EditProfile = () => {
 			return;
 		}
 
-		setFirstName(json.user.name || "");
-		setLastName(json.user.lastName || "");
+		setFirstName(json.firstName || "");
+		setLastName(json.lastName || "");
 	};
 
 	const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		const res = await fetch('/api/user/editUser', {
-			method: "POST",
+		const res = await fetch('/api/user', {
+			method: "PUT",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify({
 				firstName,
