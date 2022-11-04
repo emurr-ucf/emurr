@@ -68,7 +68,7 @@ export default async function handler (
             }
 
             // Append files from a sub-directory, putting its contents at the root of archive
-            archive.directory(`./websites/${tourId}/images`, false);
+            archive.directory(`./websites/${tourId}/images`, `./websites/${tourId}/images`);
             // Closes the archiver session.
             archive.finalize();
         }
