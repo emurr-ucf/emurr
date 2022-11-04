@@ -258,7 +258,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
 
   const getImages = useCallback(async () => {
-    const tours = await fetch(`/api/tourImage?tourId=${tour.id}`, {
+    const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
       method: "GET",
     });
 
