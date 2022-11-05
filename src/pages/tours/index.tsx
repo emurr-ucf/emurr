@@ -14,6 +14,7 @@ import { Menu, Transition } from "@headlessui/react";
 import React from "react";
 import { title } from "process";
 import { urlPath } from "../../lib/urlPath";
+import { Loading } from "../../components/Loading";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -43,8 +44,25 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
     queryTours();
   }, [query, sortQuery]);
 
-  if (status === "loading") return <div>Loading...</div>;
-  if (status === "unauthenticated") Router.push("/");
+  if (status === "loading") {
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Loading Authentification...</div>
+        </div>
+      </Loading>
+    );
+  }
+  if (status === "unauthenticated") {
+    Router.push("/");
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Redirecting...</div>
+        </div>
+      </Loading>
+    );
+  }
 
   return (
     <>

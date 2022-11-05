@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Register } from '../components/Register';
 import { ForgotPassword } from '../components/ForgotPassword';
 import { urlPath } from '../lib/urlPath';
+import { Loading } from '../components/Loading';
 
 export enum FormType { LOGIN = 1, REGISTER, FORGOT_PASSWORD };
 
@@ -19,8 +20,25 @@ const LoginPage: NextPage = () => {
     setFormType(value);
   }
 
+  if (status === "loading") {
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Loading Authentification...</div>
+        </div>
+      </Loading>
+    );
+  }
+
   if (session) {
     Router.push("/tours");
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Redirecting...</div>
+        </div>
+      </Loading>
+    );
   }
 
   return (

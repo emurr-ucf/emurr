@@ -46,6 +46,7 @@ import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
 import download from "downloadjs";
+import { Loading } from "../../components/Loading";
 
 class ContentManager {
   static currentPageId: string;
@@ -329,10 +330,25 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   }, [unsavedChanges, getImages, tour]);
 
 
-  if (status === "loading" || isLoadingStartup) return <div>Loading...</div>;
+  if (status === "loading" || isLoadingStartup) {
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Loading Tour Assets.</div>
+          <div>Please Wait...</div>
+        </div>
+      </Loading>
+    );
+  }
   if (status === "unauthenticated") {
     Router.push("/");
-    return <div>Redirecting...</div>
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Redirecting...</div>
+        </div>
+      </Loading>
+    );
   }
   
   return (
