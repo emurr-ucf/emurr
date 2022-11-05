@@ -151,8 +151,7 @@ export default async function handler (
         const path = "./websites/" + tourId + "/" + pageId + ".html";
         const file = fs.createReadStream(path)
         res.setHeader('Content-Disposition', 'attachement; filename="' + pageId + '.html"')
-        file.pipe(res);
-        
+        file.pipe(res);      
     }
 }
 
