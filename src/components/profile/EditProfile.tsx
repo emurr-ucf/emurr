@@ -69,16 +69,38 @@ export const EditProfile = () => {
 			<Modal.Body>
 			<form onSubmit={handleSave}>
 				<div className="flex flex-col gap-6">
-					<label htmlFor="pfp">
-						<div className='filter hover:contrast-200 m-auto' style={{
-							backgroundImage: "url('/images/default-user.png')",
-							backgroundSize: "128px 128px",
-							height: 128,
-							width: 128
-						}}>
-						</div>
+					<label>
+						<img
+							src={process.env.NODE_ENV === "production"
+								? (session?.user.image || `${urlLocalPath}/images/google.png`)
+								: `${urlLocalPath}/images/google.png`}
+							alt="User profile image"
+							className="filter hover:contrast-200 m-auto w-20 h-20 hover:bg-"
+						/>
+						<input
+							type="file"
+							onChange={async (event) => {
+								if (!event.target.files) return;
+
+								const formData = new FormData();
+								formData.append("file", event.target.files[0]);
+
+								const res = await fetch(`${urlLocalPath}/api/user/profileImage`, {
+									method: "PUT",
+									body: formData,
+								});
+
+								const json = await res.json();
+								
+								if (process.env.NODE_ENV)
+									console.log(json.error);
+
+								if (res.status === 200 && session)
+									session.user.image = json.image;
+							}}
+							className="hidden"
+						/>
 					</label>
-					<input id="pfp" type="file" className="hidden" />
 
 					<input 
 						type="text"

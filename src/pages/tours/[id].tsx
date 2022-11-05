@@ -269,8 +269,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       else
         setHeading("");
 
-
-      if (editor.isActive("textStyle", { fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' }))
+      if (editor.isActive("textStyle", { fontFamily: "ui-serif, Georgia, Cambria, Times New Roman, Times, serif" }))
         setFontFamily("Times");
       else if (editor.isActive("textStyle", { fontFamily: "Arial" }))
         setFontFamily("Arial");
