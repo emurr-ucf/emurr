@@ -71,13 +71,13 @@ export const EditorMenu = ({
 
   return (
     <>
-      <div className="flex flex-col 2xl:flex-row justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
-        <div className="flex items-center">
+      <div className="flex justify-between 2xl:justify-left z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
+        <div className="flex items-center overflow-x-auto">
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold inline-flex">
-                  {heading}
+              <Menu.Button className="inline-flex w-36 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold w-full flex justify-between">
+                  <div>{heading}</div>
                   <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
@@ -91,7 +91,7 @@ export const EditorMenu = ({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="fixed z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <form
                     onClick={(event) => {
@@ -212,9 +212,9 @@ export const EditorMenu = ({
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold inline-flex">
-                  {fontFamily}
+              <Menu.Button className="inline-flex w-40 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold w-full flex justify-between">
+                  <div>{fontFamily}</div>
                   <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
@@ -228,7 +228,7 @@ export const EditorMenu = ({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="fixed z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <form
                     onClick={(event) => {
@@ -541,7 +541,8 @@ export const EditorMenu = ({
           />
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center overflow-y-hidden overflow-x-auto">
+          <div className="border-x h-3/5 border-green-200 mx-2" />
           <CustomUrlModal 
             pageId={pageId}
             tourId={tourId}
@@ -549,7 +550,7 @@ export const EditorMenu = ({
           <Popover className="relative">
             {({ open }) => (
               <>
-                <Popover.Button className="flex justify-center items-center">
+                <Popover.Button className="flex justify-center items-center w-7 h-7">
                   <img src={`${urlLocalPath}/images/image-line.svg`} alt="image" title="Insert image" className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out" />
                 </Popover.Button>
                 <Transition
@@ -561,9 +562,9 @@ export const EditorMenu = ({
                   leaveFrom="opacity-100 translate-y-0"
                   leaveTo="opacity-0 translate-y-1"
                 >
-                  <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+                  <Popover.Panel className="fixed z-20 mt-3 max-w-md px-4 right-0">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                      <div className="flex-col gap-8 bg-white p-7">
+                      <div className="flex-col gap-8 bg-white px-7 py-2 h-40 overflow-y-auto">
                         {imageLoad()}
                       </div>
                       <div className="bg-gray-50 p-4">

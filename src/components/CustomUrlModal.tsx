@@ -14,9 +14,9 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
 
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center shrink-0">
         <img 
-          src={`${urlLocalPath}/images/image-line.svg`}
+          src={`${urlLocalPath}/images/custom-url.svg`}
           alt="custom url"
           title="Inset Custom URL"
           onClick={() => setIsOpen(true)}

@@ -137,8 +137,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Strike,
       CharacterCount,
       Underline,
-      FontFamily,
       TextStyle,
+      FontFamily,
       Subscript,
       Superscript,
       Highlight.configure({ multicolor: true }),
@@ -238,7 +238,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
     ],
     editorProps: {
       attributes: {
-        class: "font-serif prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+        class: "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
@@ -251,7 +251,33 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       // update global unsaved flag
       setUnsavedChanges(true);
     },
-    onSelectionUpdate: ({ editor }) => {}
+    onSelectionUpdate: ({ editor }) => {
+      if (editor.isActive("paragraph"))
+        setHeading("Paragraph");
+      else if (editor.isActive("heading", { level: 1 }))
+        setHeading("Heading 1");
+      else if (editor.isActive("heading", { level: 2 }))
+        setHeading("Heading 2");
+      else if (editor.isActive("heading", { level: 3 }))
+        setHeading("Heading 3");
+      else if (editor.isActive("heading", { level: 4 }))
+        setHeading("Heading 4");
+      else if (editor.isActive("heading", { level: 5 }))
+        setHeading("Heading 5");
+      else if (editor.isActive("heading", { level: 6 }))
+        setHeading("Heading 6");
+      else
+        setHeading("");
+
+      if (editor.isActive("textStyle", { fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' }))
+        setFontFamily("Times");
+      if (editor.isActive("textStyle", { fontFamily: "Arial" }))
+        setFontFamily("Arial");
+      if (editor.isActive("textStyle", { fontFamily: "Courier New" }))
+        setFontFamily("Courier New");
+      else
+        setFontFamily("");
+    }
   });
 
 
