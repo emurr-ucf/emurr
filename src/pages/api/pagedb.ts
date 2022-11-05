@@ -60,7 +60,7 @@ export default async function handler(
       data: {
         title,
         customURL,
-      }
+      },
     });
 
     if (!page || !page.tourId) return res.status(400).json({ error: `Page: ${pageId} could not be updated` });

@@ -62,7 +62,7 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
                       placeholder="Custom URL..."
                       className="w-full h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
                     />
-                    {}
+                    {error}
                   </div>
 
                   <div className="mt-4">

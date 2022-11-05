@@ -88,6 +88,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
+  const [page, setPage] = useState("");
 
   // Selection
   const [heading, setHeading] = useState("Heading 1");
@@ -145,10 +146,6 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
         types: ["heading", "paragraph"],
       }),
       History,
-      FontFamily,
-      TextStyle,
-      Subscript,
-      Superscript,
       // tag: table
       Table.configure({
         resizable: true,
@@ -431,6 +428,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
+                      setPage(page.id);
                       // stash changes with content manager
                       // Update "unsaved" state for old page
                       if (editor && currentPageId)
@@ -533,7 +531,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 </div>
                 <EditorMenu
                   tourId={tour.id}
-                  pageId={pageRename}
+                  pageId={page}
                   editor={editor}
                   images={tourImages.current}
                   getImages={getImages}
