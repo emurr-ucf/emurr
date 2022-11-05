@@ -34,7 +34,7 @@ export const Navbar = (props: NavbarProps) => {
           </div>
         </nav>
       </>
-    )
+    );
   }
 
 
@@ -72,5 +72,5 @@ export const Navbar = (props: NavbarProps) => {
         </div>
       </nav>
     </>
-  )
+  );
 }
