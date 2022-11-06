@@ -24,7 +24,7 @@ export const VerifyEmail = () => {
     event.preventDefault();
     const body = { emailToken: eT };
 
-    fetch(`${urlPath}/api/verifyEmail`, {
+    fetch(`${urlPath}/api/user/verifyEmail`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../../lib/prisma';
 import { User } from '@prisma/client';
-import comparePass from '../../lib/comparePassword';
+import comparePass from '../../../lib/comparePassword';
 
 // Post API Inputs.
 export interface PostLoginRequestType {

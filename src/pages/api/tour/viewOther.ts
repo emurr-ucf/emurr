@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../../lib/prisma';
 import { Tour } from "@prisma/client";
 import fs from 'fs';
 

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
-import { prisma } from '../../lib/prisma';
-import comparePass from "../../lib/comparePassword";
-import hashPass from '../../lib/hashPassword';
+import { prisma } from '../../../lib/prisma';
+import comparePass from "../../../lib/comparePassword";
+import hashPass from '../../../lib/hashPassword';
 
 // Put API Inputs.
 export interface PutResetPasswordRequestType {

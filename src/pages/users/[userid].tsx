@@ -24,7 +24,7 @@ const ViewOtherPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsT
     clearTimeout(timer);
 
     timer = setTimeout(async () => {
-      const res = await fetch(`${urlPath}/api/tour?query=${query}&userid=${userid}`, {
+      const res = await fetch(`${urlPath}/api/tour/tour?query=${query}&userid=${userid}`, {
         method: "GET"
       })
 

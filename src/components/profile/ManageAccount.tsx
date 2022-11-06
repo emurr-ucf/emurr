@@ -14,7 +14,7 @@ export const ManageAccount = () => {
 	const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		const res = await fetch('/api/user', {
+		const res = await fetch('/api/user/user', {
 			method: "DELETE",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify({

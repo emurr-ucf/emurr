@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
-import { prisma } from '../../lib/prisma';
-import { returnTour } from '../../lib/returnTour';
+import { prisma } from '../../../lib/prisma';
+import { returnTour } from '../../../lib/returnTour';
 
 export interface UpdatePageRequestType {
   pageId: string;

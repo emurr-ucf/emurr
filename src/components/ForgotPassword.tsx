@@ -30,7 +30,7 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
     }
 
     const body = { email };
-    fetch(`${urlPath}/api/forgotPassword`, {
+    fetch(`${urlPath}/api/user/forgotPassword`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)

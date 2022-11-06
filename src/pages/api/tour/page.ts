@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
-import { prisma } from '../../lib/prisma';
-import { returnTour } from '../../lib/returnTour';
+import { prisma } from '../../../lib/prisma';
+import { returnTour } from '../../../lib/returnTour';
 import multer from 'multer';
 import fs from 'fs'
 import { Page, Tour } from "@prisma/client";

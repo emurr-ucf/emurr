@@ -37,7 +37,7 @@ export const ForgotPasswordReset = () => {
     }
 
     const body = { newPassword, resPassToken: rPT };
-    fetch(`${urlPath}/api/forgotPassword`, {
+    fetch(`${urlPath}/api/user/forgotPassword`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)

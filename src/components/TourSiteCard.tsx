@@ -40,7 +40,7 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
                     onClick={async () => {
                       const bodyData = { tourId: props.id };
 
-                      const res = await fetch(`${urlPath}/api/tour`, {
+                      const res = await fetch(`${urlPath}/api/tour/tour`, {
                         method: "DELETE",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(bodyData),

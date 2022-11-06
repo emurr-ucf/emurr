@@ -283,7 +283,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
 
   const getImages = useCallback(async () => {
-    const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
+    const tours = await fetch(`${urlPath}/api/tour/tourImage?tourId=${tour.id}`, {
       method: "GET",
     });
 
@@ -373,7 +373,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 if (updatedTourTitle) {
                   const body = { tourId: tour.id, tourTitle: tourTitle };
 
-                  await fetch(`${urlPath}/api/tour`, {
+                  await fetch(`${urlPath}/api/tour/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -393,7 +393,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                   formData.append("file", file);
 
-                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`, {
+                  const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${currentPageId}`, {
                     method: "PUT",
                     body: formData,
                   });
@@ -419,7 +419,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             {/* Download button */}
             <button
               onClick={async () => {
-                const res = await fetch(`${ urlPath }/api/download`, {
+                const res = await fetch(`${ urlPath }/api/tour/download`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ tourId: tour.id }),
@@ -449,7 +449,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                 formData.append("file", file);
 
-                const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}`, {
+                const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}`, {
                   method: "POST",
                   body: formData,
                 });
@@ -487,7 +487,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                       }
                       // otherwise, fetch content from api
                       else {
-                        const res = await fetch( `${urlPath}/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
+                        const res = await fetch( `${urlPath}/api/tour/page?tourId=${ tour.id }&pageId=${ page.id }`, {
                           method: "GET",
                         } );
   
@@ -542,7 +542,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     onClick={ async () => {
                       const body = { pageId: page.id, tourId: tour.id, title: pageTitle };
 
-                      const res = await fetch(`${urlPath}/api/pagedb`, {
+                      const res = await fetch(`${urlPath}/api/tour/pagedb`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(body),

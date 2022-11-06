@@ -16,7 +16,7 @@ export const EditPassword = () => {
 	const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		const res = await fetch('/api/resetPassword', {
+		const res = await fetch('/api/user/resetPassword', {
 			method: "PUT",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify({

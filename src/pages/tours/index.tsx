@@ -6,7 +6,7 @@ import Router from "next/router";
 import { Tour } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "../../lib/prisma";
-import { CreateTourResponseType } from "../api/tour";
+import { CreateTourResponseType } from "../api/tour/tour";
 import { useEffect, useState } from "react";
 
 import { Fragment } from "react";
@@ -31,7 +31,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
     clearTimeout(timer);
 
     timer = setTimeout(async () => {
-      const res = await fetch(`${urlPath}/api/tour?sortQuery=${sortQuery}&query=${query}`, {
+      const res = await fetch(`${urlPath}/api/tour/tour?sortQuery=${sortQuery}&query=${query}`, {
         method: "GET",
       });
       const resJSON = await res.json();
@@ -78,7 +78,7 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                   const formData = new FormData();
                   formData.append("file", file);
 
-                  const res = await fetch(`${urlPath}/api/tour`, {
+                  const res = await fetch(`${urlPath}/api/tour/tour`, {
                     method: "POST",
                     body: formData,
                   });
