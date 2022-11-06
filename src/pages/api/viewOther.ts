@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from 'next-auth/jwt';
 import { prisma } from '../../lib/prisma';
-import { Page, Tour } from "@prisma/client";
+import { Tour } from "@prisma/client";
 import fs from 'fs';
-const archiver = require('archiver');
 
 // Post API Inputs.
 export interface PostDownloadRequestType {

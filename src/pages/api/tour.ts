@@ -2,6 +2,7 @@ import { Prisma, Tour } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { prisma } from '../../lib/prisma';
+import fs from 'fs';
 
 // Get API Inputs.
 export interface GetTourRequestType {
@@ -53,7 +54,6 @@ export default async function handler(
 ) {
   // Checks JWT token.
   const token = await getToken({req});
-
   if (!token)
       return res.status(401).json({ error: "User is not logged in." });
 
@@ -134,22 +134,50 @@ export default async function handler(
 
   // Updates a Tour's Title.
   else if (req.method === "PUT") {
-    const { tourId, name } = req.body;
+    const { tourId, tourTitle, published } = req.body;
     
     // Error: TourID was not sent. 
     if (!tourId)
       return res.status(400).json({ error: "Tour ID cannot be blank." })
+    
+    var data = {};
+
+    // Sets the data object with the sent published status and name.
+    if (published && typeof published === 'boolean') {
+      data = {
+        tourTitle,
+        published,
+      };
+
+      // Updates pages with the published status.
+      const updatePages = await prisma.page.updateMany({
+        where: {
+          tourId,
+          authorId: token.id,
+        },
+        data: {
+          published
+        }
+      });
+
+      if (!updatePages)
+        return res.status(400).json({ error: "Page published status could not be updated." });
+    }
+    // Sets the data object with just the sent name.
+    else {
+      data = {
+        tourTitle,
+      };
+    }
 
     // If all checks are passed.
-    // Update the Tour Title.
+    // Update the Tour Title and Published Status.
     const tour = await prisma.tour.updateMany({
       where: {
         id: tourId,
         tourAuthorId: token.id,
       },
-      data: {
-        tourTitle: name,
-      }
+      data,
     });
 
     if (tour)
@@ -175,8 +203,18 @@ export default async function handler(
       }
     })
 
-    if (tour)
-      return res.status(200).json({ error: "Tour has been deleted." });
+    if (tour) {
+      // Deletes the tour from filesystem.
+      fs.rm("./websites/" + tourId, { recursive: true, force: true }, err => {
+        if (err) {
+          throw err;
+        }
+      
+        console.log(`${tourId} is deleted!`);
+      });
+
+      return res.status(200).json({});
+    }
     else
       return res.status(400).json({ error: "Tour could not be deleted." });
   }

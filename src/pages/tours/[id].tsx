@@ -371,7 +371,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             <button
               onClick={async () => {
                 if (updatedTourTitle) {
-                  const body = { tourId: tour.id, name: tourTitle };
+                  const body = { tourId: tour.id, tourTitle: tourTitle };
 
                   await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
