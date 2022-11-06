@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { urlLocalPath, urlPath } from '../lib/urlPath';
-
+import { useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { urlLocalPath, urlPath } from "../lib/urlPath";
 
 export const ForgotPasswordReset = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -16,17 +15,19 @@ export const ForgotPasswordReset = () => {
   const error = (message: string) => {
     setColor("text-red-800");
     setMessage(message);
-  }
+  };
 
   const success = (message: string) => {
     setColor("text-green-600");
     setMessage(message);
-  }
+  };
 
-  const doForgotPasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
+  const doForgotPasswordReset = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
-    if ((typeof (newPassword) !== 'string') && (typeof (newPassword2) !== 'string')) {
+    if (typeof newPassword !== "string" && typeof newPassword2 !== "string") {
       error("Please input a valid password.");
       return;
     }
@@ -40,23 +41,25 @@ export const ForgotPasswordReset = () => {
     fetch(`${urlPath}/api/forgotPassword`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }).then((response: Response) => {
       if (response.status === 200) {
-        success("Password has been reset. Please log in using your new password.");
-      }
-      else {
+        success(
+          "Password has been reset. Please log in using your new password."
+        );
+      } else {
         response.json().then((json) => error(json.error));
       }
     });
-  }
+  };
 
   return (
     <>
-      <form onSubmit={doForgotPasswordReset} className="flex flex-col w-64 gap-6">
-        <div className="text-3xl">
-          Reset Password
-        </div>
+      <form
+        onSubmit={doForgotPasswordReset}
+        className="flex flex-col w-64 gap-6"
+      >
+        <div className="text-3xl">Reset Password</div>
         <div className="flex flex-col gap-6">
           <input
             type="password"
@@ -96,5 +99,5 @@ export const ForgotPasswordReset = () => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};

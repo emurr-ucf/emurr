@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { urlPath } from '../lib/urlPath';
-import { FormType } from '../pages/login';
+import { useState } from "react";
+import { urlPath } from "../lib/urlPath";
+import { FormType } from "../pages/login";
 
 interface RegisterProps {
   hook: (value: FormType) => void;
@@ -18,12 +18,12 @@ export const Register = (props: RegisterProps) => {
   const error = (message: string) => {
     setColor("text-red-800");
     setMessage(message);
-  }
+  };
 
   const success = (message: string) => {
     setColor("text-green-600");
     setMessage(message);
-  }
+  };
 
   const doRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,23 +37,22 @@ export const Register = (props: RegisterProps) => {
     fetch(`${urlPath}/api/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }).then((response: Response) => {
       if (response.status === 200) {
-        success("Registered! Please check your inbox and verify your email address.");
-      }
-      else {
+        success(
+          "Registered! Please check your inbox and verify your email address."
+        );
+      } else {
         response.json().then((json) => error(json.error));
       }
     });
-  }
+  };
 
   return (
     <>
       <form onSubmit={doRegister} className="flex flex-col w-64 gap-6">
-        <div className="text-3xl">
-          Register
-        </div>
+        <div className="text-3xl">Register</div>
         <div className="flex flex-col gap-6">
           <input
             type="text"
@@ -112,5 +111,5 @@ export const Register = (props: RegisterProps) => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};
