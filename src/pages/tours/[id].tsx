@@ -33,7 +33,11 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 // End of Additional Extensions
-import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import { useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../lib/prisma";
@@ -57,28 +61,30 @@ class ContentManager {
   static write = (id: string, content: string) => {
     this.editedContent[id] = content;
     this.unsavedPages[id] = !this.isSaved(id);
-  }
+  };
 
   static read = (id: string) => {
     return this.editedContent[id];
-  }
+  };
 
   static save = (id: string, content: string) => {
     this.savedContent[id] = this.editedContent[id] = content;
     this.unsavedPages[id] = false;
-  }
+  };
 
   static isSaved = (id: string) => {
     return this.savedContent[id] === this.editedContent[id];
-  }
+  };
 }
 
-const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const TiptapPage: NextPage = ({
+  propTour,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
-  const [ currentPageId, setCurrentPageId ] = useState("");
+  const [currentPageId, setCurrentPageId] = useState("");
 
-  const [ unsavedPages, setUnsavedPages ] = useState<any>({});
-  const [ unsavedChanges, setUnsavedChanges ] = useState( false );
+  const [unsavedPages, setUnsavedPages] = useState<any>({});
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [tour, setTour] = useState(propTour);
   const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
@@ -97,13 +103,14 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
   const anyUnsavedPages = () => {
     return Object.values(ContentManager.unsavedPages).includes(true);
-  }
+  };
 
   const editor = useEditor({
     extensions: [
       Blockquote.configure({
         HTMLAttributes: {
-          style: "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
+          style:
+            "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
         },
       }),
       BulletList.configure({
@@ -151,7 +158,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Table.configure({
         resizable: true,
         HTMLAttributes: {
-          style: "border-collapse: collapse; margin: 0; overflow: hidden; table-layout: fixed; width: 100%;",
+          style:
+            "border-collapse: collapse; margin: 0; overflow: hidden; table-layout: fixed; width: 100%;",
         },
       }),
       // tag: tr
@@ -159,13 +167,15 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       // tag: th
       TableHeader.configure({
         HTMLAttributes: {
-          style: "background-color: #f1f3f5; font-weight: bold; text-align: left; border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+          style:
+            "background-color: #f1f3f5; font-weight: bold; text-align: left; border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
         },
       }),
       // tag: td
       TableCell.configure({
         HTMLAttributes: {
-          style: "border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+          style:
+            "border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
         },
       }),
       Image.extend({
@@ -181,26 +191,27 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             });
             return ["img", HTMLAttributes];
           }
-
         },
         addAttributes() {
           return {
             ...this.parent?.(),
             name: {
-              renderHTML: attributes => {
+              renderHTML: (attributes) => {
                 if (attributes.src) {
-                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(
+                    attributes.alt
+                  );
                   if (src) {
                     const name = src[0];
                     return {
                       name,
-                    }
+                    };
                   }
                 }
               },
-            }
-          }
-        }
+            },
+          };
+        },
       }),
       Video.extend({
         renderHTML({ HTMLAttributes }) {
@@ -215,31 +226,33 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             });
             return ["video", HTMLAttributes];
           }
-
         },
         addAttributes() {
           return {
             ...this.parent?.(),
             name: {
-              renderHTML: attributes => {
+              renderHTML: (attributes) => {
                 if (attributes.src) {
-                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(
+                    attributes.alt
+                  );
                   if (src) {
                     const name = src[0];
                     return {
                       name,
-                    }
+                    };
                   }
                 }
               },
-            }
-          }
-        }
+            },
+          };
+        },
       }),
     ],
     editorProps: {
       attributes: {
-        class: "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+        class:
+          "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
@@ -253,8 +266,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       setUnsavedChanges(true);
     },
     onSelectionUpdate: ({ editor }) => {
-      if (editor.isActive("paragraph"))
-        setHeading("Paragraph");
+      if (editor.isActive("paragraph")) setHeading("Paragraph");
       else if (editor.isActive("heading", { level: 1 }))
         setHeading("Heading 1");
       else if (editor.isActive("heading", { level: 2 }))
@@ -267,20 +279,22 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
         setHeading("Heading 5");
       else if (editor.isActive("heading", { level: 6 }))
         setHeading("Heading 6");
-      else
-        setHeading("");
+      else setHeading("");
 
-      if (editor.isActive("textStyle", { fontFamily: "ui-serif, Georgia, Cambria, Times New Roman, Times, serif" }))
+      if (
+        editor.isActive("textStyle", {
+          fontFamily:
+            "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
+        })
+      )
         setFontFamily("Times");
       else if (editor.isActive("textStyle", { fontFamily: "Arial" }))
         setFontFamily("Arial");
       else if (editor.isActive("textStyle", { fontFamily: "Courier New" }))
         setFontFamily("Courier New");
-      else
-        setFontFamily("");
-    }
+      else setFontFamily("");
+    },
   });
-
 
   const getImages = useCallback(async () => {
     const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
@@ -305,7 +319,8 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
   }, [tour.id]);
 
   useEffect(() => {
-    const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
+    const warningText =
+      "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!unsavedChanges) return;
       e.preventDefault();
@@ -317,18 +332,16 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       Router.events.emit("routeChangeError");
       throw "routeChange aborted.";
     };
-    window.addEventListener('beforeunload', handleWindowClose);
-    Router.events.on('routeChangeStart', handleBrowseAway);
-    
-    if (tour)
-      getImages();
+    window.addEventListener("beforeunload", handleWindowClose);
+    Router.events.on("routeChangeStart", handleBrowseAway);
+
+    if (tour) getImages();
 
     return () => {
       window.removeEventListener("beforeunload", handleWindowClose);
       Router.events.off("routeChangeStart", handleBrowseAway);
     };
   }, [unsavedChanges, getImages, tour]);
-
 
   if (status === "loading" || isLoadingStartup) {
     return (
@@ -350,7 +363,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
       </Loading>
     );
   }
-  
+
   return (
     <>
       <div className="flex flex-col w-full h-screen">
@@ -386,17 +399,20 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 isSavingTour.current = true;
                 const data = editor?.getHTML();
 
-                if ( data && currentPageId ) {
-                  const file = new File( [ data ], "blank.html" );
+                if (data && currentPageId) {
+                  const file = new File([data], "blank.html");
 
                   const formData = new FormData();
 
                   formData.append("file", file);
 
-                  const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`, {
-                    method: "PUT",
-                    body: formData,
-                  });
+                  const res = await fetch(
+                    `${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`,
+                    {
+                      method: "PUT",
+                      body: formData,
+                    }
+                  );
 
                   if (res.status === 200) {
                     // mark current page as saved
@@ -409,9 +425,10 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 isSavingTour.current = false;
                 editor?.commands.setContent(data ? data : "");
                 editor?.setEditable(true);
-
               }}
-              className={`py-1 w-24 ${unsavedChanges ? "bg-red-700" : "bg-green-700"} text-background-200 rounded-sm`}
+              className={`py-1 w-24 ${
+                unsavedChanges ? "bg-red-700" : "bg-green-700"
+              } text-background-200 rounded-sm`}
             >
               Save
             </button>
@@ -419,7 +436,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             {/* Download button */}
             <button
               onClick={async () => {
-                const res = await fetch(`${ urlPath }/api/download`, {
+                const res = await fetch(`${urlPath}/api/download`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ tourId: tour.id }),
@@ -434,12 +451,13 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             </button>
 
             {/* Publish button */}
-            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
+            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
+              Publish
+            </button>
           </>
         </Navbar>
         <div className="flex pt-4 px-4 overflow-hidden">
           <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
-
             {/* Create new page button */}
             <button
               onClick={async () => {
@@ -449,10 +467,13 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                 formData.append("file", file);
 
-                const res = await fetch(`${urlPath}/api/page?tourId=${tour.id}`, {
-                  method: "POST",
-                  body: formData,
-                });
+                const res = await fetch(
+                  `${urlPath}/api/page?tourId=${tour.id}`,
+                  {
+                    method: "POST",
+                    body: formData,
+                  }
+                );
 
                 const resJSON = await res.json();
 
@@ -464,9 +485,12 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
             </button>
 
             {/* Page titles on sidebar */}
-            {tour.tourPages.map( ( page: Page ) => {
+            {tour.tourPages.map((page: Page) => {
               return (
-                <div key={page.id} className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300">
+                <div
+                  key={page.id}
+                  className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300"
+                >
                   {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
@@ -483,21 +507,27 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
 
                       // restore stashed changes from ContentManager, if possible
                       if (ContentManager.read(page.id)) {
-                        editor?.commands.setContent(ContentManager.read(page.id));
+                        editor?.commands.setContent(
+                          ContentManager.read(page.id)
+                        );
                       }
                       // otherwise, fetch content from api
                       else {
-                        const res = await fetch( `${urlPath}/api/page?tourId=${ tour.id }&pageId=${ page.id }`, {
-                          method: "GET",
-                        } );
-  
+                        const res = await fetch(
+                          `${urlPath}/api/page?tourId=${tour.id}&pageId=${page.id}`,
+                          {
+                            method: "GET",
+                          }
+                        );
+
                         const resHTML = await res.text();
-  
-                        if ( res.status === 200 ) {
-                          ContentManager.save( page.id, resHTML );
-                          editor?.commands.setContent( resHTML == "" ? "" : resHTML );
-                        }
-                        else {
+
+                        if (res.status === 200) {
+                          ContentManager.save(page.id, resHTML);
+                          editor?.commands.setContent(
+                            resHTML == "" ? "" : resHTML
+                          );
+                        } else {
                           alert("Failed to load content");
                           return;
                         }
@@ -510,37 +540,54 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                     className="w-full text-left"
                   >
                     {/* Rename page title */}
-                    {
-                      pageRename === page.id ? (
-                        <input 
-                          defaultValue={page.title === "" ? "Untitled" : page.title}
-                          autoFocus={true}
-                          onChange={(event) => {
-                            setPageTitle(event.target.value);
-                          }}
-                          className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }
-                        />
-                      ) : 
-                        <span className={"w-full" + (currentPageId === page.id ? " font-bold" : "") + (unsavedPages[page.id] ? " text-red-800" : "") }>
-                          {page.title === "" ? "Untitled" : page.title}
-                        </span>
-                    }
+                    {pageRename === page.id ? (
+                      <input
+                        defaultValue={
+                          page.title === "" ? "Untitled" : page.title
+                        }
+                        autoFocus={true}
+                        onChange={(event) => {
+                          setPageTitle(event.target.value);
+                        }}
+                        className={
+                          "w-full" +
+                          (currentPageId === page.id ? " font-bold" : "") +
+                          (unsavedPages[page.id] ? " text-red-800" : "")
+                        }
+                      />
+                    ) : (
+                      <span
+                        className={
+                          "w-full" +
+                          (currentPageId === page.id ? " font-bold" : "") +
+                          (unsavedPages[page.id] ? " text-red-800" : "")
+                        }
+                      >
+                        {page.title === "" ? "Untitled" : page.title}
+                      </span>
+                    )}
                   </button>
-                  
+
                   {/* Edit title button */}
                   <button
-                    onClick={ () => {
-                      setPageRename( page.id );
-                    } }
-                    className={ `${ pageRename === page.id || pageRename != "" ? "hidden" : "" } invisible2 group-hover:visible` }
+                    onClick={() => {
+                      setPageRename(page.id);
+                    }}
+                    className={`${
+                      pageRename === page.id || pageRename != "" ? "hidden" : ""
+                    } invisible2 group-hover:visible`}
                   >
                     Edit
                   </button>
 
                   {/* Save title button */}
                   <button
-                    onClick={ async () => {
-                      const body = { pageId: page.id, tourId: tour.id, title: pageTitle };
+                    onClick={async () => {
+                      const body = {
+                        pageId: page.id,
+                        tourId: tour.id,
+                        title: pageTitle,
+                      };
 
                       const res = await fetch(`${urlPath}/api/pagedb`, {
                         method: "PUT",
@@ -564,11 +611,15 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
           </div>
           <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
             {currentPageId === "" ? (
-              <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
+              <div className="flex justify-center p-20 h-screen">
+                Please select or create a page to load editor.
+              </div>
             ) : (
               <>
                 <div className="absolute z-10 flex flex-col justify-end items-end w-full h-full py-6 px-12 text-sm text-gray-400 select-none pointer-events-none">
-                  <div>{editor?.storage.characterCount.characters()} characters</div>
+                  <div>
+                    {editor?.storage.characterCount.characters()} characters
+                  </div>
                   <div>{editor?.storage.characterCount.words()} words</div>
                 </div>
                 <EditorMenu

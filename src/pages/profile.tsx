@@ -1,8 +1,8 @@
-import { NextPage } from "next"
+import { NextPage } from "next";
 import { EditLogin } from "../components/profile/EditLogin";
 import { EditPassword } from "../components/profile/EditPassword";
 import { EditProfile } from "../components/profile/EditProfile";
-import { Navbar } from '../components/Navbar'
+import { Navbar } from "../components/Navbar";
 import { ManageAccount } from "../components/profile/ManageAccount";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
@@ -29,7 +29,7 @@ const ProfilePage: NextPage = () => {
         </div>
       </Loading>
     );
-  } 
+  }
 
   return (
     <>
@@ -40,11 +40,10 @@ const ProfilePage: NextPage = () => {
           <EditPassword />
           <EditProfile />
           <ManageAccount />
-
         </div>
       </div>
     </>
   );
-}
+};
 
-export default ProfilePage
+export default ProfilePage;

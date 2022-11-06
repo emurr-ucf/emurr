@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { urlPath } from '../lib/urlPath';
+import { useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { urlPath } from "../lib/urlPath";
 
 export const VerifyEmail = () => {
   const [message, setMessage] = useState("");
@@ -13,12 +13,12 @@ export const VerifyEmail = () => {
   const error = (message: string) => {
     setColor("text-red-800");
     setMessage(message);
-  }
+  };
 
   const success = (message: string) => {
     setColor("text-green-600");
     setMessage(message);
-  }
+  };
 
   const doVerifyEmail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,23 +27,20 @@ export const VerifyEmail = () => {
     fetch(`${urlPath}/api/verifyEmail`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }).then((response: Response) => {
       if (response.status === 200) {
         success("Your email has been verified. Please log into your account.");
-      }
-      else {
+      } else {
         response.json().then((json) => error(json.error));
       }
     });
-  }
+  };
 
   return (
     <>
       <form onSubmit={doVerifyEmail} className="flex flex-col w-64 gap-6">
-        <div className="text-3xl">
-          Verify Email
-        </div>
+        <div className="text-3xl">Verify Email</div>
         <div className="flex justify-center">
           <button
             type="submit"
@@ -66,5 +63,5 @@ export const VerifyEmail = () => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};
