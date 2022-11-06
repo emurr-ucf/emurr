@@ -9,6 +9,7 @@ import { prisma } from "../../lib/prisma";
 import { useEffect, useState } from 'react';
 import Error from 'next/error';
 import { urlPath } from '../../lib/urlPath';
+import { Loading } from '../../components/Loading';
 
 
 const ViewOtherPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -39,18 +40,39 @@ const ViewOtherPage: NextPage = ({ propTours, userid }: InferGetServerSidePropsT
   }, [query]);
 
   // routing for: status, if changing, and if query (userid) is session id
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading") {
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Loading Authentification...</div>
+        </div>
+      </Loading>
+    );
+  }
   else if (status === "unauthenticated" && !changing) {
     setChanging(true);
     Router.push("/");
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Redirecting...</div>
+        </div>
+      </Loading>
+    );
   }
   else if (session?.user.id === userid && !changing) {
     setChanging(true);
-    Router.push("/tours/");
-    console.log(session?.user.id + " " + userid);
+    Router.push("/tours");
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Redirecting...</div>
+        </div>
+      </Loading>
+    );
   }
   else if (!userid && !changing) {
-    return (<Error statusCode={404}></Error>)
+    return (<Error statusCode={404}></Error>);
   }
 
   return (

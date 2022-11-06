@@ -98,6 +98,7 @@ model Tour {
   tourAuthorId    String
   tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade)
   tourPages       Page[]
+  published       Boolean  @default(false)
 
   @@index([tourAuthorId], map: "Tour_tourAuthorId_fkey")
 }

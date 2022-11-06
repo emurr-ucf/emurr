@@ -1,44 +1,83 @@
 import { Editor } from "@tiptap/react";
-import { useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { urlLocalPath } from "../lib/urlPath";
+import { CustomUrlModal } from "./CustomUrlModal";
 
 export interface TourSiteImageType {
   name: string;
   bloburl: string;
 }
 
-interface TourSiteCardProps {
-  tourid: string;
+interface EditorMenuProps {
+  tourId: string;
+  pageId: string;
   editor: Editor | null;
   images: TourSiteImageType[];
+  getImages: () => {};
+  isUploadingFile: boolean;
+  setIsUploadingFile: Dispatch<SetStateAction<boolean>>;
+  heading: string;
+  setHeading: Dispatch<SetStateAction<string>>;
+  fontFamily: string;
+  setFontFamily: Dispatch<SetStateAction<string>>;
 }
 
-export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
-  const [heading, setHeading] = useState("Heading 1");
-  const [fontFamily, setFontFamily] = useState("Times");
-  const [tourImages, setTourImages] = useState(images);
+export const EditorMenu = ({
+  tourId,
+  pageId,
+  editor,
+  images,
+  getImages,
+  isUploadingFile,
+  setIsUploadingFile,
+  heading,
+  setHeading,
+  fontFamily,
+  setFontFamily,
+}: EditorMenuProps) => {
 
-  const addImage = useCallback(() => {
-    const url = window.prompt("URL");
-
-    if (url) {
-      editor?.chain().focus().setImage({ src: url }).run();
-    }
-  }, [editor]);
+  const imageLoad = () => {
+    if (isUploadingFile) {
+      return <div>Uploading File...</div>
+    } else if (images.length > 0)
+      return images.map((image: TourSiteImageType) => (
+        <div key={image.name}>
+          <button
+            onClick={() => {
+              const arr = image.name.match(/\.[0-9a-z]+$/i);
+              if (arr) {
+                if (arr[0] === ".mp4") {
+                  editor?.chain().focus().setVideo({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                } else {
+                  editor?.chain().focus().setImage({ src: image.bloburl, alt: "./images/" + image.name }).run();
+                }
+              }
+            }}
+            className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-background-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+          >
+            <div className="text-sm font-medium text-gray-900">
+              {image.name}
+            </div>
+          </button>
+        </div>
+      ))
+    else
+      return <div>You have no images on this tour.</div>
+  }
 
   return (
     <>
-      <div className="flex flex-col 2xl:flex-row justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
-        <div className="flex items-center">
+      <div className="flex justify-between 2xl:justify-left z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200">
+        <div className="flex items-center overflow-x-auto">
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold inline-flex">
-                  {heading}
+              <Menu.Button className="inline-flex w-36 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold w-full flex justify-between">
+                  <div>{heading}</div>
                   <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
@@ -52,7 +91,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="fixed z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <form
                     onClick={(event) => {
@@ -150,6 +189,22 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                       )}
                     </Menu.Item>
                   </form>
+                  <form onClick={(event) => {
+                    editor?.commands.setParagraph();
+                    editor?.commands.focus();
+                    setHeading('Paragraph');
+                  }}>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                        >
+                          <div>Paragraph</div>
+                          <img src="/images/paragraph.svg" alt="h-6" className="w-4 h-4" />
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </form>
                 </div>
               </Menu.Items>
             </Transition>
@@ -157,9 +212,9 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <Menu as="div" className="relative w- inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                <div className="font-bold inline-flex">
-                  {fontFamily}
+              <Menu.Button className="inline-flex w-40 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+                <div className="font-bold w-full flex justify-between">
+                  <div>{fontFamily}</div>
                   <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
                 </div>
               </Menu.Button>
@@ -173,11 +228,11 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="fixed z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <form
                     onClick={(event) => {
-                      editor?.commands.setFontFamily('ui-serif, Georgia, Cambria, "Times New Roman", Times, serif');
+                      editor?.commands.setFontFamily("ui-serif, Georgia, Cambria, Times New Roman, Times, serif");
                       editor?.commands.focus();
                       setFontFamily("Times");
                     }}
@@ -244,7 +299,7 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="fixed z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
                   <form
                     onClick={(event) => {
@@ -486,11 +541,16 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
           />
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center overflow-y-hidden overflow-x-auto">
+          <div className="border-x h-3/5 border-green-200 mx-2" />
+          <CustomUrlModal 
+            pageId={pageId}
+            tourId={tourId}
+          />
           <Popover className="relative">
             {({ open }) => (
               <>
-                <Popover.Button className="flex justify-center items-center">
+                <Popover.Button className="flex justify-center items-center w-7 h-7">
                   <img src={`${urlLocalPath}/images/image-line.svg`} alt="image" title="Insert image" className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out" />
                 </Popover.Button>
                 <Transition
@@ -502,40 +562,30 @@ export const EditorMenu = ({ tourid, editor, images }: TourSiteCardProps) => {
                   leaveFrom="opacity-100 translate-y-0"
                   leaveTo="opacity-0 translate-y-1"
                 >
-                  <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+                  <Popover.Panel className="fixed z-20 mt-3 max-w-md px-4 right-0">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                      <div className="flex-col gap-8 bg-white p-7">
-                        {tourImages.length > 0 ? (
-                          tourImages.map((image: TourSiteImageType) => (
-                            <button
-                              key={image.name}
-                              onClick={() => {
-                                addImage();
-                                //editor?.chain().focus().setImage({ src: "./images/" + image.name }).run();
-                              }}
-                              className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                            >
-                              <div className="text-sm font-medium text-gray-900">{image.name}</div>
-                            </button>
-                          ))
-                        ) : (
-                          <div>You have no images on this tour.</div>
-                        )}
+                      <div className="flex-col gap-8 bg-white px-7 py-2 h-40 overflow-y-auto">
+                        {imageLoad()}
                       </div>
                       <div className="bg-gray-50 p-4">
-                        <label className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                        <label
+                          className="rounded-md px-2 py-2 transition duration-150 ease-in-out hover:cursor-pointer hover:bg-background-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        >
                           <input
                             type="file"
                             onChange={async (event) => {
+                              setIsUploadingFile(true);
                               if (!event.target.files) return;
 
                               const formData = new FormData();
                               formData.append("file", event.target.files[0]);
 
-                              const tours = await fetch(`${urlLocalPath}/api/tourImage?tourId=${tourid}`, {
+                              const tours = await fetch(`${urlLocalPath}/api/tourImage?tourId=${tourId}`, {
                                 method: "POST",
                                 body: formData,
                               });
+
+                              getImages();
                             }}
                             className="hidden"
                           />

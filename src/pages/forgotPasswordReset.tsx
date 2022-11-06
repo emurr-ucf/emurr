@@ -5,12 +5,30 @@ import Router from 'next/router';
 import { useSession } from 'next-auth/react';
 import { ForgotPasswordReset } from '../components/ForgotPasswordReset';
 import { urlPath } from '../lib/urlPath';
+import { Loading } from '../components/Loading';
 
 const ForgotPasswordResetPage: NextPage = () => {
   const { data: session, status } = useSession();
 
+  if (status === "loading") {
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Loading Authentification...</div>
+        </div>
+      </Loading>
+    );
+  }
+
   if (session) {
     Router.push("/tours");
+    return (
+      <Loading>
+        <div className="flex flex-col justify-center items-center mt-2">
+          <div>Redirecting...</div>
+        </div>
+      </Loading>
+    );
   }
 
   return (

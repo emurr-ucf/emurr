@@ -37,7 +37,7 @@ export default async function handler (
         const tour = await prisma.tour.findMany({
             where: {
                 tourAuthorId: token.id,
-                id:tourId
+                id:tourId,
             },
         });
 
@@ -50,9 +50,25 @@ export default async function handler (
                 throw err;
             });
 
+            const pages = await prisma.page.findMany({
+                where: {
+                    tourId,
+                }
+            });
+
             archive.pipe(res);
+
+            for (const page of pages) {
+                archive.file(`./websites/${tourId}/${page.id}.html`, 
+                    {
+                        name: (page.customURL === null || page.customURL === undefined || page.customURL === "") 
+                            ? `${page.id}.html` : `${page.customURL}.html`,
+                    }
+                );
+            }
+
             // Append files from a sub-directory, putting its contents at the root of archive
-            archive.directory("./websites/" + tourId, false);
+            archive.directory(`./websites/${tourId}/images`, `./images`);
             // Closes the archiver session.
             archive.finalize();
         }

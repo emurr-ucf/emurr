@@ -1,8 +1,7 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link'
 import { UserMenu } from './UserMenu'
-import { useEffect, useState } from 'react';
-import { urlLocalPath, urlPath } from '../lib/urlPath';
+import { urlLocalPath } from '../lib/urlPath';
 
 export interface NavbarProps {
   page?: string;
@@ -30,24 +29,12 @@ export const Navbar = (props: NavbarProps) => {
               }
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
-              <div className={`py-1 px-2 rounded-md ${props.page === "dashboard" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                <Link href={`${urlLocalPath}/tours`}>
-                  dashboard
-                </Link>
-              </div>
-              <div className={`py-1 px-2 rounded-md ${props.page === "profile" ? "font-semibold hover:font-semibold" : ""} hover:bg-background-600 transition ease-in-out delay-50`}>
-                <Link href={`${urlLocalPath}/profile`}>
-                  profile
-                </Link>
-              </div>
-              <div>
-                <UserMenu />
-              </div>
+              <UserMenu />
             </div>
           </div>
         </nav>
       </>
-    )
+    );
   }
 
 
@@ -85,5 +72,5 @@ export const Navbar = (props: NavbarProps) => {
         </div>
       </nav>
     </>
-  )
+  );
 }
