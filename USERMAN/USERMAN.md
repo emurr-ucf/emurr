@@ -56,7 +56,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 1. Navigate to the EMURR website [chdr.cs.ucf.edu/emurr](https://chdr.cs.ucf.edu/emurr)
 2. Click `Login` at the top right 
 3. Either register on the left hand side or authenticate on the right
-<!-- switch order -->
+<!-- TODO: switch order -->
 4. Click `dashboard` in the drop down after clicking the profile picture at the top right
 5. Click `Create a New Tour`
 6. Click `Edit` on the Tour Card
