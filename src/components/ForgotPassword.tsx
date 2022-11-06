@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { urlPath } from '../lib/urlPath';
-import { FormType } from '../pages/login';
+import { useState } from "react";
+import { urlPath } from "../lib/urlPath";
+import { FormType } from "../pages/login";
 
 interface ForgotPasswordProps {
   hook: (value: FormType) => void;
@@ -14,17 +14,17 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
   const error = (message: string) => {
     setColor("text-red-800");
     setMessage(message);
-  }
+  };
 
   const success = (message: string) => {
     setColor("text-green-600");
     setMessage(message);
-  }
+  };
 
   const doForgotPassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (typeof (email) !== 'string') {
+    if (typeof email !== "string") {
       error("Please input a valid email.");
       return;
     }
@@ -33,23 +33,20 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
     fetch(`${urlPath}/api/user/forgotPassword`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }).then((response: Response) => {
       if (response.status === 200) {
         success("Email sent. Please check your inbox to reset your password.");
-      }
-      else {
+      } else {
         response.json().then((json) => error(json.error));
       }
     });
-  }
+  };
 
   return (
     <>
       <form onSubmit={doForgotPassword} className="flex flex-col w-64 gap-6">
-        <div className="text-3xl">
-          Forgot Password
-        </div>
+        <div className="text-3xl">Forgot Password</div>
         <div className="flex flex-col gap-6">
           <input
             type="text"
@@ -80,5 +77,5 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
         </div>
       </form>
     </>
-  )
-}
+  );
+};

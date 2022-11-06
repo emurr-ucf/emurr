@@ -1,4 +1,8 @@
-import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import { Navbar } from "../../components/Navbar";
 import { useSession } from "next-auth/react";
 import { TourSiteCard } from "../../components/TourSiteCard";
@@ -20,7 +24,9 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const DashboardPage: NextPage = ({
+  propTours,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
   const [tours, setTours] = useState(propTours);
   const [query, setQuery] = useState("");
@@ -85,7 +91,8 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
 
                   const body: CreateTourResponseType = await res.json();
 
-                  if (!body.error) Router.push(`${urlPath}/tours/${body.tourId}`);
+                  if (!body.error)
+                    Router.push(`${urlPath}/tours/${body.tourId}`);
                 }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >
@@ -94,7 +101,11 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
             </div>
             <div className="flex justify-between">
               <div className="flex w-3/5 h-auto items-center rounded-md border border-green-800 bg-white shadow-sm shadow-black">
-                <img src={urlPath + "/images/search.png"} alt="" className="w-5 h-5 m-2" />
+                <img
+                  src={urlPath + "/images/search.png"}
+                  alt=""
+                  className="w-5 h-5 m-2"
+                />
                 <input
                   type="text"
                   placeholder="Search by Title, Tour Pack, or Page Contents"
@@ -122,7 +133,15 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                       <form onClick={(event) => setSortQuery(" ")}>
                         <Menu.Item>
                           {({ active }) => (
-                            <a href="#" className={classNames(active ? "bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
                               None
                             </a>
                           )}
@@ -131,7 +150,15 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                       <form onClick={(event) => setSortQuery("Title")}>
                         <Menu.Item>
                           {({ active }) => (
-                            <a href="#" className={classNames(active ? "bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
                               Title
                             </a>
                           )}
@@ -140,7 +167,15 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
                       <form onClick={(event) => setSortQuery("Date")}>
                         <Menu.Item>
                           {({ active }) => (
-                            <a href="#" className={classNames(active ? "bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2 text-sm")}>
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
                               Date Created
                             </a>
                           )}
@@ -153,7 +188,18 @@ const DashboardPage: NextPage = ({ propTours }: InferGetServerSidePropsType<type
             </div>
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
               {tours.map((tour: Tour) => {
-                return <TourSiteCard id={tour.id} key={tour.id} title={tour.tourTitle} description={tour.tourDescription ? tour.tourDescription : "No description..."} />;
+                return (
+                  <TourSiteCard
+                    id={tour.id}
+                    key={tour.id}
+                    title={tour.tourTitle}
+                    description={
+                      tour.tourDescription
+                        ? tour.tourDescription
+                        : "No description..."
+                    }
+                  />
+                );
               })}
             </div>
           </div>

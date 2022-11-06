@@ -20,5 +20,5 @@ export const Loading = ({ children }: LoadingProps) => {
         {children}
       </div>
     </>
-  )
-}
+  );
+};

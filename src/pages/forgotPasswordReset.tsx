@@ -1,11 +1,11 @@
-import type { NextPage } from 'next';
-import { Navbar } from '../components/Navbar';
-import { OAuth } from '../components/OAuth';
-import Router from 'next/router';
-import { useSession } from 'next-auth/react';
-import { ForgotPasswordReset } from '../components/ForgotPasswordReset';
-import { urlPath } from '../lib/urlPath';
-import { Loading } from '../components/Loading';
+import type { NextPage } from "next";
+import { Navbar } from "../components/Navbar";
+import { OAuth } from "../components/OAuth";
+import Router from "next/router";
+import { useSession } from "next-auth/react";
+import { ForgotPasswordReset } from "../components/ForgotPasswordReset";
+import { urlPath } from "../lib/urlPath";
+import { Loading } from "../components/Loading";
 
 const ForgotPasswordResetPage: NextPage = () => {
   const { data: session, status } = useSession();
@@ -34,9 +34,7 @@ const ForgotPasswordResetPage: NextPage = () => {
   return (
     <>
       <div className="min-h-screen">
-        <Navbar
-          page="forgotPasswordReset"
-        />
+        <Navbar page="forgotPasswordReset" />
         <div className="flex justify-center text-green-800">
           <div className="flex justify-center h-fit p-5 mt-28 rounded-lg bg-background-200 border-2 border-l-4 border-b-4 border-brown sm:rounded-md">
             <ForgotPasswordReset />
@@ -46,7 +44,7 @@ const ForgotPasswordResetPage: NextPage = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ForgotPasswordResetPage
+export default ForgotPasswordResetPage;

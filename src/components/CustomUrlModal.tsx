@@ -1,6 +1,6 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
-import { urlLocalPath, urlPath } from '../lib/urlPath';
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
+import { urlLocalPath, urlPath } from "../lib/urlPath";
 
 interface CustomUrlModalProps {
   pageId: string;
@@ -15,7 +15,7 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
   return (
     <>
       <div className="flex items-center justify-center shrink-0">
-        <img 
+        <img
           src={`${urlLocalPath}/images/custom-url.svg`}
           alt="custom url"
           title="Inset Custom URL"
@@ -25,7 +25,11 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => setIsOpen(false)}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -57,7 +61,7 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
                     Insert Custom URL
                   </Dialog.Title>
                   <div className="mt-2">
-                    <input 
+                    <input
                       onChange={(event) => setCustomURL(event.target.value)}
                       placeholder="Custom URL..."
                       className="w-full h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
@@ -100,5 +104,5 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};

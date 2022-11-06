@@ -1,22 +1,26 @@
-import { useState, useEffect } from 'react';
-import { FormType } from '../pages/login';
+import { useState, useEffect } from "react";
+import { FormType } from "../pages/login";
 
-import { getProviders, signIn, ClientSafeProvider, LiteralUnion } from 'next-auth/react';
-import { BuiltInProviderType } from 'next-auth/providers';
+import {
+  getProviders,
+  signIn,
+  ClientSafeProvider,
+  LiteralUnion,
+} from "next-auth/react";
+import { BuiltInProviderType } from "next-auth/providers";
 
 interface LoginProps {
   hook: (value: FormType) => void;
 }
 
 export const Login = (props: LoginProps) => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [providers, setproviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
     ClientSafeProvider
-    > | null>();
+  > | null>();
 
   useEffect(() => {
     const setTheProviders = async () => {
@@ -29,9 +33,7 @@ export const Login = (props: LoginProps) => {
   return (
     <>
       <div className="flex flex-col w-64 gap-6">
-        <div className="text-2xl">
-          Login
-        </div>
+        <div className="text-2xl">Login</div>
         {providers?.credentials && (
           <>
             <input
@@ -40,7 +42,9 @@ export const Login = (props: LoginProps) => {
               autoComplete="on"
               name="email"
               placeholder="Email"
-              onChange={({ target: { name, value } }) => {setEmail(value)}}
+              onChange={({ target: { name, value } }) => {
+                setEmail(value);
+              }}
               className="h-12 appearance-none border border-brown rounded px-3"
             />
             <input
@@ -48,15 +52,19 @@ export const Login = (props: LoginProps) => {
               autoComplete="on"
               name="password"
               placeholder="Password"
-              onChange={({ target: { name, value } }) => {setPassword(value)}}
+              onChange={({ target: { name, value } }) => {
+                setPassword(value);
+              }}
               className="h-12 appearance-none border border-brown rounded px-3"
             />
             <div className="flex justify-center">
               <button
-                onClick={() => signIn(providers.credentials.id, {
-                  email,
-                  password,
-                })}
+                onClick={() =>
+                  signIn(providers.credentials.id, {
+                    email,
+                    password,
+                  })
+                }
                 type="button"
                 className="button-primary"
               >
@@ -82,5 +90,5 @@ export const Login = (props: LoginProps) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};

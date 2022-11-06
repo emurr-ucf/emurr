@@ -6,7 +6,11 @@ import { urlLocalPath } from "../lib/urlPath";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider session={session} basePath={`${urlLocalPath}/api/auth`} refetchInterval={5 * 60}>
+    <SessionProvider
+      session={session}
+      basePath={`${urlLocalPath}/api/auth`}
+      refetchInterval={5 * 60}
+    >
       <div className="w-screen h-screen m-0 p-0 text-green-900 bg-background-400 overflow-auto">
         <Component {...pageProps} />
       </div>

@@ -1,8 +1,8 @@
-import Modal from 'react-bootstrap/Modal'
+import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
-import { ProfileCard } from './ProfileCard';
-import { useSession } from 'next-auth/react';
-import { urlLocalPath } from '../../lib/urlPath';
+import { ProfileCard } from "./ProfileCard";
+import { useSession } from "next-auth/react";
+import { urlLocalPath } from "../../lib/urlPath";
 
 export const EditProfile = () => {
 	const { data: session, status } = useSession();
