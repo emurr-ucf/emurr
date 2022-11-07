@@ -34,7 +34,7 @@ export const Register = (props: RegisterProps) => {
     }
 
     const body = { firstName, lastName, email, password };
-    fetch(`${urlPath}/api/user/user`, {
+    fetch(`${urlPath}/api/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "../../../lib/prisma";
 import multer from "multer";
-import { urlPath } from "../../../lib/urlPath";
 
 // Put API Inputs.
 export interface PutProfileImageRequestType {
@@ -30,7 +29,7 @@ export default async function handler(
 
   // Updates a page.
   if (req.method === "PUT") {
-    const destination = "./profileImages/";
+    const destination = "./profile-images/";
 
     // Updates existing page multer instance.
     const updatedImage = multer({
@@ -52,7 +51,7 @@ export default async function handler(
         },
         data: {
           /// @ts-ignore-start
-          image: `https://chdr.cs.ucf.edu/emurr/profileImages/${req.files[0].filename}`,
+          image: `https://chdr.cs.ucf.edu/emurr/profile-images/${req.files[0].filename}`,
           // @ts-ignore-end
         },
       });

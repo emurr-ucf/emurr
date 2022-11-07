@@ -858,10 +858,13 @@ export const EditorMenu = ({
                               const formData = new FormData();
                               formData.append("file", event.target.files[0]);
 
-                              const tours = await fetch(`${urlLocalPath}/api/tour/tourImage?tourId=${tourId}`, {
-                                method: "POST",
-                                body: formData,
-                              });
+                              const tours = await fetch(
+                                `${urlLocalPath}/api/tour/image?tourId=${tourId}`,
+                                {
+                                  method: "POST",
+                                  body: formData,
+                                }
+                              );
 
                               getImages();
                             }}

@@ -4,8 +4,6 @@ import { ProfileCard } from "./ProfileCard";
 import { urlLocalPath } from "../../lib/urlPath";
 
 export const ManageAccount = () => {
-  const isProd = process.env.NODE_ENV === "production";
-
   const [password, setPassword] = useState("");
 
   const [show, setShow] = useState(false);
@@ -14,13 +12,13 @@ export const ManageAccount = () => {
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-		const res = await fetch('/api/user/user', {
-			method: "DELETE",
-			headers: {"Content-Type": "application/json"},
-			body: JSON.stringify({
-				password,
-			})
-		});
+    const res = await fetch("/api/user", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        password,
+      }),
+    });
 
     const json = await res.json();
     if (json.error) {

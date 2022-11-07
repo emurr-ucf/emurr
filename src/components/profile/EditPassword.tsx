@@ -1,11 +1,9 @@
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import { ProfileCard } from "./ProfileCard";
-import { urlLocalPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 
 export const EditPassword = () => {
-  const isProd = process.env.NODE_ENV === "production";
-
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,15 +14,15 @@ export const EditPassword = () => {
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-		const res = await fetch('/api/user/resetPassword', {
-			method: "PUT",
-			headers: {"Content-Type": "application/json"},
-			body: JSON.stringify({
-				currentPassword,
-				newPassword,
-				confirmPassword,
-			})
-		});
+    const res = await fetch(`${urlPath}/api/user/reset`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      }),
+    });
 
     const json = await res.json();
     if (json.error) {

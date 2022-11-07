@@ -297,7 +297,7 @@ const TiptapPage: NextPage = ({
   });
 
   const getImages = useCallback(async () => {
-    const tours = await fetch(`${urlPath}/api/tour/tourImage?tourId=${tour.id}`, {
+    const tours = await fetch(`${urlPath}/api/tour/image?tourId=${tour.id}`, {
       method: "GET",
     });
 
@@ -386,7 +386,7 @@ const TiptapPage: NextPage = ({
                 if (updatedTourTitle) {
                   const body = { tourId: tour.id, tourTitle: tourTitle };
 
-                  await fetch(`${urlPath}/api/tour/tour`, {
+                  await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -406,10 +406,13 @@ const TiptapPage: NextPage = ({
 
                   formData.append("file", file);
 
-                  const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${currentPageId}`, {
-                    method: "PUT",
-                    body: formData,
-                  });
+                  const res = await fetch(
+                    `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${currentPageId}`,
+                    {
+                      method: "PUT",
+                      body: formData,
+                    }
+                  );
 
                   if (res.status === 200) {
                     // mark current page as saved
@@ -433,7 +436,7 @@ const TiptapPage: NextPage = ({
             {/* Download button */}
             <button
               onClick={async () => {
-                const res = await fetch(`${ urlPath }/api/tour/download`, {
+                const res = await fetch(`${urlPath}/api/tour/download`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ tourId: tour.id }),
@@ -464,10 +467,13 @@ const TiptapPage: NextPage = ({
 
                 formData.append("file", file);
 
-                const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}`, {
-                  method: "POST",
-                  body: formData,
-                });
+                const res = await fetch(
+                  `${urlPath}/api/tour/page?tourId=${tour.id}`,
+                  {
+                    method: "POST",
+                    body: formData,
+                  }
+                );
 
                 const resJSON = await res.json();
 
@@ -507,10 +513,13 @@ const TiptapPage: NextPage = ({
                       }
                       // otherwise, fetch content from api
                       else {
-                        const res = await fetch( `${urlPath}/api/tour/page?tourId=${ tour.id }&pageId=${ page.id }`, {
-                          method: "GET",
-                        } );
-  
+                        const res = await fetch(
+                          `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${page.id}`,
+                          {
+                            method: "GET",
+                          }
+                        );
+
                         const resHTML = await res.text();
 
                         if (res.status === 200) {
