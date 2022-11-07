@@ -2,6 +2,8 @@ import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import { ProfileCard } from "./ProfileCard";
 import { urlLocalPath } from "../../lib/urlPath";
+import { toast } from "react-toastify";
+import Router from "next/router";
 
 export const ManageAccount = () => {
   const [password, setPassword] = useState("");
@@ -21,13 +23,12 @@ export const ManageAccount = () => {
     });
 
     const json = await res.json();
-    if (json.error) {
-      alert(json.error); // TODO improve interface
-    } else {
-      alert("Your account has been deleted!"); // TODO improve interface
-      setShow(false);
-      // TODO sign out
-    }
+
+    if (res.status !== 200) return toast.error(json.error);
+
+    toast.success("Your account has been deleted!");
+    setShow(false);
+    Router.push("/");
   };
 
   return (
@@ -47,6 +48,7 @@ export const ManageAccount = () => {
             <div className="flex flex-col gap-6">
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="Verify your password"
                 className="h-12 appearance-none border border-brown rounded px-3"
                 onChange={(e) => setPassword(e.target.value)}

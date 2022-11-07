@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import { toast } from "react-toastify";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
 
 interface CustomUrlModalProps {
@@ -10,7 +11,6 @@ interface CustomUrlModalProps {
 export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [customURL, setCustomURL] = useState("");
-  const [error, setError] = useState("");
 
   return (
     <>
@@ -66,7 +66,6 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
                       placeholder="Custom URL..."
                       className="w-full h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
                     />
-                    {error}
                   </div>
 
                   <div className="mt-4">
@@ -74,7 +73,7 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={async () => {
-                        const res = await fetch( `${urlPath}/api/tour/pagedb`, {
+                        const res = await fetch(`${urlPath}/api/tour/pagedb`, {
                           method: "PUT",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({
@@ -86,12 +85,9 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
 
                         const json = await res.json();
 
-                        if (res.status != 200) {
-                          setError(json.error);
-                        } else {
-                          setError("");
-                          setIsOpen(false);
-                        }
+                        if (res.status !== 200) return toast.error(json.error);
+
+                        setIsOpen(false);
                       }}
                     >
                       Submit

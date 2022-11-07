@@ -2,6 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import { ProfileCard } from "./ProfileCard";
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
+import { toast } from "react-toastify";
 
 export const EditPassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -25,12 +26,11 @@ export const EditPassword = () => {
     });
 
     const json = await res.json();
-    if (json.error) {
-      alert(json.error); // TODO improve interface
-    } else {
-      alert("Updated!"); // TODO improve interface
-      setShow(false);
-    }
+
+    if (res.status !== 200) return toast.error(json.error);
+
+    toast.success("Updated!");
+    setShow(false);
   };
 
   return (
@@ -50,18 +50,21 @@ export const EditPassword = () => {
             <div className="flex flex-col gap-6">
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="Current password"
                 className="h-12 appearance-none border border-brown rounded px-3"
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="New password"
                 className="h-12 appearance-none border border-brown rounded px-3"
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="Confirm new password"
                 className="h-12 appearance-none border border-brown rounded px-3"
                 onChange={(e) => setConfirmPassword(e.target.value)}

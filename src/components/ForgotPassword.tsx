@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { urlPath } from "../lib/urlPath";
 import { FormType } from "../pages/login";
 
@@ -24,23 +25,19 @@ export const ForgotPassword = (props: ForgotPasswordProps) => {
   const doForgotPassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (typeof email !== "string") {
-      error("Please input a valid email.");
-      return;
-    }
-
-    const body = { email };
-    fetch(`${urlPath}/api/user/forgot`, {
+    const res = await fetch(`${urlPath}/api/user/forgot`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((response: Response) => {
-      if (response.status === 200) {
-        success("Email sent. Please check your inbox to reset your password.");
-      } else {
-        response.json().then((json) => error(json.error));
-      }
+      body: JSON.stringify({ email }),
     });
+
+    const json = await res.json();
+
+    if (res.status === 200)
+      toast.success(
+        "Email sent. Please check your inbox to reset your password."
+      );
+    else toast.error(json.error);
   };
 
   return (

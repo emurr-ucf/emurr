@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { urlPath } from "../lib/urlPath";
+import { toast } from "react-toastify";
 
 export const VerifyEmail = () => {
   const [message, setMessage] = useState("");
@@ -22,19 +23,20 @@ export const VerifyEmail = () => {
 
   const doVerifyEmail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const body = { emailToken: eT };
 
-    fetch(`${urlPath}/api/user/verify`, {
+    const res = await fetch(`${urlPath}/api/user/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((response: Response) => {
-      if (response.status === 200) {
-        success("Your email has been verified. Please log into your account.");
-      } else {
-        response.json().then((json) => error(json.error));
-      }
+      body: JSON.stringify({ emailToken: eT }),
     });
+
+    const json = await res.json();
+
+    if (res.status === 200)
+      toast.success(
+        "Your email has been verified. Please log into your account."
+      );
+    else toast.error(json.error);
   };
 
   return (

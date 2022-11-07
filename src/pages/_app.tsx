@@ -1,8 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { urlLocalPath } from "../lib/urlPath";
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -13,6 +15,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     >
       <div className="w-screen h-screen m-0 p-0 text-green-900 bg-background-400 overflow-auto">
         <Component {...pageProps} />
+        <ToastContainer
+          position="bottom-left"
+          newestOnTop
+          closeOnClick
+          draggable={false}
+        />
       </div>
     </SessionProvider>
   );

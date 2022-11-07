@@ -51,6 +51,7 @@ import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
 import download from "downloadjs";
 import { Loading } from "../../components/Loading";
+import { toast } from "react-toastify";
 
 class ContentManager {
   static currentPageId: string;
@@ -297,25 +298,31 @@ const TiptapPage: NextPage = ({
   });
 
   const getImages = useCallback(async () => {
-    const tours = await fetch(`${urlPath}/api/tour/image?tourId=${tour.id}`, {
-      method: "GET",
-    });
+    try {
+      const tours = await fetch(`${urlPath}/api/tour/image?tourId=${tour.id}`, {
+        method: "GET",
+      });
 
-    const res = await tours.blob();
-    const { entries } = await unzip(res);
+      const res = await tours.blob();
+      const { entries } = await unzip(res);
 
-    const images: TourSiteImageType[] = [];
-    const objs = Object.entries(entries);
+      const images: TourSiteImageType[] = [];
+      const objs = Object.entries(entries);
 
-    for (const [name, entry] of objs) {
-      const blob = await entry.blob();
-      const bloburl = URL.createObjectURL(blob);
-      images.push({ name, bloburl });
+      for (const [name, entry] of objs) {
+        const blob = await entry.blob();
+        const bloburl = URL.createObjectURL(blob);
+        images.push({ name, bloburl });
+      }
+
+      tourImages.current = images;
+      setIsUploadingFile(false);
+      setIsLoadingStartup(false);
+    } catch (err) {
+      toast.error(
+        "Failed to download tour media from server. Please try again."
+      );
     }
-
-    tourImages.current = images;
-    setIsUploadingFile(false);
-    setIsLoadingStartup(false);
   }, [tour.id]);
 
   useEffect(() => {
@@ -383,16 +390,23 @@ const TiptapPage: NextPage = ({
             {/* Save button */}
             <button
               onClick={async () => {
-                if (updatedTourTitle) {
-                  const body = { tourId: tour.id, tourTitle: tourTitle };
+                const errors = [];
+                const alert = toast.loading("Saving...");
 
-                  await fetch(`${urlPath}/api/tour`, {
+                if (updatedTourTitle) {
+                  const res = await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body),
+                    body: JSON.stringify({
+                      tourId: tour.id,
+                      tourTitle: tourTitle,
+                    }),
                   });
 
-                  setUpdatedTourTitle(false);
+                  const json = await res.json();
+
+                  if (res.status !== 200) errors.push(json.error);
+                  else setUpdatedTourTitle(false);
                 }
 
                 editor?.setEditable(false);
@@ -414,17 +428,33 @@ const TiptapPage: NextPage = ({
                     }
                   );
 
+                  const json = await res.json();
+
                   if (res.status === 200) {
                     // mark current page as saved
                     ContentManager.save(currentPageId, data);
                     setUnsavedPages(ContentManager.unsavedPages);
                     setUnsavedChanges(false);
+                  } else {
+                    errors.push(json.error);
                   }
                 }
 
                 isSavingTour.current = false;
                 editor?.commands.setContent(data ? data : "");
                 editor?.setEditable(true);
+
+                if (errors.length === 0)
+                  toast.update(alert, {
+                    render: "Tour successfully saved.",
+                    type: "success",
+                    isLoading: false,
+                    closeOnClick: true,
+                    closeButton: true,
+                    autoClose: 2000,
+                  });
+                else toast.dismiss(alert);
+                for (const error in errors) toast.error(error);
               }}
               className={`py-1 w-24 ${
                 unsavedChanges ? "bg-red-700" : "bg-green-700"
@@ -436,14 +466,35 @@ const TiptapPage: NextPage = ({
             {/* Download button */}
             <button
               onClick={async () => {
-                const res = await fetch(`${urlPath}/api/tour/download`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ tourId: tour.id }),
-                });
+                const alert = toast.loading("Downloading...");
+                try {
+                  const res = await fetch(`${urlPath}/api/tour/download`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ tourId: tour.id }),
+                  });
 
-                const blob = await res.blob();
-                download(blob, "toursite.zip", "file/zip");
+                  const blob = await res.blob();
+                  download(blob, "toursite.zip", "file/zip");
+                  toast.update(alert, {
+                    render: "Download Successful",
+                    type: "success",
+                    isLoading: false,
+                    closeOnClick: true,
+                    closeButton: true,
+                    autoClose: 2000,
+                  });
+                } catch (err) {
+                  toast.update(alert, {
+                    render:
+                      "Failed to download tour site from server. Please try again.",
+                    type: "error",
+                    isLoading: false,
+                    closeOnClick: true,
+                    closeButton: true,
+                    autoClose: 2000,
+                  });
+                }
               }}
               className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
             >
@@ -475,9 +526,11 @@ const TiptapPage: NextPage = ({
                   }
                 );
 
-                const resJSON = await res.json();
+                const json = await res.json();
 
-                if (resJSON.tour) setTour(resJSON.tour);
+                if (res.status !== 200) return toast.error(json.error);
+
+                setTour(json.tour);
               }}
               className="w-full py-1 px-4 mb-2 text-background-200 bg-green-700 rounded-sm"
             >
@@ -520,17 +573,12 @@ const TiptapPage: NextPage = ({
                           }
                         );
 
-                        const resHTML = await res.text();
+                        const html = await res.text();
 
                         if (res.status === 200) {
-                          ContentManager.save(page.id, resHTML);
-                          editor?.commands.setContent(
-                            resHTML == "" ? "" : resHTML
-                          );
-                        } else {
-                          alert("Failed to load content");
-                          return;
-                        }
+                          ContentManager.save(page.id, html);
+                          editor?.commands.setContent(html === "" ? "" : html);
+                        } else return toast.error("Page does not exist.");
                       }
 
                       // update current page id
@@ -595,11 +643,13 @@ const TiptapPage: NextPage = ({
                         body: JSON.stringify(body),
                       });
 
-                      const resJSON = await res.json();
-
-                      if (resJSON.tour) setTour(resJSON.tour);
+                      const json = await res.json();
 
                       setPageRename("");
+
+                      if (res.status !== 200) return toast.error(json.error);
+
+                      setTour(json.tour);
                     }}
                     className={`${pageRename != page.id ? "hidden" : ""}`}
                   >

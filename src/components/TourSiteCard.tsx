@@ -3,6 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { toast } from "react-toastify";
 
 interface TourSiteCardProps {
   id: string;
@@ -52,7 +53,10 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
                         body: JSON.stringify(bodyData),
                       });
 
+                      const json = await res.json();
+
                       if (res.status === 200) Router.reload();
+                      else toast.error(json.error);
                     }}
                     className="flex justify-center items-center w-full text-red-500 hover:bg-slate-100 transition ease-in-out"
                   >

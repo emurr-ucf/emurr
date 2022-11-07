@@ -7,7 +7,7 @@ export interface LoadingProps {
 export const Loading = ({ children }: LoadingProps) => {
   return (
     <>
-      <div className="flex flex-col justify-center items-center w-screen h-screen">
+      <div className="flex flex-col justify-center items-center w-full h-full">
         <Circles
           height="80"
           width="80"

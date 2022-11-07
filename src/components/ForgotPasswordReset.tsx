@@ -2,55 +2,36 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { toast } from "react-toastify";
 
 export const ForgotPasswordReset = () => {
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
-  const [message, setMessage] = useState("");
-  const [color, setColor] = useState("");
 
   const router = useRouter();
   let rPT = router.query.rPT;
-
-  const error = (message: string) => {
-    setColor("text-red-800");
-    setMessage(message);
-  };
-
-  const success = (message: string) => {
-    setColor("text-green-600");
-    setMessage(message);
-  };
 
   const doForgotPasswordReset = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
 
-    if (typeof newPassword !== "string" && typeof newPassword2 !== "string") {
-      error("Please input a valid password.");
-      return;
-    }
+    if (newPassword !== newPassword2)
+      return toast.error("Passwords do not match.");
 
-    if (newPassword !== newPassword2) {
-      error("Passwords must match.");
-      return;
-    }
-
-    const body = { newPassword, resPassToken: rPT };
-    fetch(`${urlPath}/api/user/forgotPassword`, {
+    const res = await fetch(`${urlPath}/api/user/forgot`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((response: Response) => {
-      if (response.status === 200) {
-        success(
-          "Password has been reset. Please log in using your new password."
-        );
-      } else {
-        response.json().then((json) => error(json.error));
-      }
+      body: JSON.stringify({ newPassword, resPassToken: rPT }),
     });
+
+    const json = await res.json();
+
+    if (res.status === 200)
+      toast.success(
+        "Password has been reset. Please log in using your new password."
+      );
+    else toast.error(json.error);
   };
 
   return (
@@ -93,9 +74,6 @@ export const ForgotPasswordReset = () => {
           >
             Reset Password
           </button>
-        </div>
-        <div className="text-center">
-          <span className={color}>{message}</span>
         </div>
       </form>
     </>
