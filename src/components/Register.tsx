@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { urlPath } from "../lib/urlPath";
 import { FormType } from "../pages/login";
 
@@ -28,25 +29,21 @@ export const Register = (props: RegisterProps) => {
   const doRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (password !== password2) {
-      error("Passwords must match");
-      return;
-    }
+    if (password !== password2) return toast.error("Passwords must match");
 
-    const body = { firstName, lastName, email, password };
-    fetch(`${urlPath}/api/user`, {
+    const res = await fetch(`${urlPath}/api/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((response: Response) => {
-      if (response.status === 200) {
-        success(
-          "Registered! Please check your inbox and verify your email address."
-        );
-      } else {
-        response.json().then((json) => error(json.error));
-      }
+      body: JSON.stringify({ firstName, lastName, email, password }),
     });
+
+    const json = await res.json();
+
+    if (res.status === 200)
+      toast.success(
+        "Registered! Please check your inbox and verify your email address."
+      );
+    else toast.error(json.error);
   };
 
   return (

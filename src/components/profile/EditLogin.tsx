@@ -35,6 +35,7 @@ export const EditLogin = () => {
               />
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="Verify your password"
                 className="h-12 appearance-none border border-brown rounded px-3"
               />

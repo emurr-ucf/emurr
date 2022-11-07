@@ -19,6 +19,7 @@ import React from "react";
 import { title } from "process";
 import { urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/Loading";
+import { toast } from "react-toastify";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -80,7 +81,7 @@ const DashboardPage: NextPage = ({
         <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
-              <div>Users Tours</div>
+              <div>{session?.user.name?.split(" ")[0]}&apos;s Tours</div>
               <button
                 onClick={async () => {
                   const file = new File([], "blank.html");
@@ -92,10 +93,11 @@ const DashboardPage: NextPage = ({
                     body: formData,
                   });
 
-                  const body: CreateTourResponseType = await res.json();
+                  const json = await res.json();
 
-                  if (!body.error)
-                    Router.push(`${urlPath}/tours/${body.tourId}`);
+                  if (res.status !== 200) return toast.error(json.error);
+
+                  Router.push(`${urlPath}/tours/${json.tourId}`);
                 }}
                 className="shadow-md rounded-md px-2 bg-green-800 text-base font-bold text-white hover:bg-green-600 transition ease-in-out delay-50"
               >

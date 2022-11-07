@@ -6,6 +6,8 @@ import { unzip } from "unzipit";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { urlLocalPath } from "../lib/urlPath";
 import { CustomUrlModal } from "./CustomUrlModal";
+import { toast } from "react-toastify";
+import { Loading } from "./Loading";
 
 export interface TourSiteImageType {
   name: string;
@@ -41,7 +43,13 @@ export const EditorMenu = ({
 }: EditorMenuProps) => {
   const imageLoad = () => {
     if (isUploadingFile) {
-      return <div>Uploading File...</div>;
+      return (
+        <Loading>
+          <div className="flex flex-col justify-center items-center mt-2">
+            <div>Loading Images...</div>
+          </div>
+        </Loading>
+      );
     } else if (images.length > 0)
       return images.map((image: TourSiteImageType) => (
         <div key={image.name}>
@@ -858,13 +866,17 @@ export const EditorMenu = ({
                               const formData = new FormData();
                               formData.append("file", event.target.files[0]);
 
-                              const tours = await fetch(
+                              const res = await fetch(
                                 `${urlLocalPath}/api/tour/image?tourId=${tourId}`,
                                 {
                                   method: "POST",
                                   body: formData,
                                 }
                               );
+
+                              const json = await res.json();
+
+                              if (res.status !== 200) toast.error(json.error);
 
                               getImages();
                             }}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ProfileCard } from "./ProfileCard";
 import { useSession } from "next-auth/react";
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
+import { toast } from "react-toastify";
 
 export const EditProfile = () => {
   const { data: session, status } = useSession();
@@ -23,10 +24,7 @@ export const EditProfile = () => {
     });
     const json = await res.json();
 
-    if (json.error) {
-      alert(json.error);
-      return;
-    }
+    if (res.status !== 200) return toast.error(json.error);
 
     setFirstName(json.firstName || "");
     setLastName(json.lastName || "");
@@ -45,12 +43,11 @@ export const EditProfile = () => {
     });
 
     const json = await res.json();
-    if (json.error) {
-      alert(json.error); // TODO improve interface
-    } else {
-      alert("Updated!"); // TODO improve interface
-      setShow(false);
-    }
+
+    if (res.status !== 200) return toast.error(json.error);
+
+    toast.success("Updated name.");
+    setShow(false);
   };
 
   return (
@@ -94,10 +91,16 @@ export const EditProfile = () => {
 
                     const json = await res.json();
 
+                    // For testing purposes
                     if (process.env.NODE_ENV) console.log(json.error);
 
-                    if (res.status === 200 && session)
+                    if (res.status === 200 && session) {
                       session.user.image = json.image;
+                      toast.success("Updated profile image.");
+                      return;
+                    }
+
+                    toast.error(json.error);
                   }}
                   className="hidden"
                 />

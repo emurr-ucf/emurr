@@ -37,9 +37,9 @@ const ViewOtherPage: NextPage = ({
         }
       );
 
-      const resJSON = await res.json();
+      const json = await res.json();
 
-      if (resJSON) setTours(resJSON.tours);
+      if (json) setTours(json.tours);
     }, 500);
   };
 

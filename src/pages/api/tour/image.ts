@@ -65,8 +65,7 @@ export default async function handler(
   if (req.method === "GET") {
     const { tourId } = req.query;
 
-    if (typeof tourId != "string")
-      return res.status(400).json({ error: "Tour ID cannot be blank." });
+    if (typeof tourId != "string") return res.status(400).json({ error: "" });
 
     // Returns file.
     const path = "./websites/" + tourId + "/images/";
