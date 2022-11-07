@@ -20,10 +20,6 @@ const LoginPage: NextPage = () => {
   const [formType, setFormType] = useState(FormType.LOGIN);
   const { data: session, status } = useSession();
 
-  const handleChange = (value: FormType) => {
-    setFormType(value);
-  };
-
   if (status === "loading") {
     return (
       <Loading>
@@ -51,10 +47,10 @@ const LoginPage: NextPage = () => {
         <Navbar page="login" />
         <div className="flex justify-center text-green-800">
           <div className="flex justify-center h-fit p-5 mt-28 rounded-lg bg-background-200 border-2 border-l-4 border-b-4 border-brown sm:rounded-md">
-            {formType === FormType.LOGIN && <Login hook={handleChange} />}
-            {formType === FormType.REGISTER && <Register hook={handleChange} />}
+            {formType === FormType.LOGIN && <Login hook={setFormType} />}
+            {formType === FormType.REGISTER && <Register hook={setFormType} />}
             {formType === FormType.FORGOT_PASSWORD && (
-              <ForgotPassword hook={handleChange} />
+              <ForgotPassword hook={setFormType} />
             )}
             <div className="mx-10 border-l-2 rounded border-brown"></div>
             <OAuth />

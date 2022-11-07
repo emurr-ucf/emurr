@@ -40,8 +40,8 @@ export default NextAuth({
         if (credentials) {
           const res = await fetch(
             process.env.NODE_ENV === "production"
-              ? "https://chdr.cs.ucf.edu/emurr/api/login"
-              : "http://localhost:3000/api/login",
+              ? "https://chdr.cs.ucf.edu/emurr/api/user/login"
+              : "http://localhost:3000/api/user/login",
             {
               method: "POST",
               body: JSON.stringify(credentials),

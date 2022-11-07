@@ -4,8 +4,6 @@ import { ProfileCard } from "./ProfileCard";
 import { urlLocalPath } from "../../lib/urlPath";
 
 export const ManageAccount = () => {
-  const isProd = process.env.NODE_ENV === "production";
-
   const [password, setPassword] = useState("");
 
   const [show, setShow] = useState(false);

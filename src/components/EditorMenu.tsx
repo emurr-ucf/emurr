@@ -859,7 +859,7 @@ export const EditorMenu = ({
                               formData.append("file", event.target.files[0]);
 
                               const tours = await fetch(
-                                `${urlLocalPath}/api/tourImage?tourId=${tourId}`,
+                                `${urlLocalPath}/api/tour/image?tourId=${tourId}`,
                                 {
                                   method: "POST",
                                   body: formData,

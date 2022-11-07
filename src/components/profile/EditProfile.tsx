@@ -2,11 +2,10 @@ import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import { ProfileCard } from "./ProfileCard";
 import { useSession } from "next-auth/react";
-import { urlLocalPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 
 export const EditProfile = () => {
   const { data: session, status } = useSession();
-  const isProd = process.env.NODE_ENV === "production";
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -19,12 +18,8 @@ export const EditProfile = () => {
 
     // TODO consider loading screen while awaiting api call
     // TODO consider making lastName information part of session information
-    const res = await fetch("/api/user/getUser", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: session?.user.email || "",
-      }),
+    const res = await fetch(`${urlPath}/api/user`, {
+      method: "GET",
     });
     const json = await res.json();
 
@@ -33,15 +28,15 @@ export const EditProfile = () => {
       return;
     }
 
-    setFirstName(json.user.name || "");
-    setLastName(json.user.lastName || "");
+    setFirstName(json.firstName || "");
+    setLastName(json.lastName || "");
   };
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const res = await fetch("/api/user/editUser", {
-      method: "POST",
+    const res = await fetch(`${urlPath}/api/user`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         firstName,
@@ -92,13 +87,10 @@ export const EditProfile = () => {
                     const formData = new FormData();
                     formData.append("file", event.target.files[0]);
 
-                    const res = await fetch(
-                      `${urlLocalPath}/api/user/profileImage`,
-                      {
-                        method: "PUT",
-                        body: formData,
-                      }
-                    );
+                    const res = await fetch(`${urlLocalPath}/api/user/image`, {
+                      method: "PUT",
+                      body: formData,
+                    });
 
                     const json = await res.json();
 

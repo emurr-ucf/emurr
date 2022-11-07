@@ -297,7 +297,7 @@ const TiptapPage: NextPage = ({
   });
 
   const getImages = useCallback(async () => {
-    const tours = await fetch(`${urlPath}/api/tourImage?tourId=${tour.id}`, {
+    const tours = await fetch(`${urlPath}/api/tour/image?tourId=${tour.id}`, {
       method: "GET",
     });
 
@@ -384,7 +384,7 @@ const TiptapPage: NextPage = ({
             <button
               onClick={async () => {
                 if (updatedTourTitle) {
-                  const body = { tourId: tour.id, name: tourTitle };
+                  const body = { tourId: tour.id, tourTitle: tourTitle };
 
                   await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
@@ -407,7 +407,7 @@ const TiptapPage: NextPage = ({
                   formData.append("file", file);
 
                   const res = await fetch(
-                    `${urlPath}/api/page?tourId=${tour.id}&pageId=${currentPageId}`,
+                    `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${currentPageId}`,
                     {
                       method: "PUT",
                       body: formData,
@@ -436,7 +436,7 @@ const TiptapPage: NextPage = ({
             {/* Download button */}
             <button
               onClick={async () => {
-                const res = await fetch(`${urlPath}/api/download`, {
+                const res = await fetch(`${urlPath}/api/tour/download`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ tourId: tour.id }),
@@ -468,7 +468,7 @@ const TiptapPage: NextPage = ({
                 formData.append("file", file);
 
                 const res = await fetch(
-                  `${urlPath}/api/page?tourId=${tour.id}`,
+                  `${urlPath}/api/tour/page?tourId=${tour.id}`,
                   {
                     method: "POST",
                     body: formData,
@@ -514,7 +514,7 @@ const TiptapPage: NextPage = ({
                       // otherwise, fetch content from api
                       else {
                         const res = await fetch(
-                          `${urlPath}/api/page?tourId=${tour.id}&pageId=${page.id}`,
+                          `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${page.id}`,
                           {
                             method: "GET",
                           }
@@ -589,7 +589,7 @@ const TiptapPage: NextPage = ({
                         title: pageTitle,
                       };
 
-                      const res = await fetch(`${urlPath}/api/pagedb`, {
+                      const res = await fetch(`${urlPath}/api/tour/pagedb`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(body),
