@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Tour` ADD COLUMN `mediaSize` DOUBLE NOT NULL DEFAULT 0;

@@ -69,6 +69,7 @@
     "react-dom": "18.2.0",
     "react-loader-spinner": "^5.3.4",
     "react-query": "^3.39.2",
+    "react-toastify": "^9.1.1",
     "remixicon": "^2.5.0",
     "tiptap": "^1.32.2",
     "tiptap-commands": "^1.17.1",

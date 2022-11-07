@@ -69,7 +69,6 @@ model VerificationToken {
 
 model Page {
   id            String    @id @default(cuid())
-  customURL     String?   @db.VarChar(255)
   pageCreatedAt DateTime  @default(now())
   pageUpdatedAt DateTime  @updatedAt
   title         String    @db.VarChar(255)
@@ -79,6 +78,7 @@ model Page {
   favoritedById String?
   tourId        String?
   deletable     Boolean   @default(true)
+  customURL     String?   @db.VarChar(255)
   author        User      @relation("WrittenPages", fields: [authorId], references: [id], onDelete: Cascade)
   favoritedBy   User?     @relation("FavPages", fields: [favoritedById], references: [id])
   tours         Tour?     @relation(fields: [tourId], references: [id])
@@ -96,9 +96,10 @@ model Tour {
   tourTitle       String
   tourDescription String?  @db.VarChar(255)
   tourAuthorId    String
+  published       Boolean  @default(false)
   tourAuthor      User     @relation(fields: [tourAuthorId], references: [id], onDelete: Cascade)
   tourPages       Page[]
-  published       Boolean  @default(false)
+  mediaSize       Float    @default(0)
 
   @@index([tourAuthorId], map: "Tour_tourAuthorId_fkey")
 }
