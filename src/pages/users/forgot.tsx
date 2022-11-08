@@ -47,4 +47,6 @@ const ForgotPasswordResetPage: NextPage = () => {
   );
 };
 
+ForgotPasswordResetPage.displayName = "RESET PASSWORD";
+
 export default ForgotPasswordResetPage;

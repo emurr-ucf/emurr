@@ -40,7 +40,7 @@ export const UserMenu = () => {
           <Menu.Items className="fixed z-10 mt-2 w-40 right-10 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <Menu.Item>
               {({ active }) => (
-                <HeadlessLink href="/tours" as={`${urlLocalPath}/tours`}>
+                <HeadlessLink href="/tours">
                   <div
                     className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500`}
                   >
@@ -51,10 +51,7 @@ export const UserMenu = () => {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <HeadlessLink
-                  href="/users/profile"
-                  as={`${urlLocalPath}/users/profile`}
-                >
+                <HeadlessLink href="/users/profile">
                   <div
                     className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500`}
                   >

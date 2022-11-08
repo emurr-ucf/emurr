@@ -704,4 +704,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
+TiptapPage.displayName = "EDIT TOUR";
+
 export default TiptapPage;

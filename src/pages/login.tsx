@@ -68,4 +68,6 @@ const LoginPage: NextPage = () => {
   );
 };
 
+LoginPage.displayName = "LOGIN";
+
 export default LoginPage;

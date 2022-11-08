@@ -239,4 +239,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
+DashboardPage.displayName = "DASHBOARD";
+
 export default DashboardPage;

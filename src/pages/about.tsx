@@ -148,4 +148,6 @@ const AboutPage: NextPage = () => {
   );
 };
 
+AboutPage.displayName = "ABOUT";
+
 export default AboutPage;
