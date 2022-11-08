@@ -30,7 +30,7 @@
 
 </details>
 
-<img src="./unit.jpg" alt="top down image of EMURR unit" width="400" height="400"/>
+<img src="./images/unit.jpg" alt="top down image of EMURR unit" width="400" height="400"/>
 
 <!-- TODO: CHDR contact -->
 If any parts are missing, damaged, or malfunctioning please contact CHDR labs. 
@@ -43,27 +43,27 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 1. Turn on battery
 2. Ensure battery shows five solid green lights. This indicates a full charge.
-   1. <img src="./charge.jpg" alt="top down image of EMURR unit" width="200" height="200"/>
+   1. <img src="./images/charge.jpg" alt="top down image of EMURR unit" width="200" height="200"/>
 
 <br>
 
 ### 2.2.2. Connecting Ethernet & Power Supply
 1. Ethernet from Pi to router. Ensure that the ethernet from the Pi goes to one of the orange ethernet ports. **Not** the blue internet port.
-   1. <img src="./ethernet.jpg" alt="top down image of EMURR unit" width="200" height="200"/>
+   1. <img src="./images/ethernet.jpg" alt="top down image of EMURR unit" width="200" height="200"/>
 2. Power from battery to router
    1.  Connect power supply from battery to router
    2.  Turn on router by pressing the power button on the back side.
-       1.  <img src="./router-back-power.jpg" alt="back of the router when powered" width="200" height="200"/>
+       1.  <img src="./images/router-back-power.jpg" alt="back of the router when powered" width="200" height="200"/>
    3.  Verify the router is powered by all lights turning on followed by a blinking green power light.
    4.  Wait ~15 seconds for the two wi-fi lights. This indicates wi-fi is being provided at `TP-Link_EMURR_5G`.
-       1.  <img src="./router-front-power.jpg" alt="front of the router when powered" width="200" height="200"/>
-       2.  <img src="./wifi-screenshot.png" alt="screenshot of wifi name" width="200" height="300"/>
+       1.  <img src="./images/router-front-power.jpg" alt="front of the router when powered" width="200" height="200"/>
+       2.  <img src="./images/wifi-screenshot.png" alt="screenshot of wifi name" width="200" height="300"/>
    > Note: You can also use `TP-Link_EMURR` but we have seen less issues when using the 5G counterpart.
 3. Power from battery to Pi
    1. Connect battery USB to Pi micro USB 
    2. Ensure the Pi is powered on by seeing a solid red LED light in the front
-      1. <img src="./pi-back-power.jpg" alt="raspberry pi cables when powered" width="200" height="200"/>
-      2. <img src="./pi-front-power.jpg" alt="raspberry pi LEDS when powered" width="200" height="200"/>
+      1. <img src="./images/pi-back-power.jpg" alt="raspberry pi cables when powered" width="200" height="200"/>
+      2. <img src="./images/pi-front-power.jpg" alt="raspberry pi LEDS when powered" width="200" height="200"/>
    > Note: if the red (right, closest to micro USB port) LED is blinking this implies a low voltage.
 
 <br>
