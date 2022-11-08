@@ -4,7 +4,7 @@ import { Navbar } from "../components/Navbar";
 import { OAuth } from "../components/OAuth";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Register } from "../components/Register";
 import { ForgotPassword } from "../components/ForgotPassword";
 import { Loading } from "../components/Loading";
@@ -21,6 +21,11 @@ const LoginPage: NextPage = () => {
   const { data: session, status } = useSession();
   const userUpdate = useUserStore((state) => state.update);
 
+  const loggedIn = async () => {
+    await userUpdate();
+    Router.push("/tours");
+  };
+
   if (status === "loading") {
     return (
       <Loading>
@@ -32,8 +37,7 @@ const LoginPage: NextPage = () => {
   }
 
   if (session) {
-    userUpdate();
-    Router.push("/tours");
+    loggedIn();
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">

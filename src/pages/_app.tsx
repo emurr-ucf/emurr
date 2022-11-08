@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { urlLocalPath } from "../lib/urlPath";
 import { ToastContainer } from "react-toastify";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -12,6 +13,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       basePath={`${urlLocalPath}/api/auth`}
       refetchInterval={5 * 60}
     >
+      <Head>
+        <link rel="shortcut icon" href={`${urlLocalPath}/favicon.ico`} />
+      </Head>
       <div className="w-screen h-screen m-0 p-0 text-green-900 bg-background-400 overflow-auto">
         <Component {...pageProps} />
         <ToastContainer

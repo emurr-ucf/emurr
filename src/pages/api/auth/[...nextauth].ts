@@ -66,13 +66,10 @@ export default NextAuth({
   },
   callbacks: {
     redirect: async ({ url, baseUrl }) => {
-      url = process.env.NODE_ENV === "production" ? "/emurr/" : "" + url;
+      if (process.env.NODE_ENV !== "production") return url;
 
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+      const path = url.split(baseUrl)[1];
+      return `${baseUrl}${path}`;
     },
     jwt: async ({ token, user }) => {
       if (user) {
