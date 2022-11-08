@@ -132,7 +132,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 4.  Wait until the green LED stops flashing
 5.  When the LED stays lit the tours are transferred. Unplug the USB. 
     1.  If the LED does not stop blinking or does not stay lit there has been an error. Try Again.
-6.  Tours are now accessible on the `TP_LINK_EMURR` wi-fi. Connect to it to test.
+6.  Tours are now accessible on the `TP-LINK_EMURR_5G` wi-fi. Connect to it to test.
 7.  To find the directory of all pages go to the URL `emurr.local/toursite`
 8.  Pages will be accessible at the URL `emurr.local/toursite/<custom-url>` without `<` and `>`. 
 9.  If using NFC tags ensure they point to the correct URL formatted in the previous step
