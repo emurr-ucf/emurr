@@ -15,8 +15,7 @@
 
 ## 2.1. Itemized List
 
-<details>
-<summary>What is in an EMURR Unit?</summary>
+What is in an EMURR Unit?
 
 - Raspberry Pi
   - Power Cable
@@ -27,8 +26,6 @@
   - Backpack Mount
   - Battery & Rasbperry Pi Mount
 - Ethernet Cable
-
-</details>
 
 <img src="./images/unit.jpg" alt="top down image of EMURR unit" width="400" height="400"/>
 
@@ -90,8 +87,8 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 12. Ensure to save pages at the top `Save` button regularly to not lose changes
 
 <br>
-<details>
-<summary>Editor Features List</summary>
+
+Editor Features List
 
 **From Left to Right**
 - Heading
@@ -120,7 +117,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 - Remove Styling
 - Undo
 - Redo
-</details>
+
 <br>
 
 ## 3.2. Transferring Sites to the Pi 
