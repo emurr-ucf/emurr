@@ -595,7 +595,7 @@ const TiptapPage: NextPage = ({
                     }}
                     className={`${
                       pageRename === page.id || pageRename != "" ? "hidden" : ""
-                    } invisible2 group-hover:visible`}
+                    } invisible group-hover:visible`}
                   >
                     Edit
                   </button>
@@ -603,16 +603,16 @@ const TiptapPage: NextPage = ({
                   {/* Save title button */}
                   <button
                     onClick={async () => {
-                      const body = {
-                        pageId: page.id,
-                        tourId: tour.id,
-                        title: pageTitle,
-                      };
+                      if (pageTitle === "") return setPageRename("");
 
                       const res = await fetch(`${urlPath}/api/tour/pagedb`, {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(body),
+                        body: JSON.stringify({
+                          pageId: page.id,
+                          tourId: tour.id,
+                          title: pageTitle,
+                        }),
                       });
 
                       const json = await res.json();
@@ -621,6 +621,7 @@ const TiptapPage: NextPage = ({
 
                       if (res.status !== 200) return toast.error(json.error);
 
+                      setPageTitle("");
                       setTour(json.tour);
                     }}
                     className={`${pageRename != page.id ? "hidden" : ""}`}
