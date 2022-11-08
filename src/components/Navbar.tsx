@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserMenu } from "./UserMenu";
-import { urlLocalPath } from "../lib/urlPath";
+import { urlLocalPath, urlPath } from "../lib/urlPath";
 
 export interface NavbarProps {
   page?: string;
@@ -57,7 +57,9 @@ export const Navbar = (props: NavbarProps) => {
                 props.page === "home" ? "font-semibold hover:font-semibold" : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
-              <Link href="/">home</Link>
+              <Link href="/" as={`${urlPath}`}>
+                home
+              </Link>
             </div>
             <div
               className={`py-1 px-2 rounded-md ${
@@ -66,7 +68,7 @@ export const Navbar = (props: NavbarProps) => {
                   : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
-              <Link href="/about" className="m-5">
+              <Link href="/about" as={`${urlPath}/about`} className="m-5">
                 about
               </Link>
             </div>
@@ -77,7 +79,7 @@ export const Navbar = (props: NavbarProps) => {
                   : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
-              <Link href="/login" className="m-5">
+              <Link href="/login" as={`${urlPath}/login`} className="m-5">
                 login
               </Link>
             </div>
