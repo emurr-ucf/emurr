@@ -51,15 +51,13 @@ export default async function handler(
         },
         data: {
           /// @ts-ignore-start
-          image: `https://chdr.cs.ucf.edu/emurr/profile-images/${req.files[0].filename}`,
+          image: `https://chdr.cs.ucf.edu/~emurr/pi/${req.files[0].filename}`,
           // @ts-ignore-end
         },
       });
 
       if (user) {
-        return res
-          .status(200)
-          .json({ error: "Image updated.", image: user.image });
+        return res.status(200).json({ image: user.image });
       } else
         return res.status(200).json({ error: "Image could not be updated." });
     });
