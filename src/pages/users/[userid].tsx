@@ -19,33 +19,33 @@ const ViewOtherPage: NextPage = ({
   propTours,
   userid,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
   const { data: session, status } = useSession();
   const [tours, setTours] = useState(propTours);
   const [query, setQuery] = useState("");
   const [changing, setChanging] = useState(false);
-  let timer: NodeJS.Timeout;
-
-  const queryTours = () => {
-    clearTimeout(timer);
-
-    timer = setTimeout(async () => {
-      const res = await fetch(
-        `${urlPath}/api/tour?query=${query}&userid=${userid}`,
-        {
-          method: "GET",
-        }
-      );
-
-      const json = await res.json();
-
-      if (json) setTours(json.tours);
-    }, 500);
-  };
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    const queryTours = () => {
+      clearTimeout(timer);
+
+      timer = setTimeout(async () => {
+        const res = await fetch(
+          `${urlPath}/api/tour?query=${query}&userid=${userid}`,
+          {
+            method: "GET",
+          }
+        );
+
+        const json = await res.json();
+
+        if (json) setTours(json.tours);
+      }, 500);
+    };
+
     queryTours();
-  }, [query]);
+  }, [query, userid]);
 
   // routing for: status, if changing, and if query (userid) is session id
   if (status === "loading") {

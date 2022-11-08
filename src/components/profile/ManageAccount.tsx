@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { ProfileCard } from "./ProfileCard";
-import { urlLocalPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
@@ -12,7 +12,7 @@ export const ManageAccount = () => {
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const res = await fetch("/api/user", {
+    const res = await fetch(`${urlPath}/api/user`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

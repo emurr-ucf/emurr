@@ -3,9 +3,12 @@ import { Menu, Transition } from "@headlessui/react";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
 import { HeadlessLink } from "./HeadlessLink";
 import { Fragment } from "react";
+import { useUserStore } from "../lib/store/user";
 
 export const UserMenu = () => {
   const { data: session, status } = useSession();
+  const userImage = useUserStore((state) => state.image);
+  const userRemove = useUserStore((state) => state.remove);
 
   return (
     <>
@@ -15,7 +18,7 @@ export const UserMenu = () => {
             <img
               src={
                 process.env.NODE_ENV === "production"
-                  ? session?.user.image || `${urlLocalPath}/images/google.png`
+                  ? userImage || `${urlLocalPath}/images/google.png`
                   : `${urlLocalPath}/images/google.png`
               }
               alt="User profile image"
@@ -59,7 +62,10 @@ export const UserMenu = () => {
             <Menu.Item>
               {({ active }) => (
                 <div
-                  onClick={() => signOut()}
+                  onClick={() => {
+                    signOut();
+                    userRemove();
+                  }}
                   className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500 cursor-pointer`}
                 >
                   Sign out

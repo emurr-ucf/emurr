@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../lib/prisma";
+import { urlPath } from "../../../lib/urlPath";
 
 export default NextAuth({
   // Lets our Providers Work with Prisma.
@@ -38,16 +39,11 @@ export default NextAuth({
       async authorize(credentials, req) {
         // API Request.
         if (credentials) {
-          const res = await fetch(
-            process.env.NODE_ENV === "production"
-              ? "https://chdr.cs.ucf.edu/emurr/api/user/login"
-              : "http://localhost:3000/api/user/login",
-            {
-              method: "POST",
-              body: JSON.stringify(credentials),
-              headers: { "Content-Type": "application/json" },
-            }
-          );
+          const res = await fetch(`${urlPath}/api/user/login`, {
+            method: "POST",
+            body: JSON.stringify(credentials),
+            headers: { "Content-Type": "application/json" },
+          });
           var resJson = await res.json();
         }
         // If API Works.
@@ -77,7 +73,7 @@ export default NextAuth({
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    jwt: async ({ token, profile, user }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
         token.name = user.name;

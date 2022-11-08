@@ -153,17 +153,18 @@ export default async function handler(
       return res.status(401).json({ error: "User is not logged in." });
 
     // Gets User.
-    const getUser = await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         id: token.id,
       },
     });
 
-    if (getUser)
+    if (user)
       return res.status(200).json({
-        firstName: getUser.name,
-        lastName: getUser.lastName,
-        email: getUser.email,
+        firstName: user.name,
+        lastName: user.lastName,
+        email: user.email,
+        image: user.image,
       });
     else return res.status(404).json({ error: "User not found." });
   }
