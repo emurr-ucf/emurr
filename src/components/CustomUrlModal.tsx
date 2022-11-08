@@ -27,7 +27,7 @@ export const CustomUrlModal = ({ tourId, pageId }: CustomUrlModalProps) => {
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-10"
+          className="relative z-50"
           onClose={() => setIsOpen(false)}
         >
           <Transition.Child
