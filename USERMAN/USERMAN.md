@@ -39,7 +39,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 ### 2.2.1. Battery Power
 
 1. Turn on battery
-2. Ensure battery shows five solid green lights. This indicates a full charge.
+2. Ensure battery shows four solid green lights. This indicates a full charge.
    1. <img src="./images/charge.jpg" alt="top down image of EMURR unit" width="200" height="200"/>
 
 <br>
