@@ -29,7 +29,7 @@ export default async function handler(
 
   // Updates a page.
   if (req.method === "PUT") {
-    const destination = "./profile-images/";
+    const destination = "../public_html/pi/";
 
     // Updates existing page multer instance.
     const updatedImage = multer({

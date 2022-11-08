@@ -117,13 +117,12 @@ export const EditProfile = () => {
                             // For testing purposes
                             if (process.env.NODE_ENV) console.log(json.error);
 
-                            if (res.status === 200 && session) {
-                              session.user.image = json.image;
-                              toast.success("Updated profile image.");
-                              return;
-                            }
+                            if (res.status !== 200)
+                              return toast.error(json.error);
 
-                            toast.error(json.error);
+                            if (session) session.user.image = json.image;
+
+                            toast.success("Updated profile image.");
                           }}
                           className="hidden"
                         />

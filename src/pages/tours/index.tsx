@@ -10,13 +10,11 @@ import Router from "next/router";
 import { Tour } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "../../lib/prisma";
-import { CreateTourResponseType } from "../api/tour";
 import { useEffect, useState } from "react";
 
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import React from "react";
-import { title } from "process";
 import { urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/Loading";
 import { toast } from "react-toastify";
