@@ -47,7 +47,7 @@ export const UserMenu = () => {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <HeadlessLink href={`${urlLocalPath}/profile`}>
+                <HeadlessLink href={`${urlLocalPath}/users/profile`}>
                   <div
                     className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500`}
                   >

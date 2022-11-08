@@ -50,7 +50,7 @@ export const Register = (props: RegisterProps) => {
     <>
       <form onSubmit={doRegister} className="flex flex-col w-64 gap-6">
         <div className="text-3xl">Register</div>
-        <div className="flex flex-col gap-6">
+        <form className="flex flex-col gap-6">
           <input
             type="text"
             autoComplete="on"
@@ -86,7 +86,7 @@ export const Register = (props: RegisterProps) => {
             className="h-12 appearance-none border border-brown rounded px-3"
             onChange={(e) => setPassword2(e.target.value)}
           />
-        </div>
+        </form>
         <div className="flex justify-center">
           <div
             onClick={() => props.hook(FormType.LOGIN)}

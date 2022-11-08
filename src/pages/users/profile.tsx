@@ -1,12 +1,12 @@
 import { NextPage } from "next";
-import { EditLogin } from "../components/profile/EditLogin";
-import { EditPassword } from "../components/profile/EditPassword";
-import { EditProfile } from "../components/profile/EditProfile";
-import { Navbar } from "../components/Navbar";
-import { ManageAccount } from "../components/profile/ManageAccount";
+import { EditLogin } from "../../components/profile/EditLogin";
+import { EditPassword } from "../../components/profile/EditPassword";
+import { EditProfile } from "../../components/profile/EditProfile";
+import { Navbar } from "../../components/Navbar";
+import { ManageAccount } from "../../components/profile/ManageAccount";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import { Loading } from "../components/Loading";
+import { Loading } from "../../components/Loading";
 
 const ProfilePage: NextPage = () => {
   const { data: session, status } = useSession();
