@@ -3,9 +3,11 @@ import { Menu, Transition } from "@headlessui/react";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
 import { HeadlessLink } from "./HeadlessLink";
 import { Fragment } from "react";
+import { useUserStore } from "../lib/store/user";
 
 export const UserMenu = () => {
   const { data: session, status } = useSession();
+  const userImage = useUserStore((state) => state.image);
 
   return (
     <>
@@ -15,7 +17,7 @@ export const UserMenu = () => {
             <img
               src={
                 process.env.NODE_ENV === "production"
-                  ? session?.user.image || `${urlLocalPath}/images/google.png`
+                  ? userImage || `${urlLocalPath}/images/google.png`
                   : `${urlLocalPath}/images/google.png`
               }
               alt="User profile image"

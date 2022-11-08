@@ -1,15 +1,26 @@
 import { Fragment, useState } from "react";
 import { ProfileCard } from "./ProfileCard";
-import { useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 import { Dialog, Transition } from "@headlessui/react";
+import { Session } from "next-auth";
+import { useUserStore } from "../../lib/store/user";
+import shallow from "zustand/shallow";
 
 export const EditProfile = () => {
-  const { data: session, status } = useSession();
+  const { userName, userLastName, userImage, userUpdate } = useUserStore(
+    (state) => ({
+      userName: state.name,
+      userLastName: state.lastName,
+      userImage: state.image,
+      userUpdate: state.update,
+    }),
+    shallow
+  );
 
-  const [firstName, setFirstName] = useState(session?.user.name || "");
-  const [lastName, setLastName] = useState(session?.user.lastName || "");
+  const [firstName, setFirstName] = useState(userName);
+  const [lastName, setLastName] = useState(userLastName);
   const [show, setShow] = useState(false);
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,12 +39,7 @@ export const EditProfile = () => {
 
     if (res.status !== 200) return toast.error(json.error);
 
-    if (session) {
-      session.user.name = json.firstName;
-      session.user.lastName = json.lastName;
-    }
-    setFirstName(session?.user.name || "");
-    setLastName(session?.user.lastName || "");
+    await userUpdate();
 
     toast.success("Updated name.");
     setShow(false);
@@ -89,8 +95,7 @@ export const EditProfile = () => {
                         <img
                           src={
                             process.env.NODE_ENV === "production"
-                              ? session?.user.image ||
-                                `${urlLocalPath}/images/google.png`
+                              ? userImage || `${urlLocalPath}/images/google.png`
                               : `${urlLocalPath}/images/google.png`
                           }
                           alt="User profile image"
@@ -120,7 +125,7 @@ export const EditProfile = () => {
                             if (res.status !== 200)
                               return toast.error(json.error);
 
-                            if (session) session.user.image = json.image;
+                            await userUpdate();
 
                             toast.success("Updated profile image.");
                           }}

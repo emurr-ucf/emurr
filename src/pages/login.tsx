@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Register } from "../components/Register";
 import { ForgotPassword } from "../components/ForgotPassword";
-import { urlPath } from "../lib/urlPath";
 import { Loading } from "../components/Loading";
 
 export enum FormType {

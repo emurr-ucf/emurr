@@ -18,6 +18,7 @@ import React from "react";
 import { urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/Loading";
 import { toast } from "react-toastify";
+import { useUserStore } from "../../lib/store/user";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -30,25 +31,26 @@ const DashboardPage: NextPage = ({
   const [tours, setTours] = useState(propTours);
   const [query, setQuery] = useState("");
   const [sortQuery, setSortQuery] = useState("");
-  let timer: NodeJS.Timeout;
-
-  const queryTours = () => {
-    clearTimeout(timer);
-
-    timer = setTimeout(async () => {
-      const res = await fetch(
-        `${urlPath}/api/tour?sortQuery=${sortQuery}&query=${query}`,
-        {
-          method: "GET",
-        }
-      );
-      const resJSON = await res.json();
-
-      if (resJSON) setTours(resJSON.tours);
-    }, 500);
-  };
+  const userName = useUserStore((state) => state.name);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    const queryTours = () => {
+      clearTimeout(timer);
+
+      timer = setTimeout(async () => {
+        const res = await fetch(
+          `${urlPath}/api/tour?sortQuery=${sortQuery}&query=${query}`,
+          {
+            method: "GET",
+          }
+        );
+        const json = await res.json();
+
+        if (json) setTours(json.tours);
+      }, 500);
+    };
     queryTours();
   }, [query, sortQuery]);
 
@@ -79,7 +81,7 @@ const DashboardPage: NextPage = ({
         <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
-              <div>{session?.user.name?.split(" ")[0]}&apos;s Tours</div>
+              <div>{userName.split(" ")[0]}&apos;s Tours</div>
               <button
                 onClick={async () => {
                   const file = new File([], "blank.html");

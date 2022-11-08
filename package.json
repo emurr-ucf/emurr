@@ -73,7 +73,8 @@
     "tiptap-commands": "^1.17.1",
     "tiptap-extensions": "^1.35.2",
     "unzipit": "^1.4.0",
-    "yarn.lock": "^0.0.1-security"
+    "yarn.lock": "^0.0.1-security",
+    "zustand": "^4.1.4"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.2",
