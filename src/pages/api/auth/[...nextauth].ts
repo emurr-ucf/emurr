@@ -66,10 +66,7 @@ export default NextAuth({
   },
   callbacks: {
     redirect: async ({ url, baseUrl }) => {
-      if (process.env.NODE_ENV !== "production") return url;
-
-      const path = url.split(baseUrl)[1];
-      return `${baseUrl}${path}`;
+      return url;
     },
     jwt: async ({ token, user }) => {
       if (user) {

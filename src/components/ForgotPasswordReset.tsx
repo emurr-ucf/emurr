@@ -61,7 +61,7 @@ export const ForgotPasswordReset = () => {
         </div>
         <div className="flex justify-center">
           <Link
-            href={`${urlLocalPath}/login`}
+            href="/login"
             className="cursor-pointer select-none text-brown hover:text-background-900"
           >
             Back to login

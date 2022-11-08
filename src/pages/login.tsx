@@ -9,6 +9,7 @@ import { Register } from "../components/Register";
 import { ForgotPassword } from "../components/ForgotPassword";
 import { Loading } from "../components/Loading";
 import { useUserStore } from "../lib/store/user";
+import { urlLocalPath } from "../lib/urlPath";
 
 export enum FormType {
   LOGIN = 1,
@@ -23,7 +24,7 @@ const LoginPage: NextPage = () => {
 
   const loggedIn = async () => {
     await userUpdate();
-    Router.push("/tours");
+    Router.push(`${urlLocalPath}/tours`);
   };
 
   if (status === "loading") {

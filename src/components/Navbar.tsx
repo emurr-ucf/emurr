@@ -57,7 +57,7 @@ export const Navbar = (props: NavbarProps) => {
                 props.page === "home" ? "font-semibold hover:font-semibold" : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
-              <Link href={`${urlLocalPath}/`}>home</Link>
+              <Link href="/">home</Link>
             </div>
             <div
               className={`py-1 px-2 rounded-md ${
@@ -66,7 +66,7 @@ export const Navbar = (props: NavbarProps) => {
                   : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
-              <Link href={`${urlLocalPath}/about`} className="m-5">
+              <Link href="/about" className="m-5">
                 about
               </Link>
             </div>
@@ -77,7 +77,7 @@ export const Navbar = (props: NavbarProps) => {
                   : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
-              <Link href={`${urlLocalPath}/login`} className="m-5">
+              <Link href="/login" className="m-5">
                 login
               </Link>
             </div>
