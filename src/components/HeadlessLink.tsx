@@ -12,7 +12,7 @@ export const HeadlessLink = forwardRef(
     let { href, as, children, ...rest } = props;
     return (
       <Link href={href} as={as}>
-        <a ref={ref} {...rest}>
+        <a ref={as} {...rest}>
           {children}
         </a>
       </Link>
