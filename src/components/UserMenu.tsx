@@ -6,7 +6,6 @@ import { Fragment } from "react";
 import { useUserStore } from "../lib/store/user";
 
 export const UserMenu = () => {
-  const { data: session, status } = useSession();
   const userImage = useUserStore((state) => state.image);
   const userRemove = useUserStore((state) => state.remove);
 
@@ -18,7 +17,9 @@ export const UserMenu = () => {
             <img
               src={
                 process.env.NODE_ENV === "production"
-                  ? userImage || `${urlLocalPath}/images/google.png`
+                  ? userImage === ""
+                    ? `${urlLocalPath}/images/google.png`
+                    : userImage
                   : `${urlLocalPath}/images/google.png`
               }
               alt="User profile image"

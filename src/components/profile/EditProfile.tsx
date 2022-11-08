@@ -95,7 +95,9 @@ export const EditProfile = () => {
                         <img
                           src={
                             process.env.NODE_ENV === "production"
-                              ? userImage || `${urlLocalPath}/images/google.png`
+                              ? userImage === ""
+                                ? `${urlLocalPath}/images/google.png`
+                                : userImage
                               : `${urlLocalPath}/images/google.png`
                           }
                           alt="User profile image"

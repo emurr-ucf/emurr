@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../lib/prisma";
 import { urlPath } from "../../../lib/urlPath";
+import { redirect } from "next/dist/server/api-utils";
 
 export default NextAuth({
   // Lets our Providers Work with Prisma.
