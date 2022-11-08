@@ -14,7 +14,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       refetchInterval={5 * 60}
     >
       <Head>
-        <title>EMURR | {Component.displayName}</title>
+        <title>
+          EMURR{Component.displayName ? ` | ${Component.displayName}` : ""}
+        </title>
         <link rel="shortcut icon" href={`${urlLocalPath}/favicon.ico`} />
       </Head>
       <div className="w-screen h-screen m-0 p-0 text-green-900 bg-background-400 overflow-auto">

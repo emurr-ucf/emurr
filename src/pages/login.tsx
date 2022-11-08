@@ -24,7 +24,7 @@ const LoginPage: NextPage = () => {
 
   const loggedIn = async () => {
     await userUpdate();
-    Router.push(`${urlLocalPath}/tours`);
+    Router.push("/tours");
   };
 
   if (status === "loading") {
