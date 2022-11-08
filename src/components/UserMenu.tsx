@@ -8,6 +8,7 @@ import { useUserStore } from "../lib/store/user";
 export const UserMenu = () => {
   const { data: session, status } = useSession();
   const userImage = useUserStore((state) => state.image);
+  const userRemove = useUserStore((state) => state.remove);
 
   return (
     <>
@@ -61,7 +62,10 @@ export const UserMenu = () => {
             <Menu.Item>
               {({ active }) => (
                 <div
-                  onClick={() => signOut()}
+                  onClick={() => {
+                    signOut();
+                    userRemove();
+                  }}
                   className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500 cursor-pointer`}
                 >
                   Sign out

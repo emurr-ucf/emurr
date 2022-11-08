@@ -8,6 +8,7 @@ export interface UserStoreType {
   email: string;
   image: string;
   update: () => Promise<void>;
+  remove: () => void;
 }
 
 export const useUserStore = create(

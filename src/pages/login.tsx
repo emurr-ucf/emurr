@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Register } from "../components/Register";
 import { ForgotPassword } from "../components/ForgotPassword";
 import { Loading } from "../components/Loading";
+import { useUserStore } from "../lib/store/user";
 
 export enum FormType {
   LOGIN = 1,
@@ -18,6 +19,7 @@ export enum FormType {
 const LoginPage: NextPage = () => {
   const [formType, setFormType] = useState(FormType.LOGIN);
   const { data: session, status } = useSession();
+  const userUpdate = useUserStore((state) => state.update);
 
   if (status === "loading") {
     return (
@@ -30,6 +32,7 @@ const LoginPage: NextPage = () => {
   }
 
   if (session) {
+    userUpdate();
     Router.push("/tours");
     return (
       <Loading>
