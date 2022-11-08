@@ -156,7 +156,6 @@ export default async function handler(
       'attachement; filename="' + pageId + '.html"'
     );
     file.on("error", (err) => {
-      console.log(err);
       return res.status(400).json({ error: "Page does not exist." });
     });
     file.pipe(res);

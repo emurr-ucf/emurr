@@ -53,58 +53,31 @@ import download from "downloadjs";
 import { Loading } from "../../components/Loading";
 import { toast } from "react-toastify";
 
-class ContentManager {
-  static currentPageId: string;
-  static unsavedPages: any = {};
-  static editedContent: any = {};
-  static savedContent: any = {};
-
-  static write = (id: string, content: string) => {
-    this.editedContent[id] = content;
-    this.unsavedPages[id] = !this.isSaved(id);
-  };
-
-  static read = (id: string) => {
-    return this.editedContent[id];
-  };
-
-  static save = (id: string, content: string) => {
-    this.savedContent[id] = this.editedContent[id] = content;
-    this.unsavedPages[id] = false;
-  };
-
-  static isSaved = (id: string) => {
-    return this.savedContent[id] === this.editedContent[id];
-  };
+enum STATUS {
+  DONE = 0,
+  SAVING,
+  SETTING,
 }
 
 const TiptapPage: NextPage = ({
   propTour,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
-  const [currentPageId, setCurrentPageId] = useState("");
+  const pageId = useRef("");
 
-  const [unsavedPages, setUnsavedPages] = useState<any>({});
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const unsavedPages = useRef<Map<string, string>>(new Map<string, string>());
   const [tour, setTour] = useState(propTour);
-  const [updatedTourTitle, setUpdatedTourTitle] = useState(false);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
-  //! This will change
-  const isSavingTour = useRef(false);
+  const savingTour = useRef<STATUS>(STATUS.DONE);
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
   const tourImages = useRef<TourSiteImageType[]>([]);
   const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
-  const [page, setPage] = useState("");
 
   // Selection
   const [heading, setHeading] = useState("Heading 1");
   const [fontFamily, setFontFamily] = useState("Arial");
-
-  const anyUnsavedPages = () => {
-    return Object.values(ContentManager.unsavedPages).includes(true);
-  };
 
   const editor = useEditor({
     extensions: [
@@ -181,7 +154,7 @@ const TiptapPage: NextPage = ({
       }),
       Image.extend({
         renderHTML({ HTMLAttributes }) {
-          if (isSavingTour.current) {
+          if (savingTour.current === STATUS.SAVING) {
             HTMLAttributes.src = HTMLAttributes.alt;
             return ["img", HTMLAttributes];
           } else {
@@ -216,7 +189,7 @@ const TiptapPage: NextPage = ({
       }),
       Video.extend({
         renderHTML({ HTMLAttributes }) {
-          if (isSavingTour.current) {
+          if (savingTour.current === STATUS.SAVING) {
             HTMLAttributes.src = HTMLAttributes.alt;
             return ["video", HTMLAttributes];
           } else {
@@ -259,12 +232,12 @@ const TiptapPage: NextPage = ({
     autofocus: "start",
     onUpdate: () => {
       // mark page as unsaved
-      const pageId = ContentManager.currentPageId;
-      ContentManager.unsavedPages[pageId] = true;
-      setUnsavedPages(ContentManager.unsavedPages);
-
-      // update global unsaved flag
-      setUnsavedChanges(true);
+      if (
+        !unsavedPages.current.has(pageId.current) &&
+        pageId.current !== "" &&
+        savingTour.current === STATUS.DONE
+      )
+        unsavedPages.current.set(pageId.current, "");
     },
     onSelectionUpdate: ({ editor }) => {
       if (editor.isActive("paragraph")) setHeading("Paragraph");
@@ -329,12 +302,12 @@ const TiptapPage: NextPage = ({
     const warningText =
       "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = (e: BeforeUnloadEvent) => {
-      if (!unsavedChanges) return;
+      if (unsavedPages.current.size === 0) return;
       e.preventDefault();
       return (e.returnValue = warningText);
     };
     const handleBrowseAway = () => {
-      if (!unsavedChanges) return;
+      if (unsavedPages.current.size === 0) return;
       if (window.confirm(warningText)) return;
       Router.events.emit("routeChangeError");
       throw "routeChange aborted.";
@@ -348,7 +321,7 @@ const TiptapPage: NextPage = ({
       window.removeEventListener("beforeunload", handleWindowClose);
       Router.events.off("routeChangeStart", handleBrowseAway);
     };
-  }, [unsavedChanges, getImages, tour]);
+  }, [unsavedPages, getImages, tour]);
 
   if (status === "loading" || isLoadingStartup) {
     return (
@@ -380,10 +353,7 @@ const TiptapPage: NextPage = ({
             <input
               type="text"
               defaultValue={tour.tourTitle}
-              onChange={(event) => {
-                setTourTitle(event.target.value);
-                setUpdatedTourTitle(true);
-              }}
+              onChange={(event) => setTourTitle(event.target.value)}
               className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
             />
 
@@ -393,27 +363,26 @@ const TiptapPage: NextPage = ({
                 const errors = [];
                 const alert = toast.loading("Saving...");
 
-                if (updatedTourTitle) {
+                if (tour.tourTitle !== tourTitle) {
                   const res = await fetch(`${urlPath}/api/tour`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       tourId: tour.id,
-                      tourTitle: tourTitle,
+                      tourTitle,
                     }),
                   });
 
                   const json = await res.json();
 
                   if (res.status !== 200) errors.push(json.error);
-                  else setUpdatedTourTitle(false);
                 }
 
                 editor?.setEditable(false);
-                isSavingTour.current = true;
+                savingTour.current = STATUS.SAVING;
                 const data = editor?.getHTML();
 
-                if (data && currentPageId) {
+                if (data && pageId.current) {
                   const file = new File([data], "blank.html");
 
                   const formData = new FormData();
@@ -421,7 +390,7 @@ const TiptapPage: NextPage = ({
                   formData.append("file", file);
 
                   const res = await fetch(
-                    `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${currentPageId}`,
+                    `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId.current}`,
                     {
                       method: "PUT",
                       body: formData,
@@ -430,19 +399,15 @@ const TiptapPage: NextPage = ({
 
                   const json = await res.json();
 
-                  if (res.status === 200) {
-                    // mark current page as saved
-                    ContentManager.save(currentPageId, data);
-                    setUnsavedPages(ContentManager.unsavedPages);
-                    setUnsavedChanges(false);
-                  } else {
-                    errors.push(json.error);
-                  }
+                  if (res.status === 200)
+                    unsavedPages.current.delete(pageId.current);
+                  else errors.push(json.error);
                 }
 
-                isSavingTour.current = false;
+                savingTour.current = STATUS.SETTING;
                 editor?.commands.setContent(data ? data : "");
                 editor?.setEditable(true);
+                savingTour.current = STATUS.DONE;
 
                 if (errors.length === 0)
                   toast.update(alert, {
@@ -457,7 +422,9 @@ const TiptapPage: NextPage = ({
                 for (const error in errors) toast.error(error);
               }}
               className={`py-1 w-24 ${
-                unsavedChanges ? "bg-red-700" : "bg-green-700"
+                unsavedPages.current.size !== 0 || tour.tourTitle !== tourTitle
+                  ? "bg-red-700"
+                  : "bg-green-700"
               } text-background-200 rounded-sm`}
             >
               Save
@@ -547,23 +514,26 @@ const TiptapPage: NextPage = ({
                   {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
-                      setPage(page.id);
-                      // stash changes with content manager
+                      // Stash changes with content manager
                       // Update "unsaved" state for old page
-                      if (editor && currentPageId)
-                        ContentManager.write(currentPageId, editor.getHTML());
-                      setUnsavedPages(ContentManager.unsavedPages);
-                      setUnsavedChanges(anyUnsavedPages());
+                      if (
+                        editor &&
+                        unsavedPages.current.has(pageId.current) &&
+                        pageId.current &&
+                        pageId.current !== ""
+                      )
+                        unsavedPages.current.set(
+                          pageId.current,
+                          editor.getHTML()
+                        );
 
                       // if we're renaming this page, don't switch to it
                       if (pageRename === page.id) return;
 
+                      const contents = unsavedPages.current.get(page.id);
+
                       // restore stashed changes from ContentManager, if possible
-                      if (ContentManager.read(page.id)) {
-                        editor?.commands.setContent(
-                          ContentManager.read(page.id)
-                        );
-                      }
+                      if (contents) editor?.commands.setContent(contents);
                       // otherwise, fetch content from api
                       else {
                         const res = await fetch(
@@ -575,15 +545,13 @@ const TiptapPage: NextPage = ({
 
                         const html = await res.text();
 
-                        if (res.status === 200) {
-                          ContentManager.save(page.id, html);
+                        if (res.status === 200)
                           editor?.commands.setContent(html === "" ? "" : html);
-                        } else return toast.error("Page does not exist.");
+                        else return toast.error("Page does not exist.");
                       }
 
                       // update current page id
-                      setCurrentPageId(page.id);
-                      ContentManager.currentPageId = page.id;
+                      pageId.current = page.id;
                     }}
                     className="w-full text-left"
                   >
@@ -599,16 +567,20 @@ const TiptapPage: NextPage = ({
                         }}
                         className={
                           "w-full" +
-                          (currentPageId === page.id ? " font-bold" : "") +
-                          (unsavedPages[page.id] ? " text-red-800" : "")
+                          (pageId.current === page.id ? " font-bold" : "") +
+                          (unsavedPages.current.has(page.id)
+                            ? " text-red-800"
+                            : "")
                         }
                       />
                     ) : (
                       <span
                         className={
                           "w-full" +
-                          (currentPageId === page.id ? " font-bold" : "") +
-                          (unsavedPages[page.id] ? " text-red-800" : "")
+                          (pageId.current === page.id ? " font-bold" : "") +
+                          (unsavedPages.current.has(page.id)
+                            ? " text-red-800"
+                            : "")
                         }
                       >
                         {page.title === "" ? "Untitled" : page.title}
@@ -660,7 +632,7 @@ const TiptapPage: NextPage = ({
             })}
           </div>
           <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
-            {currentPageId === "" ? (
+            {pageId.current === "" ? (
               <div className="flex justify-center p-20 h-screen">
                 Please select or create a page to load editor.
               </div>
@@ -674,7 +646,7 @@ const TiptapPage: NextPage = ({
                 </div>
                 <EditorMenu
                   tourId={tour.id}
-                  pageId={page}
+                  pageId={pageId.current}
                   editor={editor}
                   images={tourImages.current}
                   getImages={getImages}

@@ -32,7 +32,7 @@ export const Login = (props: LoginProps) => {
 
   return (
     <>
-      <div className="flex flex-col w-64 gap-6">
+      <form className="flex flex-col w-64 gap-6">
         <div className="text-2xl">Login</div>
         {providers?.credentials && (
           <>
@@ -88,7 +88,7 @@ export const Login = (props: LoginProps) => {
             Register
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 };
