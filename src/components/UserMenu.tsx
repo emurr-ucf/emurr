@@ -13,7 +13,7 @@ export const UserMenu = () => {
     <>
       <Menu as="div" className="relative w- inline-block text-left">
         <div>
-          <Menu.Button className="flex items-center justify-center rounded-full border border-gray-300 text-sm font-medium text-gray-700 shadow-sm hover:outline-none hover:ring-2 hover:ring-indigo-500 hover:ring-offset-2 hover:ring-offset-gray-100">
+          <Menu.Button className="flex items-center justify-center rounded-full border border-gray-300 text-sm font-medium text-gray-700 shadow-sm hover:outline-none hover:ring-2 hover:ring-green-400 hover:ring-offset-2 hover:ring-offset-gray-100">
             <img
               src={
                 process.env.NODE_ENV === "production"
