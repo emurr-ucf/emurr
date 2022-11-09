@@ -47,6 +47,6 @@ const VerifyEmailPage: NextPage = () => {
   );
 };
 
-VerifyEmailPage.displayName = "VERIFICATION";
+VerifyEmailPage.displayName = "Verification";
 
 export default VerifyEmailPage;

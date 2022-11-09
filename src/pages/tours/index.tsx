@@ -270,6 +270,6 @@ const DashboardPage: NextPage = () => {
   );
 };
 
-DashboardPage.displayName = "DASHBOARD";
+DashboardPage.displayName = "Dashboard";
 
 export default DashboardPage;

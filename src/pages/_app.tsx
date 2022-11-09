@@ -14,8 +14,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       refetchInterval={5 * 60}
     >
       <Head>
-        <title>{`EMURR${
-          Component.displayName ? " | " + Component.displayName : "EMURR"
+        <title>{`${
+          Component.displayName ? Component.displayName : "Emurr"
         }`}</title>
         <link rel="shortcut icon" href={`${urlLocalPath}/favicon.ico`} />
       </Head>

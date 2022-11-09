@@ -116,6 +116,6 @@ const HomePage: NextPage = () => {
   );
 };
 
-HomePage.displayName = "HOME";
+HomePage.displayName = "Home";
 
 export default HomePage;

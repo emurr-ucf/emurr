@@ -157,6 +157,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-ViewOtherPage.displayName = "PROFILE";
+ViewOtherPage.displayName = "Profile";
 
 export default ViewOtherPage;

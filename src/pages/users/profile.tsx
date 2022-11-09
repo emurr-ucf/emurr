@@ -45,6 +45,6 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-ProfilePage.displayName = "PROFILE";
+ProfilePage.displayName = "Profile";
 
 export default ProfilePage;
