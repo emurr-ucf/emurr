@@ -28,85 +28,120 @@ const HomePage: NextPage = () => {
             <div className="text-2xl text-center font-light">
               Royal Court of House CHDR
             </div>
-            <div className="flex justify-center my-10 gap-10">
-              <div className="gap-10">
+            <div className="flex justify-center my-10 gap-2 w-full">
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/amy.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">Dr. Amy Giroux</div>
+                <div className="text-center font-light text-gray-800">
+                  Lead Sponsor. UCF CHDR Associate Director.
+                </div>
               </div>
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/evan.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">Evan Wallace</div>
+                <div className="text-center font-light text-gray-800">
+                  Ph.D student under Dr. Giroux of house CHDR. 3D Printing & CAD
+                  Wizard.
+                </div>
               </div>
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/connie.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">Connie Harper</div>
+                <div className="text-center font-light text-gray-800">
+                  Software developing extraordinaire. Defender of the UCF CHDR
+                  Server.
+                </div>
               </div>
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/brook.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">Brook Miller</div>
+                <div className="text-center font-light text-gray-800">
+                  Applications Programmer. Sponsor Inception.
+                </div>
               </div>
             </div>
             <div className="text-2xl text-center font-light">
               Knights of House CHDR
             </div>
             <div className="flex justify-center my-10 gap-10">
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/braedon.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">Braedon Watkins</div>
+                <div className="text-center font-light text-gray-800">
+                  Project Manager
+                </div>
               </div>
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/edelis.jpg`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black object-cover"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">
+                  Edelis Molina Rios
+                </div>
+                <div className="text-center font-light text-gray-800">
+                  Database | Server Admin
+                </div>
               </div>
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
                   src={`${urlLocalPath}/images/logo_vert_5.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">Omar Mosa</div>
+                <div className="text-center font-light text-gray-800">
+                  Frontend Developer
+                </div>
               </div>
             </div>
             <div className="flex justify-center my-10 gap-10">
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
-                  src={`${urlLocalPath}/images/logo_vert_5.png`}
+                  src={`${urlLocalPath}/images/team/tye.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">
+                  Robert “Tye” Riley
+                </div>
+                <div className="text-center font-light text-gray-800">
+                  Full Stack Developer
+                </div>
               </div>
-              <div>
+              <div className="flex flex-col items-center w-52">
                 <img
                   src={`${urlLocalPath}/images/logo_vert_5.png`}
                   alt="EMURR-Logo"
-                  className="w-40 h-40"
+                  className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
                 />
-                <div className="text-center font-semibold">EMURR EMURR</div>
+                <div className="text-center font-semibold">
+                  Gian Alvarez Rujel
+                </div>
+                <div className="text-center font-light text-gray-800">
+                  Backend Developer
+                </div>
               </div>
             </div>
           </div>
