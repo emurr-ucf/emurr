@@ -1,3 +1,5 @@
+import { Tour } from "@prisma/client";
+import { formatCreatedAt, formatUpdatedAt } from "./formatDate";
 import { prisma } from "./prisma";
 
 /**
@@ -5,22 +7,18 @@ import { prisma } from "./prisma";
  * @param {string} tourAuthorId - user id
  */
 export const returnTour = async (id: string, tourAuthorId: string) => {
-  return await prisma.tour.findFirst({
+  const tour: any = await prisma.tour.findFirst({
     where: {
       id,
       tourAuthorId,
     },
-    select: {
-      id: true,
-      tourTitle: true,
-      tourDescription: true,
-      tourPages: {
-        select: {
-          id: true,
-          title: true,
-          published: true,
-        },
-      },
+    include: {
+      tourPages: true,
     },
   });
+
+  tour.tourCreatedAt = formatCreatedAt((tour as Tour).tourCreatedAt);
+  tour.tourUpdatedAt = formatUpdatedAt((tour as Tour).tourUpdatedAt);
+
+  return tour;
 };

@@ -1,3 +1,4 @@
+import { Tour } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "../../../lib/prisma";
@@ -11,16 +12,7 @@ export interface UpdatePageRequestType {
 
 export interface UpdatePageResponseType {
   error?: string;
-  tour?: {
-    tourPages: {
-      id: string;
-      title: string;
-      published: boolean;
-    }[];
-    id: string;
-    tourTitle: string;
-    tourDescription: string | null;
-  } | null;
+  tour?: Tour;
 }
 
 export default async function handler(

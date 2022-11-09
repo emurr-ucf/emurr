@@ -6,7 +6,7 @@ import { unzip } from "unzipit";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { urlLocalPath } from "../lib/urlPath";
 import { CustomUrlModal } from "./CustomUrlModal";
-import { toast } from "react-toastify";
+import { Id, toast } from "react-toastify";
 import { Loading } from "./Loading";
 
 export interface TourSiteImageType {
@@ -17,9 +17,11 @@ export interface TourSiteImageType {
 interface EditorMenuProps {
   tourId: string;
   pageId: string;
+  setTour: Dispatch<SetStateAction<any>>;
+  mediaSize: number;
   editor: Editor | null;
   images: TourSiteImageType[];
-  getImages: () => {};
+  getImages: (alert?: Id) => {};
   isUploadingFile: boolean;
   setIsUploadingFile: Dispatch<SetStateAction<boolean>>;
   heading: string;
@@ -31,6 +33,8 @@ interface EditorMenuProps {
 export const EditorMenu = ({
   tourId,
   pageId,
+  setTour,
+  mediaSize,
   editor,
   images,
   getImages,
@@ -42,15 +46,16 @@ export const EditorMenu = ({
   setFontFamily,
 }: EditorMenuProps) => {
   const imageLoad = () => {
-    if (isUploadingFile) {
-      return (
-        <Loading>
-          <div className="flex flex-col justify-center items-center mt-2">
-            <div>Loading Images...</div>
-          </div>
-        </Loading>
-      );
-    } else if (images.length > 0)
+    // if (isUploadingFile) {
+    //   return (
+    //     <Loading>
+    //       <div className="flex flex-col justify-center items-center mt-2">
+    //         <div>Loading Images...</div>
+    //       </div>
+    //     </Loading>
+    //   );
+    // } else
+    if (images.length > 0)
       return images.map((image: TourSiteImageType) => (
         <div key={image.name}>
           <button
@@ -856,10 +861,25 @@ export const EditorMenu = ({
                         {imageLoad()}
                       </div>
                       <div className="bg-gray-50 p-4">
-                        <label className="rounded-md px-2 py-2 transition duration-150 ease-in-out hover:cursor-pointer hover:bg-background-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                        <div className="text-sm text-gray-500 text-right">
+                          Total: {mediaSize.toFixed(1)} MB
+                        </div>
+                        <label htmlFor="media-file">
+                          <div className="rounded-md px-2 py-2 hover:cursor-pointer hover:bg-background-500 transition duration-150 ease-in-out focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                            <div className="flex items-center">
+                              <div className="text-sm font-medium text-gray-900">
+                                Upload
+                              </div>
+                            </div>
+                            <div className="block text-sm text-gray-500">
+                              Upload an image or video.
+                            </div>
+                          </div>
                           <input
+                            id="media-file"
                             type="file"
                             onChange={async (event) => {
+                              const alert = toast.loading("Uploading...");
                               setIsUploadingFile(true);
                               if (!event.target.files) return;
 
@@ -878,18 +898,16 @@ export const EditorMenu = ({
 
                               if (res.status !== 200) toast.error(json.error);
 
-                              getImages();
+                              setTour(json.tour);
+
+                              toast.update(alert, {
+                                render: "Resyncing...",
+                              });
+
+                              getImages(alert);
                             }}
                             className="hidden"
                           />
-                          <div className="flex items-center">
-                            <div className="text-sm font-medium text-gray-900">
-                              Upload
-                            </div>
-                          </div>
-                          <div className="block text-sm text-gray-500">
-                            Upload an image or video.
-                          </div>
                         </label>
                       </div>
                     </div>

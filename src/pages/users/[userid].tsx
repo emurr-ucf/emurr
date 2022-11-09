@@ -28,6 +28,7 @@ const ViewOtherPage: NextPage = ({
     let timer: NodeJS.Timeout;
 
     const queryTours = () => {
+      if (!session) return clearTimeout(timer);
       clearTimeout(timer);
 
       timer = setTimeout(async () => {
@@ -45,7 +46,7 @@ const ViewOtherPage: NextPage = ({
     };
 
     queryTours();
-  }, [query, userid]);
+  }, [query, userid, session]);
 
   // routing for: status, if changing, and if query (userid) is session id
   if (status === "loading") {
