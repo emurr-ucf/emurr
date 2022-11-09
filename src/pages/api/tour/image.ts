@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import multer from "multer";
 import { Page, Tour } from "@prisma/client";
+import { prisma } from "../../../lib/prisma";
+import { returnTour } from "../../../lib/returnTour";
 const archiver = require("archiver");
 
 // Post API Inputs.
@@ -55,10 +57,30 @@ export default async function handler(
 
     // Creates page.
     /// @ts-ignore-start
-    uploadImage.any()(req, res, () => {});
-    // @ts-ignore-end
+    uploadImage.any()(req, res, async () => {
+      // @ts-ignore-end
+      if (!req.files[0])
+        return res.status(400).json({ error: "Failed to upload image." });
+      // @ts-ignore-end
+      const size = req.files[0].size;
 
-    return res.status(200).json({ error: "" });
+      await prisma.tour.update({
+        where: {
+          id: tourId,
+        },
+        data: {
+          mediaSize: {
+            increment: parseFloat((size / 1000000).toFixed(4)),
+          },
+        },
+      });
+
+      const tour = await returnTour(tourId, token.id);
+
+      console.log(tour);
+
+      return res.status(200).json({ tour });
+    });
   }
 
   // Gets file.

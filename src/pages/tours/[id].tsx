@@ -51,7 +51,8 @@ import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
 import download from "downloadjs";
 import { Loading } from "../../components/Loading";
-import { toast } from "react-toastify";
+import { Id, toast } from "react-toastify";
+import { formatCreatedAt, formatUpdatedAt } from "../../lib/formatDate";
 
 enum STATUS {
   DONE = 0,
@@ -270,33 +271,60 @@ const TiptapPage: NextPage = ({
     },
   });
 
-  const getImages = useCallback(async () => {
-    try {
-      const tours = await fetch(`${urlPath}/api/tour/image?tourId=${tour.id}`, {
-        method: "GET",
-      });
+  const getImages = useCallback(
+    async (alert?: Id) => {
+      try {
+        const tours = await fetch(
+          `${urlPath}/api/tour/image?tourId=${tour.id}`,
+          {
+            method: "GET",
+          }
+        );
 
-      const res = await tours.blob();
-      const { entries } = await unzip(res);
+        const res = await tours.blob();
+        const { entries } = await unzip(res);
 
-      const images: TourSiteImageType[] = [];
-      const objs = Object.entries(entries);
+        const images: TourSiteImageType[] = [];
+        const objs = Object.entries(entries);
 
-      for (const [name, entry] of objs) {
-        const blob = await entry.blob();
-        const bloburl = URL.createObjectURL(blob);
-        images.push({ name, bloburl });
+        for (const [name, entry] of objs) {
+          const blob = await entry.blob();
+          const bloburl = URL.createObjectURL(blob);
+          images.push({ name, bloburl });
+        }
+
+        if (alert) {
+          toast.update(alert, {
+            render: "Media loaded successfully.",
+            type: "success",
+            isLoading: false,
+            closeOnClick: true,
+            closeButton: true,
+            autoClose: 2000,
+          });
+        }
+
+        tourImages.current = images;
+        setIsUploadingFile(false);
+        setIsLoadingStartup(false);
+      } catch (err) {
+        if (!alert)
+          return toast.error(
+            "Failed to download tour media from server. Please try again."
+          );
+
+        toast.update(alert, {
+          render: "Failed to load media.",
+          type: "error",
+          isLoading: false,
+          closeOnClick: true,
+          closeButton: true,
+          autoClose: 2000,
+        });
       }
-
-      tourImages.current = images;
-      setIsUploadingFile(false);
-      setIsLoadingStartup(false);
-    } catch (err) {
-      toast.error(
-        "Failed to download tour media from server. Please try again."
-      );
-    }
-  }, [tour.id]);
+    },
+    [tour.id]
+  );
 
   useEffect(() => {
     const warningText =
@@ -349,129 +377,153 @@ const TiptapPage: NextPage = ({
       <div className="flex flex-col w-full h-screen">
         <Navbar>
           <>
-            {/* Tour title */}
-            <input
-              type="text"
-              defaultValue={tour.tourTitle}
-              onChange={(event) => setTourTitle(event.target.value)}
-              className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
-            />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {/* Tour title */}
+                <input
+                  type="text"
+                  defaultValue={tour.tourTitle}
+                  onChange={(event) => setTourTitle(event.target.value)}
+                  className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
+                />
 
-            {/* Save button */}
-            <button
-              onClick={async () => {
-                const errors = [];
-                const alert = toast.loading("Saving...");
+                {/* Save button */}
+                <button
+                  onClick={async () => {
+                    const errors = [];
+                    const alert = toast.loading("Saving...");
 
-                if (tour.tourTitle !== tourTitle) {
-                  const res = await fetch(`${urlPath}/api/tour`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      tourId: tour.id,
-                      tourTitle,
-                    }),
-                  });
-
-                  const json = await res.json();
-
-                  if (res.status !== 200) errors.push(json.error);
-                }
-
-                editor?.setEditable(false);
-                savingTour.current = STATUS.SAVING;
-                const data = editor?.getHTML();
-
-                if (data && pageId.current) {
-                  const file = new File([data], "blank.html");
-
-                  const formData = new FormData();
-
-                  formData.append("file", file);
-
-                  const res = await fetch(
-                    `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId.current}`,
-                    {
+                    const res = await fetch(`${urlPath}/api/tour`, {
                       method: "PUT",
-                      body: formData,
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        tourId: tour.id,
+                        tourTitle:
+                          tour.tourTitle !== tourTitle ? tourTitle : undefined,
+                      }),
+                    });
+
+                    const json = await res.json();
+
+                    if (res.status !== 200) errors.push(json.error);
+                    else setTour(json.tour);
+
+                    editor?.setEditable(false);
+                    savingTour.current = STATUS.SAVING;
+                    const data = editor?.getHTML();
+
+                    if (data && pageId.current) {
+                      const file = new File([data], "blank.html");
+
+                      const formData = new FormData();
+
+                      formData.append("file", file);
+
+                      const res = await fetch(
+                        `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId.current}`,
+                        {
+                          method: "PUT",
+                          body: formData,
+                        }
+                      );
+
+                      const json = await res.json();
+
+                      if (res.status === 200)
+                        unsavedPages.current.delete(pageId.current);
+                      else errors.push(json.error);
                     }
-                  );
 
-                  const json = await res.json();
+                    savingTour.current = STATUS.SETTING;
+                    editor?.commands.setContent(data ? data : "");
+                    editor?.setEditable(true);
+                    savingTour.current = STATUS.DONE;
 
-                  if (res.status === 200)
-                    unsavedPages.current.delete(pageId.current);
-                  else errors.push(json.error);
-                }
+                    if (errors.length === 0)
+                      toast.update(alert, {
+                        render: "Tour successfully saved.",
+                        type: "success",
+                        isLoading: false,
+                        closeOnClick: true,
+                        closeButton: true,
+                        autoClose: 2000,
+                      });
+                    else toast.dismiss(alert);
+                    for (const error in errors) toast.error(error);
+                  }}
+                  className={`py-1 w-24 ${
+                    unsavedPages.current.size !== 0 ||
+                    tour.tourTitle !== tourTitle
+                      ? "bg-red-700"
+                      : "bg-green-700"
+                  } text-background-200 rounded-sm`}
+                >
+                  Save
+                </button>
 
-                savingTour.current = STATUS.SETTING;
-                editor?.commands.setContent(data ? data : "");
-                editor?.setEditable(true);
-                savingTour.current = STATUS.DONE;
+                {/* Download button */}
+                <button
+                  onClick={async () => {
+                    const alert = toast.loading("Downloading...");
+                    try {
+                      const res = await fetch(`${urlPath}/api/tour/download`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ tourId: tour.id }),
+                      });
 
-                if (errors.length === 0)
-                  toast.update(alert, {
-                    render: "Tour successfully saved.",
-                    type: "success",
-                    isLoading: false,
-                    closeOnClick: true,
-                    closeButton: true,
-                    autoClose: 2000,
-                  });
-                else toast.dismiss(alert);
-                for (const error in errors) toast.error(error);
-              }}
-              className={`py-1 w-24 ${
-                unsavedPages.current.size !== 0 || tour.tourTitle !== tourTitle
-                  ? "bg-red-700"
-                  : "bg-green-700"
-              } text-background-200 rounded-sm`}
-            >
-              Save
-            </button>
+                      const blob = await res.blob();
+                      download(blob, "toursite.zip", "file/zip");
+                      toast.update(alert, {
+                        render: "Download Successful",
+                        type: "success",
+                        isLoading: false,
+                        closeOnClick: true,
+                        closeButton: true,
+                        autoClose: 2000,
+                      });
+                    } catch (err) {
+                      toast.update(alert, {
+                        render:
+                          "Failed to download tour site from server. Please try again.",
+                        type: "error",
+                        isLoading: false,
+                        closeOnClick: true,
+                        closeButton: true,
+                        autoClose: 2000,
+                      });
+                    }
+                  }}
+                  className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
+                >
+                  Download
+                </button>
 
-            {/* Download button */}
-            <button
-              onClick={async () => {
-                const alert = toast.loading("Downloading...");
-                try {
-                  const res = await fetch(`${urlPath}/api/tour/download`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ tourId: tour.id }),
-                  });
+                {/* Publish button */}
+                <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
+                  Publish
+                </button>
 
-                  const blob = await res.blob();
-                  download(blob, "toursite.zip", "file/zip");
-                  toast.update(alert, {
-                    render: "Download Successful",
-                    type: "success",
-                    isLoading: false,
-                    closeOnClick: true,
-                    closeButton: true,
-                    autoClose: 2000,
-                  });
-                } catch (err) {
-                  toast.update(alert, {
-                    render:
-                      "Failed to download tour site from server. Please try again.",
-                    type: "error",
-                    isLoading: false,
-                    closeOnClick: true,
-                    closeButton: true,
-                    autoClose: 2000,
-                  });
-                }
-              }}
-              className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
-            >
-              Download
-            </button>
+                <button
+                  onClick={async () => {
+                    const res = await fetch(`${urlPath}/api/tour`, {
+                      method: "DELETE",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ tourId: tour.id }),
+                    });
 
-            {/* Publish button */}
-            <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
-              Publish
-            </button>
+                    const json = await res.json();
+
+                    if (res.status === 200) Router.push("/tours");
+                    else toast.error(json.error);
+                  }}
+                  className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
+                >
+                  Delete
+                </button>
+              </div>
+              <div className="text-sm text-gray-500">{`Last Saved: ${tour.tourUpdatedAt}`}</div>
+            </div>
           </>
         </Navbar>
         <div className="flex pt-4 px-4 overflow-hidden">
@@ -648,6 +700,8 @@ const TiptapPage: NextPage = ({
                 <EditorMenu
                   tourId={tour.id}
                   pageId={pageId.current}
+                  setTour={setTour}
+                  mediaSize={tour.mediaSize}
                   editor={editor}
                   images={tourImages.current}
                   getImages={getImages}
@@ -675,7 +729,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
 
   if (token && typeof id === "string") {
-    const propTour = await prisma.tour.findFirst({
+    await prisma.tour.updateMany({
+      where: {
+        id,
+        tourAuthorId: token.id,
+      },
+      data: {
+        tourUpdatedAt: new Date(),
+      },
+    });
+
+    const propTour: any = await prisma.tour.findFirst({
       where: {
         id,
         tourAuthorId: token.id,
@@ -691,8 +755,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             published: true,
           },
         },
+        mediaSize: true,
+        tourUpdatedAt: true,
+        tourCreatedAt: true,
       },
     });
+
+    propTour.tourUpdatedAt = formatUpdatedAt(propTour.tourUpdatedAt);
+    propTour.tourCreatedAt = formatCreatedAt(propTour.tourCreatedAt);
 
     return {
       props: { propTour },

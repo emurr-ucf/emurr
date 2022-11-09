@@ -10,60 +10,63 @@ interface TourSiteCardProps {
   isVisitor?: boolean;
   title: string;
   description: string;
+  createdAt: string;
+  updatedAt: string;
+  mediaSize: number;
 }
 
 export const TourSiteCard = (props: TourSiteCardProps) => {
   return (
     <>
-      <div className="flex justify-center h-36 w-11/12 align-middle rounded-lg bg-white shadow-md shadow-slate-400 border-2 border-stone-500 sm:rounded-md">
+      <Link href={`${urlLocalPath}/tours/${props.id}`}>
+        <div className="flex justify-center h-36 w-11/12 align-middle rounded-lg bg-white shadow-md shadow-slate-400 border-2 border-stone-500 sm:rounded-md transition ease-in-out hover:bg-grey hover:cursor-pointer hover:scale-110 hover:animate-pulse select-none">
+          <div className="flex flex-col h-full w-full justify-between p-2">
+            <div className="flex flex-col w-full">
+              <div className="text-2xl">{props.title}</div>
+              <div className="text-sm">{props.description}</div>
+            </div>
+            <div className="flex justify-between items-center w-full text-sm">
+              <div className={`${props.mediaSize >= 5000 ? "text-red" : ""}`}>
+                {props.mediaSize.toFixed(1)} MB
+              </div>
+              <div className="flex flex-col">
+                <div>
+                  {props.updatedAt.includes("PM") ||
+                  props.updatedAt.includes("AM")
+                    ? "Opened " + props.updatedAt
+                    : props.updatedAt}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </>
+  );
+};
+
+export const TourSiteCardTemplate = () => {
+  return (
+    <>
+      <div className="animate-pulse flex justify-center h-36 w-11/12 align-middle rounded-lg bg-white shadow-md shadow-slate-400 border-2 border-stone-500 sm:rounded-md">
         <div className="flex flex-col justify-between w-full">
-          <div className="flex flex-col w-full p-2">
-            <div className="text-2xl">{props.title}</div>
-            <div className="text-sm">{props.description}</div>
-            {/* <div className="text-sm">{props.createdAt.toString()}</div> */}
+          <div className="flex flex-col h-full w-full justify-between p-2">
+            <div className="flex flex-col w-full gap-4">
+              <div className="h-4 w-8 bg-grey rounded"></div>
+              <div className="h-12 bg-grey rounded"></div>
+            </div>
+            <div className="flex justify-between items-center w-full text-sm"></div>
           </div>
           <div>
-            <div className="border-t-2 w- border-stone-400" />
+            <div className="border-t-2 border-stone-400" />
             <div className="flex justify-between h-8 text-base font-bold">
-              {props.isVisitor ? (
-                <>
-                  <button className="flex justify-center items-center w-full hover:bg-slate-100 transition ease-in-out">
-                    VIEW
-                  </button>
-                  <div className="border-l-2 border-stone-400" />
-                  <button className="flex justify-center items-center w-full text-red-500 hover:bg-slate-100 transition ease-in-out">
-                    CLONE
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link href={`${urlLocalPath}/tours/${props.id}`}>
-                    <button className="flex justify-center items-center w-full hover:bg-slate-100 transition ease-in-out">
-                      EDIT
-                    </button>
-                  </Link>
-                  <div className="border-l-2 border-stone-400" />
-                  <button
-                    onClick={async () => {
-                      const bodyData = { tourId: props.id };
-
-                      const res = await fetch(`${urlPath}/api/tour`, {
-                        method: "DELETE",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(bodyData),
-                      });
-
-                      const json = await res.json();
-
-                      if (res.status === 200) Router.reload();
-                      else toast.error(json.error);
-                    }}
-                    className="flex justify-center items-center w-full text-red-500 hover:bg-slate-100 transition ease-in-out"
-                  >
-                    DELETE
-                  </button>
-                </>
-              )}
+              <div className="flex justify-center items-center w-full">
+                <div className="h-4 w-12 bg-grey rounded"></div>
+              </div>
+              <div className="border-l-2 border-stone-400" />
+              <div className="flex justify-center items-center w-full">
+                <div className="h-4 w-12 bg-grey rounded"></div>
+              </div>
             </div>
           </div>
         </div>

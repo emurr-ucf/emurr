@@ -11,19 +11,35 @@ export interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   const { data: session, status } = useSession();
 
+  if (status === "loading") {
+    return (
+      <>
+        <nav className="animate-pulse sticky top-0 z-50 border-b border-brown backdrop-blur-md bg-background-400">
+          <div className="flex justify-between h-auto py-2 px-10">
+            <div className="flex flex-row items-center gap-4 w-full">
+              <div className="rounded w-10 h-10 bg-grey"></div>
+              <div className="rounded w-20 h-10 bg-grey"></div>
+            </div>
+            <div className="rounded w-20 h-10 bg-grey"></div>
+          </div>
+        </nav>
+      </>
+    );
+  }
+
   if (status === "authenticated") {
     return (
       <>
         <nav className="sticky top-0 z-50 border-b border-brown backdrop-blur-md bg-background-400">
           <div className="flex justify-between h-auto py-2 px-10">
-            <div className="flex flex-row justify-center items-center gap-4">
+            <div className="flex flex-row items-center gap-4 w-full">
               <img
                 src={`${urlLocalPath}/images/logo_vert_5.png`}
                 alt="An SVG of the Emurr Logo"
                 className="w-10 h-10"
               />
               {props.children ? (
-                props.children
+                <div className="w-full pr-4">{props.children}</div>
               ) : (
                 <>
                   <div className="text-2xl font-semibold">EMURR</div>

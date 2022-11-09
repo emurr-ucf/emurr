@@ -5,7 +5,10 @@ import type {
 } from "next";
 import { Navbar } from "../../components/Navbar";
 import { useSession } from "next-auth/react";
-import { TourSiteCard } from "../../components/TourSiteCard";
+import {
+  TourSiteCard,
+  TourSiteCardTemplate,
+} from "../../components/TourSiteCard";
 import Router from "next/router";
 import { Tour } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
@@ -19,29 +22,32 @@ import { urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/Loading";
 import { toast } from "react-toastify";
 import { useUserStore } from "../../lib/store/user";
+import { TourExtend } from "../../lib/types/tour-extend";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const DashboardPage: NextPage = ({
-  propTours,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const DashboardPage: NextPage = () => {
   const { data: session, status } = useSession();
-  const [tours, setTours] = useState(propTours);
+  const [tours, setTours] = useState<TourExtend[] | undefined>(undefined);
   const [query, setQuery] = useState("");
-  const [sortQuery, setSortQuery] = useState("");
+  const [sortQuery, setSortQuery] = useState({
+    type: "Date Updated",
+    asc: "desc",
+  });
   const userName = useUserStore((state) => state.name);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     const queryTours = () => {
+      if (!session) return clearTimeout(timer);
       clearTimeout(timer);
 
       timer = setTimeout(async () => {
         const res = await fetch(
-          `${urlPath}/api/tour?sortQuery=${sortQuery}&query=${query}`,
+          `${urlPath}/api/tour?sortQuery=${sortQuery.type}&query=${query}&asc=${sortQuery.asc}`,
           {
             method: "GET",
           }
@@ -52,7 +58,7 @@ const DashboardPage: NextPage = ({
       }, 500);
     };
     queryTours();
-  }, [query, sortQuery]);
+  }, [query, sortQuery, session]);
 
   if (status === "loading") {
     return (
@@ -121,7 +127,10 @@ const DashboardPage: NextPage = ({
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-                    <div className="font-bold">Sort By: {sortQuery} ▾</div>
+                    <div className="font-bold">
+                      Sort By: {sortQuery.type}
+                      {sortQuery.asc === "asc" ? " ▲" : " ▼"}
+                    </div>
                   </Menu.Button>
                 </div>
                 <Transition
@@ -135,24 +144,19 @@ const DashboardPage: NextPage = ({
                 >
                   <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                      <form onClick={(event) => setSortQuery(" ")}>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active
-                                  ? "bg-gray-100 text-gray-900"
-                                  : "text-gray-700",
-                                "block px-4 py-2 text-sm"
-                              )}
-                            >
-                              None
-                            </a>
-                          )}
-                        </Menu.Item>
-                      </form>
-                      <form onClick={(event) => setSortQuery("Title")}>
+                      <form
+                        onClick={(event) =>
+                          setSortQuery({
+                            type: "Title",
+                            asc:
+                              sortQuery.type !== "Title"
+                                ? "asc"
+                                : sortQuery.asc === "asc"
+                                ? "desc"
+                                : "asc",
+                          })
+                        }
+                      >
                         <Menu.Item>
                           {({ active }) => (
                             <a
@@ -169,7 +173,19 @@ const DashboardPage: NextPage = ({
                           )}
                         </Menu.Item>
                       </form>
-                      <form onClick={(event) => setSortQuery("Date")}>
+                      <form
+                        onClick={(event) =>
+                          setSortQuery({
+                            type: "Date Created",
+                            asc:
+                              sortQuery.type !== "Date Created"
+                                ? "desc"
+                                : sortQuery.asc === "asc"
+                                ? "desc"
+                                : "asc",
+                          })
+                        }
+                      >
                         <Menu.Item>
                           {({ active }) => (
                             <a
@@ -186,57 +202,72 @@ const DashboardPage: NextPage = ({
                           )}
                         </Menu.Item>
                       </form>
+                      <form
+                        onClick={(event) =>
+                          setSortQuery({
+                            type: "Date Updated",
+                            asc:
+                              sortQuery.type !== "Date Updated"
+                                ? "desc"
+                                : sortQuery.asc === "asc"
+                                ? "desc"
+                                : "asc",
+                          })
+                        }
+                      >
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-gray-700",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Date Updated
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </form>
                     </div>
                   </Menu.Items>
                 </Transition>
               </Menu>
             </div>
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
-              {tours.map((tour: Tour) => {
-                return (
-                  <TourSiteCard
-                    id={tour.id}
-                    key={tour.id}
-                    title={tour.tourTitle}
-                    description={
-                      tour.tourDescription
-                        ? tour.tourDescription
-                        : "No description..."
-                    }
-                  />
-                );
-              })}
+              {tours ? (
+                tours.map((tour: TourExtend) => {
+                  return (
+                    <TourSiteCard
+                      id={tour.id}
+                      key={tour.id}
+                      title={tour.tourTitle}
+                      description={
+                        tour.tourDescription
+                          ? tour.tourDescription
+                          : "No description..."
+                      }
+                      mediaSize={tour.mediaSize}
+                      createdAt={tour.tourCreatedAt}
+                      updatedAt={tour.tourUpdatedAt}
+                    />
+                  );
+                })
+              ) : (
+                <>
+                  <TourSiteCardTemplate />
+                  <TourSiteCardTemplate />
+                  <TourSiteCardTemplate />
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const token = await getToken(context);
-
-  if (token) {
-    const propTours = await prisma.tour.findMany({
-      where: {
-        tourAuthorId: token.id,
-      },
-      select: {
-        id: true,
-        tourTitle: true,
-        tourDescription: true,
-      },
-    });
-
-    return {
-      props: { propTours },
-    };
-  }
-
-  return {
-    props: { propTours: [] },
-  };
 };
 
 DashboardPage.displayName = "DASHBOARD";
