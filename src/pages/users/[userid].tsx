@@ -5,7 +5,10 @@ import type {
 } from "next";
 import { Navbar } from "../../components/Navbar";
 import { useSession } from "next-auth/react";
-import { TourSiteCard } from "../../components/TourSiteCard";
+import {
+  TourSiteCard,
+  TourSiteCardTemplate,
+} from "../../components/TourSiteCard";
 import Router, { useRouter } from "next/router";
 import { Tour } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
@@ -14,13 +17,13 @@ import { useEffect, useState } from "react";
 import Error from "next/error";
 import { urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/Loading";
+import { TourExtend } from "../../lib/types/tour-extend";
 
 const ViewOtherPage: NextPage = ({
-  propTours,
   userid,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
-  const [tours, setTours] = useState(propTours);
+  const [tours, setTours] = useState<TourExtend[] | undefined>([]);
   const [query, setQuery] = useState("");
   const [changing, setChanging] = useState(false);
 
@@ -113,21 +116,32 @@ const ViewOtherPage: NextPage = ({
               </button>
             </div>
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
-              {tours.map((tour: Tour) => {
-                return (
-                  <TourSiteCard
-                    id={tour.id}
-                    isVisitor={session?.user.id != userid}
-                    key={tour.id}
-                    title={tour.tourTitle}
-                    description={
-                      tour.tourDescription
-                        ? tour.tourDescription
-                        : "No description..."
-                    }
-                  />
-                );
-              })}
+              {tours !== undefined ? (
+                tours.map((tour: TourExtend) => {
+                  return (
+                    <TourSiteCard
+                      id={tour.id}
+                      isVisitor={session?.user.id != userid}
+                      key={tour.id}
+                      title={tour.tourTitle}
+                      description={
+                        tour.tourDescription
+                          ? tour.tourDescription
+                          : "No description..."
+                      }
+                      createdAt={tour.tourCreatedAt}
+                      updatedAt={tour.tourUpdatedAt}
+                      mediaSize={tour.mediaSize}
+                    />
+                  );
+                })
+              ) : (
+                <>
+                  <TourSiteCardTemplate />
+                  <TourSiteCardTemplate />
+                  <TourSiteCardTemplate />
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -137,40 +151,9 @@ const ViewOtherPage: NextPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const token = await getToken(context);
   const { userid } = context.query;
-
-  // if valid token and userid query find user to display
-  if (token && typeof userid === "string") {
-    const user = await prisma.user.findFirst({
-      where: {
-        id: userid,
-      },
-    });
-
-    // if no user then 404 their ass
-    if (!user) return { props: { propTours: [], userid: null } };
-
-    // if user then grab all their tours and return
-    const propTours = await prisma.tour.findMany({
-      where: {
-        tourAuthorId: userid,
-      },
-      select: {
-        id: true,
-        tourTitle: true,
-        tourDescription: true,
-      },
-    });
-
-    return {
-      props: { propTours, userid },
-    };
-  }
-
-  // fallback case so next isn't angry
   return {
-    props: { propTours: [], userid: null },
+    props: { userid },
   };
 };
 
