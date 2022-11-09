@@ -36,7 +36,6 @@ const ProfilePage: NextPage = () => {
       <div className="w-full h-full">
         <Navbar page="profile" />
         <div className="flex flex-wrap px-28 mt-10 text-green-700 justify-center w-4/5 m-auto">
-          <EditLogin />
           <EditPassword />
           <EditProfile />
           <ManageAccount />
