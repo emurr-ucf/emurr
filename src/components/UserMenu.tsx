@@ -73,6 +73,29 @@ export const UserMenu = () => {
                 </div>
               )}
             </Menu.Item>
+            <div className="rounded border border-b-1 bg-grey my-1 mx-2"></div>
+            <Menu.Item>
+              {({ active }) => (
+                <HeadlessLink href={`${urlLocalPath}/`}>
+                  <div
+                    className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500`}
+                  >
+                    Home
+                  </div>
+                </HeadlessLink>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <HeadlessLink href={`${urlLocalPath}/about`}>
+                  <div
+                    className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500`}
+                  >
+                    About
+                  </div>
+                </HeadlessLink>
+              )}
+            </Menu.Item>
           </Menu.Items>
         </Transition>
       </Menu>

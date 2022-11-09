@@ -49,25 +49,14 @@ export const TourSiteCardTemplate = () => {
   return (
     <>
       <div className="animate-pulse flex justify-center h-36 w-11/12 align-middle rounded-lg bg-white shadow-md shadow-slate-400 border-2 border-stone-500 sm:rounded-md">
-        <div className="flex flex-col justify-between w-full">
-          <div className="flex flex-col h-full w-full justify-between p-2">
-            <div className="flex flex-col w-full gap-4">
-              <div className="h-4 w-8 bg-grey rounded"></div>
-              <div className="h-12 bg-grey rounded"></div>
-            </div>
-            <div className="flex justify-between items-center w-full text-sm"></div>
+        <div className="flex flex-col h-full w-full justify-between p-2">
+          <div className="flex flex-col w-full gap-2">
+            <div className="h-8 w-24 bg-grey rounded"></div>
+            <div className="h-12 w-full bg-grey rounded"></div>
           </div>
-          <div>
-            <div className="border-t-2 border-stone-400" />
-            <div className="flex justify-between h-8 text-base font-bold">
-              <div className="flex justify-center items-center w-full">
-                <div className="h-4 w-12 bg-grey rounded"></div>
-              </div>
-              <div className="border-l-2 border-stone-400" />
-              <div className="flex justify-center items-center w-full">
-                <div className="h-4 w-12 bg-grey rounded"></div>
-              </div>
-            </div>
+          <div className="flex justify-between items-center w-full text-sm">
+            <div className="h-4 w-8 bg-grey rounded"></div>
+            <div className="h-4 w-8 bg-grey rounded"></div>
           </div>
         </div>
       </div>
