@@ -4,10 +4,6 @@
 
 echo "Updating repository at `date`"
 
-# Trigger installation of all modules listed as dependencies in the package.json
-echo "Updating modules"
-npm install
-
 if [ -d ".git" ]
   then
     echo "Status"
@@ -20,6 +16,24 @@ if [ -d ".git" ]
     echo "Skipping because it doesn't look like it has a .git folder."
   fi
 
+git log -1 HEAD > diff2.txt
+
+# compare the last commit to the previous comit
+if cmp -s "./resources/diff.txt" "diff2.txt"
+then
+    echo "Files are the same"
+    rm diff2.txt
+    exit 1
+else
+    echo "Files are different"
+    rm ./resources/diff.txt
+    mv diff2.txt ./resources/diff.txt
+fi
+
+# Trigger installation of all modules listed as dependencies in the package.json
+echo "Updating modules"
+npm install
+
 echo "Build Command"
 npm run build
 if [ $? -eq 0 ]
@@ -27,6 +41,7 @@ if [ $? -eq 0 ]
     echo "SUCCESS"
   else
     echo "FAIL"
+    exit 1
 fi
 
 # restart application in the background
