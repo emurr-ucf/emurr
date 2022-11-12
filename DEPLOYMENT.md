@@ -28,10 +28,18 @@
   },
   ```
   
- 8. The server is ran using pm2, a process manager for production Node.js applications.
+ 8. The server is ran using pm2, a daemon process manager to keep the application online.
  
  9. Check the status by running `pm2 status` anywhere in the CHDR Server or run `pm2 -h` for a list of available commands
  
  10. Currently, there is a process running called `emurr` which should be restarted after each build `pm2 restart <id|name>`. Since the process name is emurr, then run `pm2 restart emurr`.
  
  11. If there isn't any process running, create a new one by running `pm2 start npm --name "app name" -- start`
+
+ ## Note
+ 
+ 1. Running the script `deployment.sh` will automate the above process.
+
+ 2. We can run cron job with pm2 and run the script every certain time. For example, the script `deployment.sh` will run every minute with the command below.
+
+ `pm2 start deployment.sh --cron-restart="* * * * *"`
