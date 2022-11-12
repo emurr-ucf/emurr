@@ -351,6 +351,7 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                   type="text"
                   defaultValue={tour.tourDescription ? tourDescription : "Tour description..."}
                   onChange={(event) => setTourDescription(event.target.value)}
+                  maxLength={150}
                   className="w-80 h-10 bg-inherit border-2 p-1 text-xs text-green-900 border-brown focus:outline-brown transition ease-in-out"
                 />
                 {/* Save button */}
