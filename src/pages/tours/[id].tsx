@@ -596,7 +596,6 @@ const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof g
                 </div>
               );
             })}
-            <button className="w-full py-1 px-4 mb-2 shadow-sm text-background-200 bg-red-700 rounded-sm hover:bg-red-800">Delete Page</button>
           </div>
           <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
             {pageId.current === "" ? (
