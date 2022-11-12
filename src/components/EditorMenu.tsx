@@ -208,7 +208,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/paragraph.svg" alt="paragraph" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/paragraph.svg`} alt="paragraph" className="w-4 h-4" />
                           <div>Paragraph</div>
                         </div>
                       )}
@@ -322,7 +322,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/table-line.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/table-line.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Insert table</div>
                         </div>
                       )}
@@ -336,7 +336,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/insert-column-left.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/insert-column-left.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Insert column left</div>
                         </div>
                       )}
@@ -350,7 +350,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/insert-column-right.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/insert-column-right.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Insert column right</div>
                         </div>
                       )}
@@ -364,7 +364,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/delete-column.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/delete-column.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Delete column</div>
                         </div>
                       )}
@@ -378,7 +378,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/insert-row-top.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/insert-row-top.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Insert row above</div>
                         </div>
                       )}
@@ -392,7 +392,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/insert-row-bottom.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/insert-row-bottom.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Insert row below</div>
                         </div>
                       )}
@@ -406,7 +406,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/delete-row.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/delete-row.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Delete row</div>
                         </div>
                       )}
@@ -420,7 +420,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/delete-bin-6-line.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/delete-bin-6-line.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Delete table</div>
                         </div>
                       )}
@@ -434,7 +434,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/merge-cells-horizontal.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/merge-cells-horizontal.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Merge cells</div>
                         </div>
                       )}
@@ -448,7 +448,7 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                     <Menu.Item>
                       {({ active }) => (
                         <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src="/images/split-cells-horizontal.svg" alt="" className="w-4 h-4" />
+                          <img src={`${urlLocalPath}/images/split-cells-horizontal.svg`} alt="" className="w-4 h-4" />
                           <div className="ml-2">Split cells</div>
                         </div>
                       )}
