@@ -33,11 +33,7 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 // End of Additional Extensions
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
+import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../lib/prisma";
@@ -60,9 +56,7 @@ enum STATUS {
   SETTING,
 }
 
-const TiptapPage: NextPage = ({
-  propTour,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const TiptapPage: NextPage = ({ propTour }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
   const pageId = useRef("");
 
@@ -73,6 +67,7 @@ const TiptapPage: NextPage = ({
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
   const tourImages = useRef<TourSiteImageType[]>([]);
   const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
+  const [tourDescription, setTourDescription] = useState(propTour.tourDescription);
   const [pageRename, setPageRename] = useState("");
   const [pageTitle, setPageTitle] = useState("");
 
@@ -84,8 +79,7 @@ const TiptapPage: NextPage = ({
     extensions: [
       Blockquote.configure({
         HTMLAttributes: {
-          style:
-            "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
+          style: "background: #F6F2EE; border-left: 0.25rem solid #ccc; padding: 0 0.5rem;",
         },
       }),
       BulletList.configure({
@@ -133,8 +127,7 @@ const TiptapPage: NextPage = ({
       Table.configure({
         resizable: true,
         HTMLAttributes: {
-          style:
-            "border-collapse: collapse; margin: 0; overflow: hidden; table-layout: fixed; width: 100%;",
+          style: "border-collapse: collapse; margin: 0; overflow: hidden; table-layout: fixed; width: 100%;",
         },
       }),
       // tag: tr
@@ -142,15 +135,13 @@ const TiptapPage: NextPage = ({
       // tag: th
       TableHeader.configure({
         HTMLAttributes: {
-          style:
-            "background-color: #f1f3f5; font-weight: bold; text-align: left; border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+          style: "background-color: #f1f3f5; font-weight: bold; text-align: left; border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
         },
       }),
       // tag: td
       TableCell.configure({
         HTMLAttributes: {
-          style:
-            "border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
+          style: "border: 1px solid; box-sizing: border-box; min-width: 1em; padding: 3px 5px; position: relative; vertical-align: top;",
         },
       }),
       Image.extend({
@@ -173,9 +164,7 @@ const TiptapPage: NextPage = ({
             name: {
               renderHTML: (attributes) => {
                 if (attributes.src) {
-                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(
-                    attributes.alt
-                  );
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
                   if (src) {
                     const name = src[0];
                     return {
@@ -208,9 +197,7 @@ const TiptapPage: NextPage = ({
             name: {
               renderHTML: (attributes) => {
                 if (attributes.src) {
-                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(
-                    attributes.alt
-                  );
+                  const src = /([a-zA-Z0-9\s_\\.\-\(\):])+$/.exec(attributes.alt);
                   if (src) {
                     const name = src[0];
                     return {
@@ -226,47 +213,32 @@ const TiptapPage: NextPage = ({
     ],
     editorProps: {
       attributes: {
-        class:
-          "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+        class: "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
     onUpdate: () => {
       // mark page as unsaved
-      if (
-        !unsavedPages.current.has(pageId.current) &&
-        pageId.current !== "" &&
-        savingTour.current === STATUS.DONE
-      )
-        unsavedPages.current.set(pageId.current, "");
+      if (!unsavedPages.current.has(pageId.current) && pageId.current !== "" && savingTour.current === STATUS.DONE) unsavedPages.current.set(pageId.current, "");
     },
     onSelectionUpdate: ({ editor }) => {
       if (editor.isActive("paragraph")) setHeading("Paragraph");
-      else if (editor.isActive("heading", { level: 1 }))
-        setHeading("Heading 1");
-      else if (editor.isActive("heading", { level: 2 }))
-        setHeading("Heading 2");
-      else if (editor.isActive("heading", { level: 3 }))
-        setHeading("Heading 3");
-      else if (editor.isActive("heading", { level: 4 }))
-        setHeading("Heading 4");
-      else if (editor.isActive("heading", { level: 5 }))
-        setHeading("Heading 5");
-      else if (editor.isActive("heading", { level: 6 }))
-        setHeading("Heading 6");
+      else if (editor.isActive("heading", { level: 1 })) setHeading("Heading 1");
+      else if (editor.isActive("heading", { level: 2 })) setHeading("Heading 2");
+      else if (editor.isActive("heading", { level: 3 })) setHeading("Heading 3");
+      else if (editor.isActive("heading", { level: 4 })) setHeading("Heading 4");
+      else if (editor.isActive("heading", { level: 5 })) setHeading("Heading 5");
+      else if (editor.isActive("heading", { level: 6 })) setHeading("Heading 6");
       else setHeading("");
 
       if (
         editor.isActive("textStyle", {
-          fontFamily:
-            "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
+          fontFamily: "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
         })
       )
         setFontFamily("Times");
-      else if (editor.isActive("textStyle", { fontFamily: "Arial" }))
-        setFontFamily("Arial");
-      else if (editor.isActive("textStyle", { fontFamily: "Courier New" }))
-        setFontFamily("Courier New");
+      else if (editor.isActive("textStyle", { fontFamily: "Arial" })) setFontFamily("Arial");
+      else if (editor.isActive("textStyle", { fontFamily: "Courier New" })) setFontFamily("Courier New");
       else setFontFamily("");
     },
   });
@@ -274,12 +246,9 @@ const TiptapPage: NextPage = ({
   const getImages = useCallback(
     async (alert?: Id) => {
       try {
-        const tours = await fetch(
-          `${urlPath}/api/tour/image?tourId=${tour.id}`,
-          {
-            method: "GET",
-          }
-        );
+        const tours = await fetch(`${urlPath}/api/tour/image?tourId=${tour.id}`, {
+          method: "GET",
+        });
 
         const res = await tours.blob();
         const { entries } = await unzip(res);
@@ -308,10 +277,7 @@ const TiptapPage: NextPage = ({
         setIsUploadingFile(false);
         setIsLoadingStartup(false);
       } catch (err) {
-        if (!alert)
-          return toast.error(
-            "Failed to download tour media from server. Please try again."
-          );
+        if (!alert) return toast.error("Failed to download tour media from server. Please try again.");
 
         toast.update(alert, {
           render: "Failed to load media.",
@@ -327,8 +293,7 @@ const TiptapPage: NextPage = ({
   );
 
   useEffect(() => {
-    const warningText =
-      "You have unsaved changes.\nAre you sure you wish to leave this page?";
+    const warningText = "You have unsaved changes.\nAre you sure you wish to leave this page?";
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (unsavedPages.current.size === 0) return;
       e.preventDefault();
@@ -380,13 +345,14 @@ const TiptapPage: NextPage = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 {/* Tour title */}
+                <input type="text" defaultValue={tour.tourTitle} onChange={(event) => setTourTitle(event.target.value)} className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out" />
+                {/* Tour description */}
                 <input
                   type="text"
-                  defaultValue={tour.tourTitle}
-                  onChange={(event) => setTourTitle(event.target.value)}
-                  className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
+                  defaultValue={tour.tourDescription ? tourDescription : "Tour description..."}
+                  onChange={(event) => setTourDescription(event.target.value)}
+                  className="w-80 h-10 bg-inherit border-2 p-1 text-xs text-green-900 border-brown focus:outline-brown transition ease-in-out"
                 />
-
                 {/* Save button */}
                 <button
                   onClick={async () => {
@@ -398,8 +364,8 @@ const TiptapPage: NextPage = ({
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
                         tourId: tour.id,
-                        tourTitle:
-                          tour.tourTitle !== tourTitle ? tourTitle : undefined,
+                        tourTitle: tour.tourTitle !== tourTitle ? tourTitle : undefined,
+                        tourDescription: tour.tourDescription !== tourDescription ? tourDescription : undefined,
                       }),
                     });
 
@@ -419,18 +385,14 @@ const TiptapPage: NextPage = ({
 
                       formData.append("file", file);
 
-                      const res = await fetch(
-                        `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId.current}`,
-                        {
-                          method: "PUT",
-                          body: formData,
-                        }
-                      );
+                      const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId.current}`, {
+                        method: "PUT",
+                        body: formData,
+                      });
 
                       const json = await res.json();
 
-                      if (res.status === 200)
-                        unsavedPages.current.delete(pageId.current);
+                      if (res.status === 200) unsavedPages.current.delete(pageId.current);
                       else errors.push(json.error);
                     }
 
@@ -451,16 +413,10 @@ const TiptapPage: NextPage = ({
                     else toast.dismiss(alert);
                     for (const error in errors) toast.error(error);
                   }}
-                  className={`py-1 w-24 ${
-                    unsavedPages.current.size !== 0 ||
-                    tour.tourTitle !== tourTitle
-                      ? "bg-red-700"
-                      : "bg-green-700"
-                  } text-background-200 rounded-sm`}
+                  className={`py-1 w-24 ${unsavedPages.current.size !== 0 || tour.tourTitle !== tourTitle ? "bg-red-700" : "bg-green-700"} text-background-200 rounded-sm`}
                 >
                   Save
                 </button>
-
                 {/* Download button */}
                 <button
                   onClick={async () => {
@@ -484,8 +440,7 @@ const TiptapPage: NextPage = ({
                       });
                     } catch (err) {
                       toast.update(alert, {
-                        render:
-                          "Failed to download tour site from server. Please try again.",
+                        render: "Failed to download tour site from server. Please try again.",
                         type: "error",
                         isLoading: false,
                         closeOnClick: true,
@@ -498,12 +453,8 @@ const TiptapPage: NextPage = ({
                 >
                   Download
                 </button>
-
                 {/* Publish button */}
-                <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
-                  Publish
-                </button>
-
+                <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">Publish</button>
                 <button
                   onClick={async () => {
                     const res = await fetch(`${urlPath}/api/tour`, {
@@ -537,13 +488,10 @@ const TiptapPage: NextPage = ({
 
                 formData.append("file", file);
 
-                const res = await fetch(
-                  `${urlPath}/api/tour/page?tourId=${tour.id}`,
-                  {
-                    method: "POST",
-                    body: formData,
-                  }
-                );
+                const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}`, {
+                  method: "POST",
+                  body: formData,
+                });
 
                 const json = await res.json();
 
@@ -559,25 +507,13 @@ const TiptapPage: NextPage = ({
             {/* Page titles on sidebar */}
             {tour.tourPages.map((page: Page) => {
               return (
-                <div
-                  key={page.id}
-                  className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300"
-                >
+                <div key={page.id} className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300">
                   {/* Load tour page into editor */}
                   <button
                     onClick={async () => {
                       // Stash changes with content manager
                       // Update "unsaved" state for old page
-                      if (
-                        editor &&
-                        unsavedPages.current.has(pageId.current) &&
-                        pageId.current &&
-                        pageId.current !== ""
-                      )
-                        unsavedPages.current.set(
-                          pageId.current,
-                          editor.getHTML()
-                        );
+                      if (editor && unsavedPages.current.has(pageId.current) && pageId.current && pageId.current !== "") unsavedPages.current.set(pageId.current, editor.getHTML());
 
                       // if we're renaming this page, don't switch to it
                       if (pageRename === page.id) return;
@@ -588,17 +524,13 @@ const TiptapPage: NextPage = ({
                       if (contents) editor?.commands.setContent(contents);
                       // otherwise, fetch content from api
                       else {
-                        const res = await fetch(
-                          `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${page.id}`,
-                          {
-                            method: "GET",
-                          }
-                        );
+                        const res = await fetch(`${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${page.id}`, {
+                          method: "GET",
+                        });
 
                         const html = await res.text();
 
-                        if (res.status === 200)
-                          editor?.commands.setContent(html === "" ? "" : html);
+                        if (res.status === 200) editor?.commands.setContent(html === "" ? "" : html);
                         else return toast.error("Page does not exist.");
                       }
 
@@ -610,33 +542,15 @@ const TiptapPage: NextPage = ({
                     {/* Rename page title */}
                     {pageRename === page.id ? (
                       <input
-                        defaultValue={
-                          page.title === "" ? "Untitled" : page.title
-                        }
+                        defaultValue={page.title === "" ? "Untitled" : page.title}
                         autoFocus={true}
                         onChange={(event) => {
                           setPageTitle(event.target.value);
                         }}
-                        className={
-                          "w-full" +
-                          (pageId.current === page.id ? " font-bold" : "") +
-                          (unsavedPages.current.has(page.id)
-                            ? " text-red-800"
-                            : "")
-                        }
+                        className={"w-full" + (pageId.current === page.id ? " font-bold" : "") + (unsavedPages.current.has(page.id) ? " text-red-800" : "")}
                       />
                     ) : (
-                      <span
-                        className={
-                          "w-full" +
-                          (pageId.current === page.id ? " font-bold" : "") +
-                          (unsavedPages.current.has(page.id)
-                            ? " text-red-800"
-                            : "")
-                        }
-                      >
-                        {page.title === "" ? "Untitled" : page.title}
-                      </span>
+                      <span className={"w-full" + (pageId.current === page.id ? " font-bold" : "") + (unsavedPages.current.has(page.id) ? " text-red-800" : "")}>{page.title === "" ? "Untitled" : page.title}</span>
                     )}
                   </button>
 
@@ -645,9 +559,7 @@ const TiptapPage: NextPage = ({
                     onClick={() => {
                       setPageRename(page.id);
                     }}
-                    className={`${
-                      pageRename === page.id || pageRename != "" ? "hidden" : ""
-                    } invisible group-hover:visible`}
+                    className={`${pageRename === page.id || pageRename != "" ? "hidden" : ""} invisible group-hover:visible`}
                   >
                     Edit
                   </button>
@@ -683,18 +595,15 @@ const TiptapPage: NextPage = ({
                 </div>
               );
             })}
+            <button className="w-full py-1 px-4 mb-2 shadow-sm text-background-200 bg-red-700 rounded-sm hover:bg-red-800">Delete Page</button>
           </div>
           <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
             {pageId.current === "" ? (
-              <div className="flex justify-center p-20 h-screen">
-                Please select or create a page to load editor.
-              </div>
+              <div className="flex justify-center p-20 h-screen">Please select or create a page to load editor.</div>
             ) : (
               <>
                 <div className="absolute z-10 flex flex-col justify-end items-end w-full h-full py-6 px-12 text-sm text-gray-400 select-none pointer-events-none">
-                  <div>
-                    {editor?.storage.characterCount.characters()} characters
-                  </div>
+                  <div>{editor?.storage.characterCount.characters()} characters</div>
                   <div>{editor?.storage.characterCount.words()} words</div>
                 </div>
                 <EditorMenu
