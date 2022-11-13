@@ -43,7 +43,7 @@ export const EditorMenu = ({
   return (
     <>
       <div className="flex justify-left 2xl:justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200 overflow-x-auto">
-        <div className="flex items-center">
+        <div className="flex shrink-0 items-center">
           <HeadingMenu
             heading={heading}
             setHeading={setHeading}
@@ -261,7 +261,7 @@ export const EditorMenu = ({
           <TableMenu editor={editor} />
         </div>
 
-        <div className="flex items-center">
+        <div className="flex shrink-0 items-center">
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <ImagePopover
             tourId={tourId}
