@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
-import { Navbar } from "../../components/Navbar";
-import { OAuth } from "../../components/OAuth";
+import { Navbar } from "../../components/navigation/Navbar";
+import { OAuth } from "../../components/login/OAuth";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { VerifyEmail } from "../../components/VerifyEmail";
+import { VerifyEmail } from "../../components/login/VerifyEmail";
 import { urlPath } from "../../lib/urlPath";
-import { Loading } from "../../components/Loading";
+import { Loading } from "../../components/util/Loading";
 
 const VerifyEmailPage: NextPage = () => {
   const { data: session, status } = useSession();

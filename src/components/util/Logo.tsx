@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { urlLocalPath } from "../lib/urlPath";
+import { urlLocalPath } from "../../lib/urlPath";
 
 export const Logo = () => {
   const [logo, setLogo] = useState(true);

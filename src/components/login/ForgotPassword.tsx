@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { urlPath } from "../lib/urlPath";
-import { FormType } from "../pages/login";
+import { urlPath } from "../../lib/urlPath";
+import { FormType } from "../../pages/login";
 
 interface ForgotPasswordProps {
   hook: (value: FormType) => void;

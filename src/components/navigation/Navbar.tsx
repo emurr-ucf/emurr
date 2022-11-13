@@ -1,14 +1,15 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserMenu } from "./UserMenu";
-import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 
 export interface NavbarProps {
   page?: string;
   children?: JSX.Element;
+  userMenuChildren?: JSX.Element;
 }
 
-export const Navbar = (props: NavbarProps) => {
+export const Navbar = ({ page, children, userMenuChildren }: NavbarProps) => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -38,8 +39,8 @@ export const Navbar = (props: NavbarProps) => {
                 alt="An SVG of the Emurr Logo"
                 className="w-10 h-10"
               />
-              {props.children ? (
-                <div className="w-full pr-4">{props.children}</div>
+              {children ? (
+                <div className="w-full pr-4">{children}</div>
               ) : (
                 <>
                   <div className="text-2xl font-semibold">EMURR</div>
@@ -47,7 +48,7 @@ export const Navbar = (props: NavbarProps) => {
               )}
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
-              <UserMenu />
+              <UserMenu>{userMenuChildren}</UserMenu>
             </div>
           </div>
         </nav>
@@ -70,16 +71,14 @@ export const Navbar = (props: NavbarProps) => {
           <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
             <div
               className={`py-1 px-2 rounded-md ${
-                props.page === "home" ? "font-semibold hover:font-semibold" : ""
+                page === "home" ? "font-semibold hover:font-semibold" : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
               <Link href={`${urlLocalPath}/`}>home</Link>
             </div>
             <div
               className={`py-1 px-2 rounded-md ${
-                props.page === "about"
-                  ? "font-semibold hover:font-semibold"
-                  : ""
+                page === "about" ? "font-semibold hover:font-semibold" : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
               <Link href={`${urlLocalPath}/about`} className="m-5">
@@ -88,9 +87,7 @@ export const Navbar = (props: NavbarProps) => {
             </div>
             <div
               className={`py-1 px-2 rounded-md ${
-                props.page === "login"
-                  ? "font-semibold hover:font-semibold"
-                  : ""
+                page === "login" ? "font-semibold hover:font-semibold" : ""
               } hover:bg-background-600 transition ease-in-out delay-50`}
             >
               <Link href={`${urlLocalPath}/login`} className="m-5">

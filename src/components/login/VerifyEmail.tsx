@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 
 export const VerifyEmail = () => {

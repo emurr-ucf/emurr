@@ -1,4 +1,5 @@
-import { EditorContent, getAttributes, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
+
 // The below extensions are included on StarterKit
 import Blockquote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -32,29 +33,34 @@ import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
-// End of Additional Extensions
+
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
 import { useEffect, useState } from "react";
-import { Navbar } from "../../components/Navbar";
+import { Navbar } from "../../components/navigation/Navbar";
 import { prisma } from "../../lib/prisma";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { Page } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
-import { EditorMenu, TourSiteImageType } from "../../components/EditorMenu";
+import {
+  EditorMenu,
+  TourSiteImageType,
+} from "../../components/tour/EditorMenu";
 import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
 import { urlPath } from "../../lib/urlPath";
-import download from "downloadjs";
-import { Loading } from "../../components/Loading";
+import { Loading } from "../../components/util/Loading";
 import { Id, toast } from "react-toastify";
 import { formatCreatedAt, formatUpdatedAt } from "../../lib/formatDate";
+import { TourDescriptionModal } from "../../components/tour/TourDescriptionModal";
+import { TourExtend } from "../../lib/types/tour-extend";
+import { TourUserMenuChildren } from "../../components/tour/TourUserMenuChildren";
+import { PageSidebar } from "../../components/tour/PageSidebar";
 
-enum STATUS {
+export enum STATUS {
   DONE = 0,
   SAVING,
   SETTING,
@@ -65,16 +71,12 @@ const TiptapPage: NextPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: session, status } = useSession();
   const pageId = useRef("");
-
   const unsavedPages = useRef<Map<string, string>>(new Map<string, string>());
-  const [tour, setTour] = useState(propTour);
+  const [tour, setTour] = useState<TourExtend>(propTour);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
   const savingTour = useRef<STATUS>(STATUS.DONE);
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
   const tourImages = useRef<TourSiteImageType[]>([]);
-  const [tourTitle, setTourTitle] = useState(propTour.tourTitle);
-  const [pageRename, setPageRename] = useState("");
-  const [pageTitle, setPageTitle] = useState("");
 
   // Selection
   const [heading, setHeading] = useState("Heading 1");
@@ -375,52 +377,54 @@ const TiptapPage: NextPage = ({
   return (
     <>
       <div className="flex flex-col w-full h-screen">
-        <Navbar>
+        <Navbar userMenuChildren={<TourUserMenuChildren tour={tour} />}>
           <>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 {/* Tour title */}
-                <input
-                  type="text"
-                  defaultValue={tour.tourTitle}
-                  onChange={(event) => setTourTitle(event.target.value)}
-                  className="w-60 h-10 bg-inherit border-b-2 p-1 text-green-900 border-brown focus:outline-brown transition ease-in-out"
-                />
-
+                <div className="relative flex items-center justify-end">
+                  <div className="flex items-center w-60 h-10 outline-none bg-inherit border-b-2 p-1 text-green-900 border-brown">
+                    {tour.tourTitle}
+                  </div>
+                  <div className="fixed z-20">
+                    <TourDescriptionModal tour={tour} setTour={setTour} />
+                  </div>
+                </div>
                 {/* Save button */}
                 <button
                   onClick={async () => {
+                    const lastSave = editor?.getHTML();
+
+                    if (
+                      editor &&
+                      unsavedPages.current.has(pageId.current) &&
+                      pageId.current &&
+                      pageId.current !== ""
+                    )
+                      unsavedPages.current.set(
+                        pageId.current,
+                        lastSave ? lastSave : ""
+                      );
                     const errors = [];
                     const alert = toast.loading("Saving...");
 
-                    const res = await fetch(`${urlPath}/api/tour`, {
-                      method: "PUT",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        tourId: tour.id,
-                        tourTitle:
-                          tour.tourTitle !== tourTitle ? tourTitle : undefined,
-                      }),
-                    });
-
-                    const json = await res.json();
-
-                    if (res.status !== 200) errors.push(json.error);
-                    else setTour(json.tour);
-
                     editor?.setEditable(false);
                     savingTour.current = STATUS.SAVING;
-                    const data = editor?.getHTML();
+                    for (const [pageId, page] of unsavedPages.current) {
+                      editor?.commands.setContent(page);
+                      const data = editor?.getHTML();
 
-                    if (data && pageId.current) {
+                      if (!data) {
+                        errors.push(`Page id:${pageId} could not be saved.`);
+                        continue;
+                      }
+
                       const file = new File([data], "blank.html");
-
                       const formData = new FormData();
-
                       formData.append("file", file);
 
                       const res = await fetch(
-                        `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId.current}`,
+                        `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${pageId}`,
                         {
                           method: "PUT",
                           body: formData,
@@ -430,12 +434,12 @@ const TiptapPage: NextPage = ({
                       const json = await res.json();
 
                       if (res.status === 200)
-                        unsavedPages.current.delete(pageId.current);
+                        unsavedPages.current.delete(pageId);
                       else errors.push(json.error);
                     }
 
                     savingTour.current = STATUS.SETTING;
-                    editor?.commands.setContent(data ? data : "");
+                    editor?.commands.setContent(lastSave ? lastSave : "");
                     editor?.setEditable(true);
                     savingTour.current = STATUS.DONE;
 
@@ -452,74 +456,12 @@ const TiptapPage: NextPage = ({
                     for (const error in errors) toast.error(error);
                   }}
                   className={`py-1 w-24 ${
-                    unsavedPages.current.size !== 0 ||
-                    tour.tourTitle !== tourTitle
+                    unsavedPages.current.size !== 0
                       ? "bg-red-700"
                       : "bg-green-700"
                   } text-background-200 rounded-sm`}
                 >
                   Save
-                </button>
-
-                {/* Download button */}
-                <button
-                  onClick={async () => {
-                    const alert = toast.loading("Downloading...");
-                    try {
-                      const res = await fetch(`${urlPath}/api/tour/download`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ tourId: tour.id }),
-                      });
-
-                      const blob = await res.blob();
-                      download(blob, "toursite.zip", "file/zip");
-                      toast.update(alert, {
-                        render: "Download Successful",
-                        type: "success",
-                        isLoading: false,
-                        closeOnClick: true,
-                        closeButton: true,
-                        autoClose: 2000,
-                      });
-                    } catch (err) {
-                      toast.update(alert, {
-                        render:
-                          "Failed to download tour site from server. Please try again.",
-                        type: "error",
-                        isLoading: false,
-                        closeOnClick: true,
-                        closeButton: true,
-                        autoClose: 2000,
-                      });
-                    }
-                  }}
-                  className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
-                >
-                  Download
-                </button>
-
-                {/* Publish button */}
-                <button className="py-1 w-24 text-background-200 bg-green-700 rounded-sm">
-                  Publish
-                </button>
-
-                <button
-                  onClick={async () => {
-                    const res = await fetch(`${urlPath}/api/tour`, {
-                      method: "DELETE",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ tourId: tour.id }),
-                    });
-
-                    const json = await res.json();
-
-                    if (res.status === 200) Router.push("/tours");
-                    else toast.error(json.error);
-                  }}
-                  className="py-1 w-24 text-background-200 bg-green-700 rounded-sm"
-                >
-                  Delete
                 </button>
               </div>
               <div className="text-sm text-gray-500">{`Last Saved: ${tour.tourUpdatedAt}`}</div>
@@ -527,168 +469,25 @@ const TiptapPage: NextPage = ({
           </>
         </Navbar>
         <div className="flex pt-4 px-4 overflow-hidden">
-          <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
-            {/* Create new page button */}
-            <button
-              onClick={async () => {
-                const file = new File([], "blank.html");
-
-                const formData = new FormData();
-
-                formData.append("file", file);
-
-                const res = await fetch(
-                  `${urlPath}/api/tour/page?tourId=${tour.id}`,
-                  {
-                    method: "POST",
-                    body: formData,
-                  }
-                );
-
-                const json = await res.json();
-
-                if (res.status !== 200) return toast.error(json.error);
-
-                setTour(json.tour);
-              }}
-              className="w-full py-1 px-4 mb-2 text-background-200 bg-green-700 rounded-sm"
-            >
-              Create New Page
-            </button>
-
-            {/* Page titles on sidebar */}
-            {tour.tourPages.map((page: Page) => {
-              return (
-                <div
-                  key={page.id}
-                  className="group flex rounded-md border-b-2 bg-inherit focus:bg-background-300 hover:bg-background-300"
-                >
-                  {/* Load tour page into editor */}
-                  <button
-                    onClick={async () => {
-                      // Stash changes with content manager
-                      // Update "unsaved" state for old page
-                      if (
-                        editor &&
-                        unsavedPages.current.has(pageId.current) &&
-                        pageId.current &&
-                        pageId.current !== ""
-                      )
-                        unsavedPages.current.set(
-                          pageId.current,
-                          editor.getHTML()
-                        );
-
-                      // if we're renaming this page, don't switch to it
-                      if (pageRename === page.id) return;
-
-                      const contents = unsavedPages.current.get(page.id);
-
-                      // restore stashed changes from ContentManager, if possible
-                      if (contents) editor?.commands.setContent(contents);
-                      // otherwise, fetch content from api
-                      else {
-                        const res = await fetch(
-                          `${urlPath}/api/tour/page?tourId=${tour.id}&pageId=${page.id}`,
-                          {
-                            method: "GET",
-                          }
-                        );
-
-                        const html = await res.text();
-
-                        if (res.status === 200)
-                          editor?.commands.setContent(html === "" ? "" : html);
-                        else return toast.error("Page does not exist.");
-                      }
-
-                      // update current page id
-                      pageId.current = page.id;
-                    }}
-                    className="w-full text-left"
-                  >
-                    {/* Rename page title */}
-                    {pageRename === page.id ? (
-                      <input
-                        defaultValue={
-                          page.title === "" ? "Untitled" : page.title
-                        }
-                        autoFocus={true}
-                        onChange={(event) => {
-                          setPageTitle(event.target.value);
-                        }}
-                        className={
-                          "w-full" +
-                          (pageId.current === page.id ? " font-bold" : "") +
-                          (unsavedPages.current.has(page.id)
-                            ? " text-red-800"
-                            : "")
-                        }
-                      />
-                    ) : (
-                      <span
-                        className={
-                          "w-full" +
-                          (pageId.current === page.id ? " font-bold" : "") +
-                          (unsavedPages.current.has(page.id)
-                            ? " text-red-800"
-                            : "")
-                        }
-                      >
-                        {page.title === "" ? "Untitled" : page.title}
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Edit title button */}
-                  <button
-                    onClick={() => {
-                      setPageRename(page.id);
-                    }}
-                    className={`${
-                      pageRename === page.id || pageRename != "" ? "hidden" : ""
-                    } invisible group-hover:visible`}
-                  >
-                    Edit
-                  </button>
-
-                  {/* Save title button */}
-                  <button
-                    onClick={async () => {
-                      if (pageTitle === "") return setPageRename("");
-
-                      const res = await fetch(`${urlPath}/api/tour/pagedb`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          pageId: page.id,
-                          tourId: tour.id,
-                          title: pageTitle,
-                        }),
-                      });
-
-                      const json = await res.json();
-
-                      setPageRename("");
-
-                      if (res.status !== 200) return toast.error(json.error);
-
-                      setPageTitle("");
-                      setTour(json.tour);
-                    }}
-                    className={`${pageRename != page.id ? "hidden" : ""}`}
-                  >
-                    Save
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {/* Page list */}
+          <PageSidebar
+            tour={tour}
+            editor={editor}
+            unsavedPages={unsavedPages}
+            pageId={pageId}
+            setTour={setTour}
+          />
           <div className="relative flex flex-[4_1_0] flex-col overflow-auto">
             {pageId.current === "" ? (
               <div className="flex justify-center p-20 h-screen">
                 Please select or create a page to load editor.
               </div>
+            ) : savingTour.current === STATUS.SAVING ? (
+              <>
+                <div className="h-screen">
+                  <Loading>Saving tour...</Loading>
+                </div>
+              </>
             ) : (
               <>
                 <div className="absolute z-10 flex flex-col justify-end items-end w-full h-full py-6 px-12 text-sm text-gray-400 select-none pointer-events-none">
