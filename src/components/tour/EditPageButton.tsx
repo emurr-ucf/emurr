@@ -46,6 +46,8 @@ export const EditPageButton = ({
     const json = await res.json();
     if (res.status !== 200) return toast.error(json.error);
 
+    toast.success("Updated page.");
+
     setTour(json.tour);
     setIsOpen(false);
   };
@@ -101,18 +103,15 @@ export const EditPageButton = ({
                       className="w-full h-10 bg-inherit border-b-2 p-1 text-green-900 outline-none border-brown"
                     />
                   </div>
-                  <div className="flex items-center mt-2 gap-4">
-                    <div className="w-28">Custom URL:</div>
-                    <div className="flex items-center">
-                      emurr.local/
-                      <input
-                        defaultValue={customURL}
-                        onChange={(event) => setCustomURL(event.target.value)}
-                        placeholder="Custom URL..."
-                        className="w-full h-10 bg-inherit border-b-2 p-1 text-green-900 outline-none border-brown"
-                      />
-                      .html
-                    </div>
+                  <div className="flex items-center mt-2">
+                    emurr.local/
+                    <input
+                      defaultValue={customURL}
+                      onChange={(event) => setCustomURL(event.target.value)}
+                      placeholder="Custom URL..."
+                      className="w-full h-10 bg-inherit border-b-2 p-1 text-green-900 outline-none border-brown"
+                    />
+                    .html
                   </div>
 
                   <div className="mt-4">

@@ -64,7 +64,7 @@ export const PageSidebar = ({
   return (
     <>
       <div className="flex-1 bg-background-200 p-4 rounded-tl-md overflow-scroll">
-        <div className="flex justify-between w-full border-b-2 border-grey">
+        <div className="flex justify-between w-full border-b-2 border-grey pb-2">
           <div>
             <CreatePageButton
               tour={tour}
@@ -75,16 +75,16 @@ export const PageSidebar = ({
             />
           </div>
           <div className="flex items-center">
-            {pageId.current !== "" && (
-              <EditPageButton tour={tour} page={page} setTour={setTour} />
-            )}
-            {pageId.current !== "" && (
-              <DeletePageButton
-                tour={tour}
-                unsavedPages={unsavedPages}
-                pageId={pageId}
-                setTour={setTour}
-              />
+            {page !== undefined && (
+              <>
+                <EditPageButton tour={tour} page={page} setTour={setTour} />
+                <DeletePageButton
+                  tour={tour}
+                  unsavedPages={unsavedPages}
+                  pageId={pageId}
+                  setTour={setTour}
+                />
+              </>
             )}
           </div>
         </div>

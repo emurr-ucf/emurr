@@ -62,8 +62,8 @@ import { PageSidebar } from "../../components/tour/PageSidebar";
 
 export enum STATUS {
   DONE = 0,
-  SAVING,
-  SETTING,
+  SAVING = 1,
+  SETTING = 2,
 }
 
 const TiptapPage: NextPage = ({
@@ -74,7 +74,7 @@ const TiptapPage: NextPage = ({
   const unsavedPages = useRef<Map<string, string>>(new Map<string, string>());
   const [tour, setTour] = useState<TourExtend>(propTour);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
-  const savingTour = useRef<STATUS>(STATUS.DONE);
+  const savingTour = useRef<number>(STATUS.DONE);
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
   const tourImages = useRef<TourSiteImageType[]>([]);
 
@@ -410,7 +410,7 @@ const TiptapPage: NextPage = ({
 
                     editor?.setEditable(false);
                     savingTour.current = STATUS.SAVING;
-                    for (const [pageId, page] of unsavedPages.current) {
+                    for await (const [pageId, page] of unsavedPages.current) {
                       editor?.commands.setContent(page);
                       const data = editor?.getHTML();
 
@@ -439,9 +439,9 @@ const TiptapPage: NextPage = ({
                     }
 
                     savingTour.current = STATUS.SETTING;
+                    editor?.commands.setContent("");
                     editor?.commands.setContent(lastSave ? lastSave : "");
                     editor?.setEditable(true);
-                    savingTour.current = STATUS.DONE;
 
                     if (errors.length === 0)
                       toast.update(alert, {
@@ -454,6 +454,7 @@ const TiptapPage: NextPage = ({
                       });
                     else toast.dismiss(alert);
                     for (const error in errors) toast.error(error);
+                    savingTour.current = STATUS.DONE;
                   }}
                   className={`py-1 w-24 ${
                     unsavedPages.current.size !== 0
