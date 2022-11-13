@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
-import { Login } from "../components/Login";
-import { Navbar } from "../components/Navbar";
-import { OAuth } from "../components/OAuth";
+import { Login } from "../components/login/Login";
+import { Navbar } from "../components/navigation/Navbar";
+import { OAuth } from "../components/login/OAuth";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { Register } from "../components/Register";
-import { ForgotPassword } from "../components/ForgotPassword";
-import { Loading } from "../components/Loading";
+import { Register } from "../components/login/Register";
+import { ForgotPassword } from "../components/login/ForgotPassword";
+import { Loading } from "../components/util/Loading";
 import { useUserStore } from "../lib/store/user";
 import { urlLocalPath } from "../lib/urlPath";
 

@@ -1,11 +1,15 @@
 import { signOut, useSession } from "next-auth/react";
 import { Menu, Transition } from "@headlessui/react";
-import { urlLocalPath, urlPath } from "../lib/urlPath";
-import { HeadlessLink } from "./HeadlessLink";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
+import { HeadlessLink } from "../util/HeadlessLink";
 import { Fragment } from "react";
-import { useUserStore } from "../lib/store/user";
+import { useUserStore } from "../../lib/store/user";
 
-export const UserMenu = () => {
+export interface UserMenuProps {
+  children?: JSX.Element;
+}
+
+export const UserMenu = ({ children }: UserMenuProps) => {
   const userImage = useUserStore((state) => state.image);
   const userRemove = useUserStore((state) => state.remove);
 
@@ -96,6 +100,14 @@ export const UserMenu = () => {
                 </HeadlessLink>
               )}
             </Menu.Item>
+            {children ? (
+              <>
+                <div className="rounded border border-b-1 bg-grey my-1 mx-2"></div>
+                {children}
+              </>
+            ) : (
+              <></>
+            )}
           </Menu.Items>
         </Transition>
       </Menu>

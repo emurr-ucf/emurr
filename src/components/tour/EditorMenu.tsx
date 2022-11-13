@@ -4,10 +4,9 @@ import { Menu, Transition, Popover } from "@headlessui/react";
 import { Fragment } from "react";
 import { unzip } from "unzipit";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { urlLocalPath } from "../lib/urlPath";
-import { CustomUrlModal } from "./CustomUrlModal";
+import { urlLocalPath } from "../../lib/urlPath";
 import { Id, toast } from "react-toastify";
-import { Loading } from "./Loading";
+import { Loading } from "../util/Loading";
 
 export interface TourSiteImageType {
   name: string;
@@ -30,17 +29,22 @@ interface EditorMenuProps {
   setFontFamily: Dispatch<SetStateAction<string>>;
 }
 
-export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images, getImages, isUploadingFile, setIsUploadingFile, heading, setHeading, fontFamily, setFontFamily }: EditorMenuProps) => {
+export const EditorMenu = ({
+  tourId,
+  pageId,
+  setTour,
+  mediaSize,
+  editor,
+  images,
+  getImages,
+  isUploadingFile,
+  setIsUploadingFile,
+  heading,
+  setHeading,
+  fontFamily,
+  setFontFamily,
+}: EditorMenuProps) => {
   const imageLoad = () => {
-    // if (isUploadingFile) {
-    //   return (
-    //     <Loading>
-    //       <div className="flex flex-col justify-center items-center mt-2">
-    //         <div>Loading Images...</div>
-    //       </div>
-    //     </Loading>
-    //   );
-    // } else
     if (images.length > 0)
       return images.map((image: TourSiteImageType) => (
         <div key={image.name}>
@@ -71,7 +75,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
             }}
             className="flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-background-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
           >
-            <div className="text-sm font-medium text-gray-900">{image.name}</div>
+            <div className="text-sm font-medium text-gray-900">
+              {image.name}
+            </div>
           </button>
         </div>
       ));
@@ -87,7 +93,10 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               <Menu.Button className="inline-flex w-32 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 <div className="font-bold w-full flex justify-between">
                   <div>{heading}</div>
-                  <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
+                  <ChevronDownIcon
+                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
+                    aria-hidden="true"
+                  />
                 </div>
               </Menu.Button>
             </div>
@@ -111,8 +120,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/h-1.svg`} alt="h-1" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/h-1.svg`}
+                            alt="h-1"
+                            className="w-4 h-4"
+                          />
                           <div>Heading 1</div>
                         </div>
                       )}
@@ -127,8 +146,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/h-2.svg`} alt="h-2" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/h-2.svg`}
+                            alt="h-2"
+                            className="w-4 h-4"
+                          />
                           <div>Heading 2</div>
                         </div>
                       )}
@@ -143,8 +172,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/h-3.svg`} alt="h-3" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/h-3.svg`}
+                            alt="h-3"
+                            className="w-4 h-4"
+                          />
                           <div>Heading 3</div>
                         </div>
                       )}
@@ -159,8 +198,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/h-4.svg`} alt="h-4" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/h-4.svg`}
+                            alt="h-4"
+                            className="w-4 h-4"
+                          />
                           <div>Heading 4</div>
                         </div>
                       )}
@@ -175,8 +224,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/h-5.svg`} alt="h-5" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/h-5.svg`}
+                            alt="h-5"
+                            className="w-4 h-4"
+                          />
                           <div>Heading 5</div>
                         </div>
                       )}
@@ -191,8 +250,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/h-6.svg`} alt="h-6" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/h-6.svg`}
+                            alt="h-6"
+                            className="w-4 h-4"
+                          />
                           <div>Heading 6</div>
                         </div>
                       )}
@@ -207,8 +276,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/paragraph.svg`} alt="paragraph" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/paragraph.svg`}
+                            alt="paragraph"
+                            className="w-4 h-4"
+                          />
                           <div>Paragraph</div>
                         </div>
                       )}
@@ -224,7 +303,10 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               <Menu.Button className="inline-flex w-32 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 <div className="font-bold w-full flex justify-between">
                   <div>{fontFamily}</div>
-                  <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
+                  <ChevronDownIcon
+                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
+                    aria-hidden="true"
+                  />
                 </div>
               </Menu.Button>
             </div>
@@ -241,14 +323,22 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                 <div className="py-1">
                   <form
                     onClick={(event) => {
-                      editor?.commands.setFontFamily("ui-serif, Georgia, Cambria, Times New Roman, Times, serif");
+                      editor?.commands.setFontFamily(
+                        "ui-serif, Georgia, Cambria, Times New Roman, Times, serif"
+                      );
                       editor?.commands.focus();
                       setFontFamily("Times");
                     }}
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
                           <div className="font-serif">Times</div>
                         </div>
                       )}
@@ -263,7 +353,13 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
                           <div className="font-sans">Arial</div>
                         </div>
                       )}
@@ -278,7 +374,13 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-between px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                        <div
+                          className={`flex items-center justify-between px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
                           <div className="font-mono">Courier New</div>
                         </div>
                       )}
@@ -294,8 +396,16 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               <Menu.Button className="inline-flex w-32 justify-center rounded-md border border-gray-300 bg-white px-4 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                 <div className="font-bold inline-flex items-center">
                   Table
-                  <img className="w-7 h-7 p-1" src={`${urlLocalPath}/images/table-line.svg`} alt="table" title="Insert Table" />
-                  <ChevronDownIcon className="h-5 w-5 text-gray-700 hover:bg-gray-50" aria-hidden="true" />
+                  <img
+                    className="w-7 h-7 p-1"
+                    src={`${urlLocalPath}/images/table-line.svg`}
+                    alt="table"
+                    title="Insert Table"
+                  />
+                  <ChevronDownIcon
+                    className="h-5 w-5 text-gray-700 hover:bg-gray-50"
+                    aria-hidden="true"
+                  />
                 </div>
               </Menu.Button>
             </div>
@@ -321,8 +431,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/table-line.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/table-line.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Insert table</div>
                         </div>
                       )}
@@ -335,8 +455,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/insert-column-left.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/insert-column-left.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Insert column left</div>
                         </div>
                       )}
@@ -349,8 +479,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/insert-column-right.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/insert-column-right.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Insert column right</div>
                         </div>
                       )}
@@ -363,8 +503,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/delete-column.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/delete-column.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Delete column</div>
                         </div>
                       )}
@@ -377,8 +527,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/insert-row-top.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/insert-row-top.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Insert row above</div>
                         </div>
                       )}
@@ -391,8 +551,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/insert-row-bottom.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/insert-row-bottom.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Insert row below</div>
                         </div>
                       )}
@@ -405,8 +575,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/delete-row.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/delete-row.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Delete row</div>
                         </div>
                       )}
@@ -419,8 +599,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/delete-bin-6-line.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/delete-bin-6-line.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Delete table</div>
                         </div>
                       )}
@@ -433,8 +623,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/merge-cells-horizontal.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/merge-cells-horizontal.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Merge cells</div>
                         </div>
                       )}
@@ -447,8 +647,18 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                   >
                     <Menu.Item>
                       {({ active }) => (
-                        <div className={`flex items-center justify-start px-4 py-2 text-sm ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                          <img src={`${urlLocalPath}/images/split-cells-horizontal.svg`} alt="" className="w-4 h-4" />
+                        <div
+                          className={`flex items-center justify-start px-4 py-2 text-sm ${
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          <img
+                            src={`${urlLocalPath}/images/split-cells-horizontal.svg`}
+                            alt=""
+                            className="w-4 h-4"
+                          />
                           <div className="ml-2">Split cells</div>
                         </div>
                       )}
@@ -467,7 +677,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleBold();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("bold") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("bold") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/italic.svg`}
@@ -477,7 +689,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleItalic();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("italic") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("italic") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/underline.svg`}
@@ -487,7 +701,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleUnderline();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("underline") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("underline") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/strikethrough.svg`}
@@ -497,7 +713,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleStrike();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("strike") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("strike") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/subscript.svg`}
@@ -507,7 +725,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleSubscript();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("subscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("subscript") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/superscript.svg`}
@@ -517,7 +737,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleSuperscript();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("superscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("superscript") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -528,7 +750,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleHighlight({ color: "#f1e740" });
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("highlight") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("highlight") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -539,7 +763,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.setTextAlign("left");
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive({ textAlign: "left" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive({ textAlign: "left" }) ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/align-center.svg`}
@@ -549,7 +775,11 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.setTextAlign("center");
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive({ textAlign: "center" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive({ textAlign: "center" })
+                ? "bg-background-500"
+                : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/align-right.svg`}
@@ -559,7 +789,11 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.setTextAlign("right");
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive({ textAlign: "right" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive({ textAlign: "right" })
+                ? "bg-background-500"
+                : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/align-justify.svg`}
@@ -569,7 +803,11 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.setTextAlign("justify");
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive({ textAlign: "justify" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive({ textAlign: "justify" })
+                ? "bg-background-500"
+                : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/code-box-line.svg`}
@@ -579,7 +817,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleCode();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("code") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("code") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -590,7 +830,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleBulletList();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("bulletList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("bulletList") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/list-ordered.svg`}
@@ -600,7 +842,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleOrderedList();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("orderedList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("orderedList") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/double-quotes-l.svg`}
@@ -610,7 +854,9 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.toggleBlockquote();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("blockquote") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("blockquote") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/separator.svg`}
@@ -620,18 +866,24 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
               editor?.commands.setHorizontalRule();
               editor?.commands.focus();
             }}
-            className={`${editor?.isActive("horizontalRule") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${
+              editor?.isActive("horizontalRule") ? "bg-background-500" : ""
+            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
         </div>
 
         <div className="flex items-center overflow-y-hidden overflow-x-auto">
           <div className="border-x h-3/5 border-green-200 mx-2" />
-          <CustomUrlModal pageId={pageId} tourId={tourId} />
           <Popover className="relative">
             {({ open }) => (
               <>
                 <Popover.Button className="flex justify-center items-center w-7 h-7">
-                  <img src={`${urlLocalPath}/images/image-line.svg`} alt="image" title="Insert image" className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out" />
+                  <img
+                    src={`${urlLocalPath}/images/image-line.svg`}
+                    alt="image"
+                    title="Insert image"
+                    className="w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out"
+                  />
                 </Popover.Button>
                 <Transition
                   as={Fragment}
@@ -644,15 +896,23 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                 >
                   <Popover.Panel className="fixed z-20 mt-3 max-w-md px-4 right-0">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                      <div className="flex-col gap-8 bg-white px-7 py-2 h-40 overflow-y-auto">{imageLoad()}</div>
+                      <div className="flex-col gap-8 bg-white px-7 py-2 h-40 overflow-y-auto">
+                        {imageLoad()}
+                      </div>
                       <div className="bg-gray-50 p-4">
-                        <div className="text-sm text-gray-500 text-right">Total: {mediaSize.toFixed(1)} MB</div>
+                        <div className="text-sm text-gray-500 text-right">
+                          Total: {mediaSize.toFixed(1)} MB
+                        </div>
                         <label htmlFor="media-file">
                           <div className="rounded-md px-2 py-2 hover:cursor-pointer hover:bg-background-500 transition duration-150 ease-in-out focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                             <div className="flex items-center">
-                              <div className="text-sm font-medium text-gray-900">Upload</div>
+                              <div className="text-sm font-medium text-gray-900">
+                                Upload
+                              </div>
                             </div>
-                            <div className="block text-sm text-gray-500">Upload an image or video.</div>
+                            <div className="block text-sm text-gray-500">
+                              Upload an image or video.
+                            </div>
                           </div>
                           <input
                             id="media-file"
@@ -665,10 +925,13 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
                               const formData = new FormData();
                               formData.append("file", event.target.files[0]);
 
-                              const res = await fetch(`${urlLocalPath}/api/tour/image?tourId=${tourId}`, {
-                                method: "POST",
-                                body: formData,
-                              });
+                              const res = await fetch(
+                                `${urlLocalPath}/api/tour/image?tourId=${tourId}`,
+                                {
+                                  method: "POST",
+                                  body: formData,
+                                }
+                              );
 
                               const json = await res.json();
 

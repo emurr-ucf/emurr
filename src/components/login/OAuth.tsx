@@ -6,7 +6,7 @@ import {
   LiteralUnion,
 } from "next-auth/react";
 import { BuiltInProviderType } from "next-auth/providers";
-import { urlLocalPath } from "../lib/urlPath";
+import { urlLocalPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 
 export const OAuth = () => {

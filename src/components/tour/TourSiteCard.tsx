@@ -2,7 +2,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
-import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 
 interface TourSiteCardProps {
@@ -23,12 +23,21 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
           <div className="flex flex-col h-full w-full justify-between p-2">
             <div className="flex flex-col w-full">
               <div className="text-2xl">{props.title}</div>
-              <div className="text-sm overflow-y-hidden">{props.description}</div>
+              <div className="text-sm overflow-y-hidden">
+                {props.description}
+              </div>
             </div>
             <div className="flex justify-between items-center w-full text-sm">
-              <div className={`${props.mediaSize >= 5000 ? "text-red" : ""}`}>{props.mediaSize.toFixed(1)} MB</div>
+              <div className={`${props.mediaSize >= 5000 ? "text-red" : ""}`}>
+                {props.mediaSize.toFixed(1)} MB
+              </div>
               <div className="flex flex-col">
-                <div>{props.updatedAt.includes("PM") || props.updatedAt.includes("AM") ? "Opened " + props.updatedAt : props.updatedAt}</div>
+                <div>
+                  {props.updatedAt.includes("PM") ||
+                  props.updatedAt.includes("AM")
+                    ? "Opened " + props.updatedAt
+                    : props.updatedAt}
+                </div>
               </div>
             </div>
           </div>
