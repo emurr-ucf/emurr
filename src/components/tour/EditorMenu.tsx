@@ -42,7 +42,7 @@ export const EditorMenu = ({
 }: EditorMenuProps) => {
   return (
     <>
-      <div className="flex justify-left 2xl:justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200 overflow-x-auto">
+      <div className="flex justify-left 2xl:justify-between z-10 px-2 border shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200 overflow-x-auto">
         <div className="flex shrink-0 items-center">
           <HeadingMenu
             heading={heading}
