@@ -27,7 +27,7 @@ export const CreatePageButton = ({
     )
       unsavedPages.current.set(pageId.current, editor.getHTML());
 
-    const file = new File([], "blank.html");
+    const file = new File([], "blank.html", { type: "text/html" });
     const formData = new FormData();
     formData.append("file", file);
 

@@ -1,14 +1,4 @@
-/* 
-  This file is a work in progess.
-  It will be used to create a tour editor.
-*/
-
-import {
-  Editor as EditorType,
-  EditorContent,
-  getAttributes,
-  useEditor,
-} from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 
 // The below extensions are included on StarterKit
 import Blockquote from "@tiptap/extension-blockquote";
@@ -34,7 +24,7 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import History from "@tiptap/extension-history";
 import Image from "@tiptap/extension-image";
-import Video from "../../lib/extensions/video";
+import Video from "./extensions/video";
 import FontFamily from "@tiptap/extension-font-family";
 import TextStyle from "@tiptap/extension-text-style";
 import Subscript from "@tiptap/extension-subscript";
@@ -43,33 +33,34 @@ import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
-// End of Additional Extensions
-import { STATUS } from "../../pages/tours/[id]";
-import { TourSiteImageType } from "./EditorMenu";
-import { useEffect } from "react";
+import React from "react";
 
-interface EditorProps {
-  pageId: React.MutableRefObject<string>;
+import { TourSiteImageType } from "../components/tour/EditorMenu";
+
+interface Parameters {
   savingTour: React.MutableRefObject<STATUS>;
   tourImages: React.MutableRefObject<TourSiteImageType[]>;
+  pageId: React.MutableRefObject<string>;
   unsavedPages: React.MutableRefObject<Map<string, string>>;
   setHeading: React.Dispatch<React.SetStateAction<string>>;
   setFontFamily: React.Dispatch<React.SetStateAction<string>>;
-  editor: EditorType | null;
-  setEditor: React.Dispatch<React.SetStateAction<EditorType | null>>;
 }
 
-export const Editor = ({
-  pageId,
+export enum STATUS {
+  DONE = 0,
+  SAVING = 1,
+  SETTING = 2,
+}
+
+export const useEditorHook = ({
   savingTour,
   tourImages,
+  pageId,
   unsavedPages,
   setHeading,
   setFontFamily,
-  editor,
-  setEditor,
-}: EditorProps) => {
-  const editorRef = useEditor({
+}: Parameters) => {
+  return useEditor({
     extensions: [
       Blockquote.configure({
         HTMLAttributes: {
@@ -216,7 +207,7 @@ export const Editor = ({
     editorProps: {
       attributes: {
         class:
-          "prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
+          "font-serif prose prose-base sm:prose lg:prose-lg xl:prose-2xl p-5 focus:outline-none",
       },
     },
     autofocus: "start",
@@ -245,7 +236,8 @@ export const Editor = ({
         setHeading("Heading 6");
       else setHeading("");
 
-      if (
+      if (!editor.isActive("textStyle")) setFontFamily("Times");
+      else if (
         editor.isActive("textStyle", {
           fontFamily:
             "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
@@ -259,10 +251,4 @@ export const Editor = ({
       else setFontFamily("");
     },
   });
-
-  // useEffect(() => {
-  //   if (pageId.current) console.log("test");
-  // }, [pageId]);
-
-  return <EditorContent editor={editorRef} />;
 };

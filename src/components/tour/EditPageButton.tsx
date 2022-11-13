@@ -1,6 +1,5 @@
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { TourExtend } from "../../lib/types/tour-extend";
-import { Editor } from "@tiptap/react";
 import { toast } from "react-toastify";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
@@ -10,12 +9,14 @@ interface EditPageButtonProps {
   tour: TourExtend;
   page: Page | undefined;
   setTour: React.Dispatch<React.SetStateAction<TourExtend>>;
+  setPage: React.Dispatch<React.SetStateAction<Page | undefined>>;
 }
 
 export const EditPageButton = ({
   tour,
   page,
   setTour,
+  setPage,
 }: EditPageButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -49,6 +50,7 @@ export const EditPageButton = ({
     toast.success("Updated page.");
 
     setTour(json.tour);
+    setPage(json.page);
     setIsOpen(false);
   };
 

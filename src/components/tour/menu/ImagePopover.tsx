@@ -13,7 +13,6 @@ interface ImagePopoverProps {
   editor: Editor | null;
   images: TourSiteImageType[];
   getImages: (alert?: Id) => {};
-  setIsUploadingFile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ImagePopover = ({
@@ -23,7 +22,6 @@ export const ImagePopover = ({
   editor,
   images,
   getImages,
-  setIsUploadingFile,
 }: ImagePopoverProps) => {
   const imageLoad = () => {
     if (images.length > 0)
@@ -112,7 +110,6 @@ export const ImagePopover = ({
                         type="file"
                         onChange={async (event) => {
                           const alert = toast.loading("Uploading...");
-                          setIsUploadingFile(true);
                           if (!event.target.files) return;
 
                           const formData = new FormData();

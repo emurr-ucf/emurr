@@ -17,14 +17,11 @@ export interface TourSiteImageType {
 
 interface EditorMenuProps {
   tourId: string;
-  pageId: string;
   setTour: Dispatch<SetStateAction<any>>;
   mediaSize: number;
   editor: Editor | null;
   images: TourSiteImageType[];
   getImages: (alert?: Id) => {};
-  isUploadingFile: boolean;
-  setIsUploadingFile: Dispatch<SetStateAction<boolean>>;
   heading: string;
   setHeading: Dispatch<SetStateAction<string>>;
   fontFamily: string;
@@ -33,14 +30,11 @@ interface EditorMenuProps {
 
 export const EditorMenu = ({
   tourId,
-  pageId,
   setTour,
   mediaSize,
   editor,
   images,
   getImages,
-  isUploadingFile,
-  setIsUploadingFile,
   heading,
   setHeading,
   fontFamily,
@@ -276,7 +270,6 @@ export const EditorMenu = ({
             editor={editor}
             images={images}
             getImages={getImages}
-            setIsUploadingFile={setIsUploadingFile}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img

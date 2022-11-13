@@ -1,4 +1,4 @@
-import { Tour } from "@prisma/client";
+import { Page, Tour } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "../../../lib/prisma";
@@ -13,6 +13,7 @@ export interface UpdatePageRequestType {
 export interface UpdatePageResponseType {
   error?: string;
   tour?: Tour;
+  page?: Page;
 }
 
 export default async function handler(
@@ -39,7 +40,11 @@ export default async function handler(
       });
 
       for (const page of pages) {
-        if (page.customURL != "" && page.customURL === customURL) {
+        if (
+          page.id !== pageId &&
+          page.customURL != "" &&
+          page.customURL === customURL
+        ) {
           return res
             .status(400)
             .json({ error: "Already a page with that custom URL" });
@@ -64,7 +69,7 @@ export default async function handler(
 
     const tour = await returnTour(page.tourId, token.id);
 
-    if (tour) res.status(200).json({ tour });
+    if (tour) res.status(200).json({ tour, page });
     else
       res.status(400).json({ error: `Page: ${pageId} could not be updated` });
   }

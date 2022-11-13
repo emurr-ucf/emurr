@@ -77,7 +77,12 @@ export const PageSidebar = ({
           <div className="flex items-center">
             {page !== undefined && (
               <>
-                <EditPageButton tour={tour} page={page} setTour={setTour} />
+                <EditPageButton
+                  tour={tour}
+                  page={page}
+                  setTour={setTour}
+                  setPage={setPage}
+                />
                 <DeletePageButton
                   tour={tour}
                   unsavedPages={unsavedPages}

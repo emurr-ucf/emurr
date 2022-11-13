@@ -2,7 +2,6 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Editor } from "@tiptap/react";
 import { Fragment } from "react";
-import { urlLocalPath } from "../../../lib/urlPath";
 
 interface FontFamilyProps {
   fontFamily: string;
