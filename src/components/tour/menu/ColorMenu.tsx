@@ -42,7 +42,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#C00000" className="w-5 h-5" />
                             </div>
                           )}
@@ -59,7 +59,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#FF0000" className="w-5 h-5" />
                             </div>
                           )}
@@ -76,7 +76,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#FFC000" className="w-5 h-5" />
                             </div>
                           )}
@@ -95,7 +95,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#FFFF00" className="w-5 h-5" />
                             </div>
                           )}
@@ -112,7 +112,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#92D050" className="w-5 h-5" />
                             </div>
                           )}
@@ -129,7 +129,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#00B050" className="w-5 h-5" />
                             </div>
                           )}
@@ -141,6 +141,23 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                     <td>
                       <form
                         onClick={(event) => {
+                          editor?.chain().focus().setColor("#94FADB").run();
+                          editor?.commands.focus();
+                          // setColor("Heading 1");
+                        }}
+                      >
+                        <Menu.Item>
+                          {({ active }) => (
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
+                              <input type="color" value="#94FADB" className="w-5 h-5" />
+                            </div>
+                          )}
+                        </Menu.Item>
+                      </form>
+                    </td>
+                    <td>
+                      <form
+                        onClick={(event) => {
                           editor?.chain().focus().setColor("#00B0F0").run();
                           editor?.commands.focus();
                           // setColor("Heading 1");
@@ -148,7 +165,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#00B0F0" className="w-5 h-5" />
                             </div>
                           )}
@@ -165,25 +182,8 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#0070C0" className="w-5 h-5" />
-                            </div>
-                          )}
-                        </Menu.Item>
-                      </form>
-                    </td>
-                    <td>
-                      <form
-                        onClick={(event) => {
-                          editor?.chain().focus().setColor("#002060").run();
-                          editor?.commands.focus();
-                          // setColor("Heading 1");
-                        }}
-                      >
-                        <Menu.Item>
-                          {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                              <input type="color" value="#002060" className="w-5 h-5" />
                             </div>
                           )}
                         </Menu.Item>
@@ -194,15 +194,15 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                     <td>
                       <form
                         onClick={(event) => {
-                          editor?.chain().focus().setColor("#7030A0").run();
+                          editor?.chain().focus().setColor("#002060").run();
                           editor?.commands.focus();
                           // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                              <input type="color" value="#7030A0" className="w-5 h-5" />
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
+                              <input type="color" value="#002060" className="w-5 h-5" />
                             </div>
                           )}
                         </Menu.Item>
@@ -211,15 +211,15 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                     <td>
                       <form
                         onClick={(event) => {
-                          editor?.chain().focus().setColor("AB7942").run();
+                          editor?.chain().focus().setColor("#7030A0").run();
                           editor?.commands.focus();
                           // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
-                              <input type="color" value="#AB7942" className="w-5 h-5" />
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
+                              <input type="color" value="#7030A0" className="w-5 h-5" />
                             </div>
                           )}
                         </Menu.Item>
@@ -235,7 +235,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
-                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"}`}>
+                            <div className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${active ? "bg-gray-600" : "text-gray-700"}`}>
                               <input type="color" value="#000000" className="w-5 h-5" />
                             </div>
                           )}
