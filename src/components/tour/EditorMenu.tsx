@@ -9,6 +9,7 @@ import { HeadingMenu } from "./menu/HeadingMenu";
 import { FontFamilyMenu } from "./menu/FontFamilyMenu";
 import { TableMenu } from "./menu/TableMenu";
 import { ImagePopover } from "./menu/ImagePopover";
+import { ColorMenu } from "./menu/ColorMenu";
 
 export interface TourSiteImageType {
   name: string;
@@ -31,36 +32,14 @@ interface EditorMenuProps {
   setFontFamily: Dispatch<SetStateAction<string>>;
 }
 
-export const EditorMenu = ({
-  tourId,
-  pageId,
-  setTour,
-  mediaSize,
-  editor,
-  images,
-  getImages,
-  isUploadingFile,
-  setIsUploadingFile,
-  heading,
-  setHeading,
-  fontFamily,
-  setFontFamily,
-}: EditorMenuProps) => {
+export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images, getImages, isUploadingFile, setIsUploadingFile, heading, setHeading, fontFamily, setFontFamily, color, setColor }: EditorMenuProps) => {
   return (
     <>
       <div className="flex justify-left 2xl:justify-between z-10 px-2 border-x border-y shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200 overflow-x-auto">
         <div className="flex items-center">
-          <HeadingMenu
-            heading={heading}
-            setHeading={setHeading}
-            editor={editor}
-          />
+          <HeadingMenu heading={heading} setHeading={setHeading} editor={editor} />
           <div className="border-x h-3/5 border-green-200 mx-2" />
-          <FontFamilyMenu
-            fontFamily={fontFamily}
-            setFontFamily={setFontFamily}
-            editor={editor}
-          />
+          <FontFamilyMenu fontFamily={fontFamily} setFontFamily={setFontFamily} editor={editor} />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
             src={`${urlLocalPath}/images/bold.svg`}
@@ -70,9 +49,7 @@ export const EditorMenu = ({
               editor?.commands.toggleBold();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("bold") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("bold") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/italic.svg`}
@@ -82,9 +59,7 @@ export const EditorMenu = ({
               editor?.commands.toggleItalic();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("italic") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("italic") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/underline.svg`}
@@ -94,10 +69,9 @@ export const EditorMenu = ({
               editor?.commands.toggleUnderline();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("underline") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("underline") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
+          <ColorMenu color={color} setColor={setColor} editor={editor} />
           <img
             src={`${urlLocalPath}/images/strikethrough.svg`}
             alt="strikethrough"
@@ -106,9 +80,7 @@ export const EditorMenu = ({
               editor?.commands.toggleStrike();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("strike") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("strike") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/subscript.svg`}
@@ -118,9 +90,7 @@ export const EditorMenu = ({
               editor?.commands.toggleSubscript();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("subscript") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("subscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/superscript.svg`}
@@ -130,9 +100,7 @@ export const EditorMenu = ({
               editor?.commands.toggleSuperscript();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("superscript") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("superscript") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -143,9 +111,7 @@ export const EditorMenu = ({
               editor?.commands.toggleHighlight({ color: "#f1e740" });
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("highlight") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("highlight") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -156,9 +122,7 @@ export const EditorMenu = ({
               editor?.commands.setTextAlign("left");
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive({ textAlign: "left" }) ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive({ textAlign: "left" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/align-center.svg`}
@@ -168,11 +132,7 @@ export const EditorMenu = ({
               editor?.commands.setTextAlign("center");
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive({ textAlign: "center" })
-                ? "bg-background-500"
-                : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive({ textAlign: "center" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/align-right.svg`}
@@ -182,11 +142,7 @@ export const EditorMenu = ({
               editor?.commands.setTextAlign("right");
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive({ textAlign: "right" })
-                ? "bg-background-500"
-                : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive({ textAlign: "right" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/align-justify.svg`}
@@ -196,11 +152,7 @@ export const EditorMenu = ({
               editor?.commands.setTextAlign("justify");
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive({ textAlign: "justify" })
-                ? "bg-background-500"
-                : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive({ textAlign: "justify" }) ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/code-box-line.svg`}
@@ -210,9 +162,7 @@ export const EditorMenu = ({
               editor?.commands.toggleCode();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("code") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("code") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
@@ -223,9 +173,7 @@ export const EditorMenu = ({
               editor?.commands.toggleBulletList();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("bulletList") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("bulletList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/list-ordered.svg`}
@@ -235,9 +183,7 @@ export const EditorMenu = ({
               editor?.commands.toggleOrderedList();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("orderedList") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("orderedList") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/double-quotes-l.svg`}
@@ -247,9 +193,7 @@ export const EditorMenu = ({
               editor?.commands.toggleBlockquote();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("blockquote") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("blockquote") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <img
             src={`${urlLocalPath}/images/separator.svg`}
@@ -259,9 +203,7 @@ export const EditorMenu = ({
               editor?.commands.setHorizontalRule();
               editor?.commands.focus();
             }}
-            className={`${
-              editor?.isActive("horizontalRule") ? "bg-background-500" : ""
-            } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
+            className={`${editor?.isActive("horizontalRule") ? "bg-background-500" : ""} w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <TableMenu editor={editor} />
@@ -269,15 +211,7 @@ export const EditorMenu = ({
 
         <div className="flex items-center">
           <div className="border-x h-3/5 border-green-200 mx-2" />
-          <ImagePopover
-            tourId={tourId}
-            setTour={setTour}
-            mediaSize={mediaSize}
-            editor={editor}
-            images={images}
-            getImages={getImages}
-            setIsUploadingFile={setIsUploadingFile}
-          />
+          <ImagePopover tourId={tourId} setTour={setTour} mediaSize={mediaSize} editor={editor} images={images} getImages={getImages} setIsUploadingFile={setIsUploadingFile} />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
             src={`${urlLocalPath}/images/format-clear.svg`}
