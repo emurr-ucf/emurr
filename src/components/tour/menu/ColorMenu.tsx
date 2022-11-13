@@ -14,9 +14,14 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
   return (
     <>
       <Menu as="div" className="relative inline-block">
-        <Menu.Button className="w-7 h-7 p- hover:bg-background-400 rounded transition ease-in-out">
-          <img src={`${urlLocalPath}/images/font-color.svg`} alt="font-color" title="Text Color" />
-          <div>{color}</div>
+        <Menu.Button className="w-7 h-7 hover:bg-background-400 rounded transition ease-in-out">
+          {/* <img src={`${urlLocalPath}/images/font-color.svg`} alt="font-color" title="Text Color" /> */}
+          <div className="grid grid-rows-2">
+            <div className="text-base">A</div>
+            <div className="w-5 h-6">
+              <input type="color" onInput={(event) => editor?.chain().focus().setColor(event.target.value).run()} value={editor?.getAttributes("textStyle").color} />
+            </div>
+          </div>
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -37,7 +42,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#C00000").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -54,7 +58,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#FF0000").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -71,7 +74,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#FFC000").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -90,7 +92,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#FFFF00").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -107,7 +108,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#92D050").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -124,7 +124,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#00B050").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -143,7 +142,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#94FADB").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -160,7 +158,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#00B0F0").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -177,7 +174,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#0070C0").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -196,7 +192,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#002060").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -213,7 +208,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#7030A0").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
@@ -230,7 +224,6 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                         onClick={(event) => {
                           editor?.chain().focus().setColor("#000000").run();
                           editor?.commands.focus();
-                          // setColor("Heading 1");
                         }}
                       >
                         <Menu.Item>
