@@ -672,8 +672,8 @@ export const EditorMenu = ({ tourId, pageId, setTour, mediaSize, editor, images,
 
                               const json = await res.json();
 
-                              if (res.status !== 200) toast.error(json.error);
-
+                              if (res.status !== 200) return toast.error(json.error);
+            
                               setTour(json.tour);
 
                               toast.update(alert, {

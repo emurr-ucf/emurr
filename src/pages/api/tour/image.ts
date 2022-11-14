@@ -45,6 +45,16 @@ export default async function handler(
     if (typeof tourId != "string")
       return res.status(400).json({ error: "Please send a tour ID." });
 
+    const currentTour = await prisma.tour.findFirst({
+      where: {
+        id: tourId,
+        tourAuthorId:token.id,
+      }
+    }) 
+    
+    if(!currentTour)
+      return res.status(404).json({ error: "Error uploading file." });
+
     const destination = "./websites/" + tourId + "/images/";
 
     // Upload page multer instance.
@@ -53,11 +63,27 @@ export default async function handler(
         destination,
         filename: (req, file, cb) => cb(null, file.originalname),
       }),
+      fileFilter: (req, file, callback) => {
+        const filetypes = ["image/jpg", "image/jpeg", "image/png", "video/mp4"];
+        if(!filetypes.includes(file.mimetype)) {
+          return callback(new Error('Incorrect file type sent.'));
+        }
+        callback(null, true);
+      },
+      limits: {
+        fileSize: 500000000
+      },
     });
-
+    
     // Creates page.
     /// @ts-ignore-start
-    uploadImage.any()(req, res, async () => {
+    uploadImage.any()(req, res, async(err) => {
+      if(multer.MulterError)
+        return res.status(409).json({ error: "Error uploading file." });
+
+      else if (err)
+        return res.status(409).json({ error: err.message });
+
       // @ts-ignore-end
       if (!req.files[0])
         return res.status(400).json({ error: "Failed to upload image." });

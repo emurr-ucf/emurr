@@ -72,14 +72,27 @@ export default async function handler(
           filename: (req, file, cb) =>
             cb(null, savedPage.id + /\.[0-9a-z]+$/i.exec(file.originalname)),
         }),
+        fileFilter: (req, file, callback) => {
+          const filetypes = ["text/html"];
+          if(!filetypes.includes(file.mimetype)) {
+            return callback(new Error('Incorrect file type sent.'));
+          }
+          callback(null, true);
+        },
       });
 
       // Creates page.
       /// @ts-ignore-start
-      createPage.any()(req, res, () => {});
-      // @ts-ignore-end
+      createPage.any()(req, res, (err) => {
+        if(multer.MulterError)
+          return res.status(409).json({ error: "Error uploading file." });
 
-      return res.status(200).json({ tour });
+        else if (err)
+            return res.status(409).json({ error: err });
+
+        return res.status(200).json({ tour });
+      });
+      // @ts-ignore-end
     } else return res.status(400).json({ error: "Page could not be created." });
   }
 

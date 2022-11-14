@@ -38,6 +38,16 @@ export default async function handler(
         filename: (req, file, cb) =>
           cb(null, token.id + /\.[0-9a-z]+$/i.exec(file.originalname)),
       }),
+      fileFilter: (req, file, callback) => {
+        const filetypes = ["image/jpg", "image/jpeg", "image/png"];
+        if(!filetypes.includes(file.mimetype)) {
+          return callback(new Error('Incorrect file type sent.'));
+        }
+        callback(null, true);
+      },
+      limits: {
+        fileSize: 4000000
+      },
     });
 
     // Replaces page in new position.

@@ -531,7 +531,7 @@ const TiptapPage: NextPage = ({
             {/* Create new page button */}
             <button
               onClick={async () => {
-                const file = new File([], "blank.html");
+                const file = new File([], "blank.html", { type: "text/html" });
 
                 const formData = new FormData();
 
