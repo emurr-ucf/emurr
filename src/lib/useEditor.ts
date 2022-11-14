@@ -43,8 +43,6 @@ interface Parameters {
   tourImages: React.MutableRefObject<TourSiteImageType[]>;
   pageId: React.MutableRefObject<string>;
   unsavedPages: React.MutableRefObject<Map<string, string>>;
-  setHeading: React.Dispatch<React.SetStateAction<string>>;
-  setFontFamily: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export enum STATUS {
@@ -58,8 +56,6 @@ export const useEditorHook = ({
   tourImages,
   pageId,
   unsavedPages,
-  setHeading,
-  setFontFamily,
 }: Parameters) => {
   return useEditor({
     extensions: [
@@ -213,7 +209,7 @@ export const useEditorHook = ({
       },
     },
     autofocus: "start",
-    onUpdate: () => {
+    onUpdate: ({ editor }) => {
       // mark page as unsaved
       if (
         !unsavedPages.current.has(pageId.current) &&
@@ -221,36 +217,6 @@ export const useEditorHook = ({
         savingTour.current === STATUS.DONE
       )
         unsavedPages.current.set(pageId.current, "");
-    },
-    onSelectionUpdate: ({ editor }) => {
-      if (editor.isActive("paragraph")) setHeading("Paragraph");
-      else if (editor.isActive("heading", { level: 1 }))
-        setHeading("Heading 1");
-      else if (editor.isActive("heading", { level: 2 }))
-        setHeading("Heading 2");
-      else if (editor.isActive("heading", { level: 3 }))
-        setHeading("Heading 3");
-      else if (editor.isActive("heading", { level: 4 }))
-        setHeading("Heading 4");
-      else if (editor.isActive("heading", { level: 5 }))
-        setHeading("Heading 5");
-      else if (editor.isActive("heading", { level: 6 }))
-        setHeading("Heading 6");
-      else setHeading("");
-
-      if (!editor.isActive("textStyle")) setFontFamily("Times");
-      else if (
-        editor.isActive("textStyle", {
-          fontFamily:
-            "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
-        })
-      )
-        setFontFamily("Times");
-      else if (editor.isActive("textStyle", { fontFamily: "Arial" }))
-        setFontFamily("Arial");
-      else if (editor.isActive("textStyle", { fontFamily: "Courier New" }))
-        setFontFamily("Courier New");
-      else setFontFamily("");
     },
   });
 };

@@ -131,7 +131,7 @@ const HomePage: NextPage = () => (
             </div>
             <div className="flex flex-col items-center w-52">
               <img
-                src={`${urlLocalPath}/images/logo_vert_5.png`}
+                src={`${urlLocalPath}/images/team/gian.png`}
                 alt="EMURR-Logo"
                 className="max-w-40 max-h-40 rounded-full shadow-md shadow-black"
               />

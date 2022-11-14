@@ -4,23 +4,38 @@ import { Editor } from "@tiptap/react";
 import { Fragment } from "react";
 
 interface FontFamilyProps {
-  fontFamily: string;
-  setFontFamily: React.Dispatch<React.SetStateAction<string>>;
   editor: Editor | null;
 }
 
-export const FontFamilyMenu = ({
-  fontFamily,
-  setFontFamily,
-  editor,
-}: FontFamilyProps) => {
+export const FontFamilyMenu = ({ editor }: FontFamilyProps) => {
+  const fontFamilies = new Map<string, string>([
+    ["ui-serif, Georgia, Cambria, Times New Roman, Times, serif", "Times"],
+    ["Arial", "Arial"],
+    ["Courier New", "Courier New"],
+  ]);
+
+  const selection = () => {
+    if (!editor?.isActive("textStyle")) return "Times";
+    else if (
+      editor?.isActive("textStyle", {
+        fontFamily: "ui-serif, Georgia, Cambria, Times New Roman, Times, serif",
+      })
+    )
+      return "Times";
+    else if (editor?.isActive("textStyle", { fontFamily: "Arial" }))
+      return "Arial";
+    else if (editor?.isActive("textStyle", { fontFamily: "Courier New" }))
+      return "Courier New";
+    else return "";
+  };
+
   return (
     <>
       <Menu as="div" className="relative w- inline-block text-left">
         <div>
           <Menu.Button className="inline-flex w-32 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none">
             <div className="font-bold w-full flex justify-between">
-              <div>{fontFamily}</div>
+              <div>{selection()}</div>
               <ChevronDownIcon
                 className="h-5 w-5 text-gray-700 hover:bg-gray-50"
                 aria-hidden="true"
@@ -45,7 +60,6 @@ export const FontFamilyMenu = ({
                     "ui-serif, Georgia, Cambria, Times New Roman, Times, serif"
                   );
                   editor?.commands.focus();
-                  setFontFamily("Times");
                 }}
               >
                 <Menu.Item>
@@ -64,7 +78,6 @@ export const FontFamilyMenu = ({
                 onClick={(event) => {
                   editor?.commands.setFontFamily("Arial");
                   editor?.commands.focus();
-                  setFontFamily("Arial");
                 }}
               >
                 <Menu.Item>
@@ -83,7 +96,6 @@ export const FontFamilyMenu = ({
                 onClick={(event) => {
                   editor?.commands.setFontFamily("Courier New");
                   editor?.commands.focus();
-                  setFontFamily("Courier New");
                 }}
               >
                 <Menu.Item>

@@ -38,18 +38,11 @@ const TiptapPage: NextPage = ({
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
   const tourImages = useRef<TourSiteImageType[]>([]);
 
-  // Selection
-  const [heading, setHeading] = useState("Heading 1");
-  const [fontFamily, setFontFamily] = useState("Arial");
-  const [color, setColor] = useState("Black");
-
   const editor = useEditorHook({
     savingTour,
     tourImages,
     pageId,
     unsavedPages,
-    setHeading,
-    setFontFamily,
   });
 
   const getImages = useCallback(
@@ -282,12 +275,6 @@ const TiptapPage: NextPage = ({
                   editor={editor}
                   images={tourImages.current}
                   getImages={getImages}
-                  heading={heading}
-                  setHeading={setHeading}
-                  fontFamily={fontFamily}
-                  setFontFamily={setFontFamily}
-                  color={color}
-                  setColor={setColor}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
