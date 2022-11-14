@@ -1,8 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Editor } from "@tiptap/react";
 import { Fragment } from "react";
-import { urlLocalPath } from "../../../lib/urlPath";
+import React from "react";
 
 interface ColorMenuProps {
   color: string;
@@ -13,6 +12,7 @@ interface ColorMenuProps {
 export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
   return (
     <>
+<<<<<<< HEAD
       <Menu
         as="div"
         className="relative inline-block w-7 h-7 hover:bg-background-400 rounded transition ease-in-out"
@@ -30,6 +30,28 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
           />
         </div>
 
+=======
+      <Menu as="div" className="relative inline-block">
+        <Menu.Button className="w-7 h-7 hover:bg-background-400 rounded transition ease-in-out">
+          {/* <img src={`${urlLocalPath}/images/font-color.svg`} alt="font-color" title="Text Color" /> */}
+          <div className="grid grid-rows-2">
+            <div className="text-base">A</div>
+            <div className="w-5 h-6">
+              <input
+                type="color"
+                onInput={(event) =>
+                  editor
+                    ?.chain()
+                    .focus()
+                    .setColor((event.target as HTMLInputElement).value)
+                    .run()
+                }
+                value={editor?.getAttributes("textStyle").color}
+              />
+            </div>
+          </div>
+        </Menu.Button>
+>>>>>>> da6fb48 (fix error in property value)
         <Transition
           as={Fragment}
           enter="transition ease-out duration-100"
@@ -53,6 +75,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -63,6 +86,10 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#C00000"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              <input type="color" value="#C00000" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -77,6 +104,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -87,6 +115,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#FF0000"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#FF0000" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -101,6 +134,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -111,6 +145,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#FFC000"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#FFC000" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -127,6 +166,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -137,6 +177,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#FFFF00"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#FFFF00" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -151,6 +196,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -161,6 +207,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#92D050"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#92D050" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -175,6 +226,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -185,6 +237,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#00B050"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#00B050" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -201,6 +258,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -211,6 +269,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#94FADB"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#94FADB" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -225,6 +288,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -235,6 +299,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#00B0F0"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#00B0F0" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -249,6 +318,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -259,6 +329,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#0070C0"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#0070C0" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -275,6 +350,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -285,6 +361,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#002060"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#002060" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -299,6 +380,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -309,6 +391,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#7030A0"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#7030A0" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
@@ -323,6 +410,7 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                       >
                         <Menu.Item>
                           {({ active }) => (
+<<<<<<< HEAD
                             <div
                               className={`flex items-center justify-start px-0.5 py-0.5 text-sm hover:bg-grey ${
                                 active ? "bg-gray-600" : "text-gray-700"
@@ -333,6 +421,11 @@ export const ColorMenu = ({ color, setColor, editor }: ColorMenuProps) => {
                                 value="#000000"
                                 className="w-5 h-5"
                               />
+=======
+                            <div className="flex items-center justify-center hover:bg-grey">
+                              {" "}
+                              <input type="color" value="#000000" className="w-5 h-5" />
+>>>>>>> da6fb48 (fix error in property value)
                             </div>
                           )}
                         </Menu.Item>
