@@ -40,6 +40,7 @@ export const CreatePageButton = ({
 
     if (res.status !== 200) return toast.error(json.error);
 
+    toast.success("Page created.");
     setTour(json.tour);
   };
 

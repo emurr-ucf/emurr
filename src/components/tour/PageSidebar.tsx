@@ -1,5 +1,6 @@
 import { Page } from "@prisma/client";
 import { Editor } from "@tiptap/react";
+import { setDefaultResultOrder } from "dns";
 import { MutableRefObject, useState } from "react";
 import { toast } from "react-toastify";
 import { TourExtend } from "../../lib/types/tour-extend";
@@ -49,11 +50,19 @@ export const PageSidebar = ({
         }
       );
 
-      const html = await res.text();
+      if (res.status !== 200) {
+        const json = await res.json();
 
-      if (res.status === 200)
-        editor?.commands.setContent(html === "" ? "" : html);
-      else return toast.error("Page does not exist.");
+        if (res.status !== 404) return toast.error(json.error);
+
+        setTour(json.tour);
+        setPage(undefined);
+        pageId.current = "";
+        return toast.error(json.error);
+      }
+
+      const html = await res.text();
+      editor?.commands.setContent(html === "" ? "" : html);
     }
 
     // update current page id

@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "../../../lib/prisma";
 import multer from "multer";
+import fs from "fs";
 
 // Put API Inputs.
 export interface PutProfileImageRequestType {
@@ -38,12 +39,26 @@ export default async function handler(
         filename: (req, file, cb) =>
           cb(null, token.id + /\.[0-9a-z]+$/i.exec(file.originalname)),
       }),
+      fileFilter: (req, file, callback) => {
+        const filetypes = ["image/jpg", "image/jpeg", "image/png"];
+        if (!filetypes.includes(file.mimetype)) {
+          return callback(new Error("Incorrect file type sent."));
+        }
+        callback(null, true);
+      },
+      limits: {
+        fileSize: 4000000,
+      },
     });
 
     // Replaces page in new position.
     /// @ts-ignore-start
-    updatedImage.any()(req, res, async () => {
+    updatedImage.any()(req, res, async (err) => {
       // @ts-ignore-end
+      if (err instanceof multer.MulterError)
+        return res.status(409).json({ error: "Error uploading file." });
+      else if (err) return res.status(409).json({ error: err.message });
+
       // Updates the last modified date.
       const user = await prisma.user.update({
         where: {
@@ -61,6 +76,38 @@ export default async function handler(
       } else
         return res.status(200).json({ error: "Image could not be updated." });
     });
+  } else if (req.method === "DELETE") {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: token.id,
+      },
+    });
+
+    if (user?.image) {
+      fs.unlink("../public_html/pi/" + user.image, async (err) => {
+        if (err)
+          return res
+            .status(409)
+            .json({ error: "Profile image could not be deleted." });
+
+        console.log("Profile image has been deleted.");
+
+        const image = await prisma.user.update({
+          where: {
+            id: token.id,
+          },
+          data: {
+            image: "",
+          },
+        });
+
+        if (image) return res.status(200).json({});
+        else
+          return res
+            .status(409)
+            .json({ error: "Profile image could not be deleted." });
+      });
+    }
   }
 }
 

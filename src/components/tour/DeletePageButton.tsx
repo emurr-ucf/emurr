@@ -21,7 +21,7 @@ export const DeletePageButton = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const deletePage = async () => {
-    const res = await fetch(`${urlPath}/api/pagedb`, {
+    const res = await fetch(`${urlPath}/api/tour/pagedb`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tourId: tour.id, pageId: pageId.current }),
@@ -31,6 +31,7 @@ export const DeletePageButton = ({
 
     if (res.status !== 200) return toast.error(json.error);
 
+    toast.success("Page deleted.");
     unsavedPages.current.delete(pageId.current);
     pageId.current = "";
     setTour(json.tour);

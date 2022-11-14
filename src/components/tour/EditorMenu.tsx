@@ -1,10 +1,7 @@
 import { Editor } from "@tiptap/react";
 import { Dispatch, SetStateAction } from "react";
-import { Menu, Transition, Popover } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Fragment } from "react";
 import { urlLocalPath } from "../../lib/urlPath";
-import { Id, toast } from "react-toastify";
+import { Id } from "react-toastify";
 import { HeadingMenu } from "./menu/HeadingMenu";
 import { FontFamilyMenu } from "./menu/FontFamilyMenu";
 import { TableMenu } from "./menu/TableMenu";

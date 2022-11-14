@@ -72,14 +72,45 @@ export default async function handler(
           filename: (req, file, cb) =>
             cb(null, savedPage.id + /\.[0-9a-z]+$/i.exec(file.originalname)),
         }),
+        fileFilter: (req, file, callback) => {
+          const filetypes = ["text/html"];
+          if (!filetypes.includes(file.mimetype)) {
+            return callback(new Error("Incorrect file type sent."));
+          }
+          callback(null, true);
+        },
       });
 
       // Creates page.
       /// @ts-ignore-start
-      createPage.any()(req, res, () => {});
-      // @ts-ignore-end
+      createPage.any()(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+          const deletepage = await prisma.page.delete({
+            where: {
+              id: savedPage.id,
+            },
+          });
+          if (!deletepage)
+            return res
+              .status(409)
+              .json({ error: "Page could not be deleted." });
+          else return res.status(409).json({ error: "Error uploading file." });
+        } else if (err) {
+          const deletepage = await prisma.page.delete({
+            where: {
+              id: savedPage.id,
+            },
+          });
+          if (!deletepage)
+            return res
+              .status(409)
+              .json({ error: "Page could not be deleted." });
+          else return res.status(409).json({ error: err.message });
+        }
 
-      return res.status(200).json({ tour });
+        return res.status(200).json({ tour });
+      });
+      // @ts-ignore-end
     } else return res.status(400).json({ error: "Page could not be created." });
   }
 
@@ -101,26 +132,37 @@ export default async function handler(
         filename: (req, file, cb) =>
           cb(null, pageId + /\.[0-9a-z]+$/i.exec(file.originalname)),
       }),
+      fileFilter: (req, file, callback) => {
+        const filetypes = ["text/html"];
+        if (!filetypes.includes(file.mimetype)) {
+          return callback(new Error("Incorrect file type sent."));
+        }
+        callback(null, true);
+      },
     });
 
     // Replaces page in new position.
     /// @ts-ignore-start
-    updatedPage.any()(req, res, () => {});
-    // @ts-ignore-end
+    updatedPage.any()(req, res, async (err) => {
+      if (err instanceof multer.MulterError)
+        return res.status(409).json({ error: "Error uploading file." });
+      else if (err) return res.status(409).json({ error: err.message });
 
-    // Updates the last modified date.
-    const updatePage = await prisma.page.updateMany({
-      where: {
-        id: pageId,
-        authorId: token.id,
-      },
-      data: {
-        pageUpdatedAt: new Date(),
-      },
+      // Updates the last modified date.
+      const updatePage = await prisma.page.updateMany({
+        where: {
+          id: pageId,
+          authorId: token.id,
+        },
+        data: {
+          pageUpdatedAt: new Date(),
+        },
+      });
+
+      if (updatePage) return res.status(200).json({ error: "Page updated." });
+      else return res.status(200).json({ error: "Page could not be updated." });
     });
-
-    if (updatePage) return res.status(200).json({ error: "Page updated." });
-    else return res.status(200).json({ error: "Page could not be updated." });
+    // @ts-ignore-end
   }
 
   // Gets file.
@@ -155,8 +197,24 @@ export default async function handler(
       "Content-Disposition",
       'attachement; filename="' + pageId + '.html"'
     );
-    file.on("error", (err) => {
-      return res.status(400).json({ error: "Page does not exist." });
+    file.on("error", async (err) => {
+      /// @ts-ignore-start
+      if (err.errno === -2) {
+        //@ts-ignore-end
+        await prisma.page.delete({
+          where: {
+            id: pageId,
+          },
+        });
+
+        const tour = await returnTour(tourId, token.id);
+
+        return res.status(404).json({ tour, error: "Page does not exist." });
+      } else {
+        return res
+          .status(400)
+          .json({ error: "An error has occured please try again." });
+      }
     });
     file.pipe(res);
   }
