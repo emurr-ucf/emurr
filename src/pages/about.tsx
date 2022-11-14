@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { Navbar } from "../components/navigation/Navbar";
+import { urlLocalPath } from "../lib/urlPath";
 
 const AboutPage: NextPage = () => {
   return (
@@ -7,141 +8,374 @@ const AboutPage: NextPage = () => {
       <div>
         <Navbar page="about" />
         <div className="px-20 text-justify">
-          ACT I PROLOGUE Two households, both alike in dignity, In fair Verona,
-          where we lay our scene, From ancient grudge break to new mutiny, Where
-          civil blood makes civil hands unclean. From forth the fatal loins of
-          these two foes A pair of star-cross`&apos;`d lovers take their life;
-          Whose misadventured piteous overthrows Do with their death bury their
-          parents`&apos;` strife. The fearful passage of their
-          death-mark`&apos;`d love, And the continuance of their parents`&apos;`
-          rage, Which, but their children`&apos;`s end, nought could remove, Is
-          now the two hours`&apos;` traffic of our stage; The which if you with
-          patient ears attend, What here shall miss, our toil shall strive to
-          mend. SCENE I. Verona. A public place. Enter SAMPSON and GREGORY, of
-          the house of Capulet, armed with swords and bucklers SAMPSON Gregory,
-          o`&apos;` my word, we`&apos;`ll not carry coals. GREGORY No, for then
-          we should be colliers. SAMPSON I mean, an we be in choler,
-          we`&apos;`ll draw. GREGORY Ay, while you live, draw your neck out
-          o`&apos;` the collar. SAMPSON I strike quickly, being moved. GREGORY
-          But thou art not quickly moved to strike. SAMPSON A dog of the house
-          of Montague moves me. GREGORY To move is to stir; and to be valiant is
-          to stand: therefore, if thou art moved, thou runn`&apos;`st away.
-          SAMPSON A dog of that house shall move me to stand: I will take the
-          wall of any man or maid of Montague`&apos;`s. GREGORY That shows thee
-          a weak slave; for the weakest goes to the wall. SAMPSON True; and
-          therefore women, being the weaker vessels, are ever thrust to the
-          wall: therefore I will push Montague`&apos;`s men from the wall, and
-          thrust his maids to the wall. GREGORY The quarrel is between our
-          masters and us their men. SAMPSON `&apos;`Tis all one, I will show
-          myself a tyrant: when I have fought with the men, I will be cruel with
-          the maids, and cut off their heads. GREGORY The heads of the maids?
-          SAMPSON Ay, the heads of the maids, or their maidenheads; take it in
-          what sense thou wilt. GREGORY They must take it in sense that feel it.
-          SAMPSON Me they shall feel while I am able to stand: and `&apos;`tis
-          known I am a pretty piece of flesh. GREGORY `&apos;`Tis well thou art
-          not fish; if thou hadst, thou hadst been poor John. Draw thy tool!
-          here comes two of the house of the Montagues. SAMPSON My naked weapon
-          is out: quarrel, I will back thee. GREGORY How! turn thy back and run?
-          SAMPSON Fear me not. GREGORY No, marry; I fear thee! SAMPSON Let us
-          take the law of our sides; let them begin. GREGORY I will frown as I
-          pass by, and let them take it as they list. SAMPSON Nay, as they dare.
-          I will bite my thumb at them; which is a disgrace to them, if they
-          bear it. Enter ABRAHAM and BALTHASAR ABRAHAM Do you bite your thumb at
-          us, sir? SAMPSON I do bite my thumb, sir. ABRAHAM Do you bite your
-          thumb at us, sir? SAMPSON [Aside to GREGORY] Is the law of our side,
-          if I say ay? GREGORY No. SAMPSON No, sir, I do not bite my thumb at
-          you, sir, but I bite my thumb, sir. GREGORY Do you quarrel, sir?
-          ABRAHAM Quarrel sir! no, sir. SAMPSON If you do, sir, I am for you: I
-          serve as good a man as you. ABRAHAM No better. SAMPSON Well, sir.
-          GREGORY Say `&apos;`better:`&apos;` here comes one of my
-          master`&apos;`s kinsmen. SAMPSON Yes, better, sir. ABRAHAM You lie.
-          SAMPSON Draw, if you be men. Gregory, remember thy swashing blow. They
-          fight Enter BENVOLIO BENVOLIO Part, fools! Put up your swords; you
-          know not what you do. Beats down their swords Enter TYBALT TYBALT
-          What, art thou drawn among these heartless hinds? Turn thee, Benvolio,
-          look upon thy death. BENVOLIO I do but keep the peace: put up thy
-          sword, Or manage it to part these men with me. TYBALT What, drawn, and
-          talk of peace! I hate the word, As I hate hell, all Montagues, and
-          thee: Have at thee, coward! They fight Enter, several of both houses,
-          who join the fray; then enter Citizens, with clubs First Citizen
-          Clubs, bills, and partisans! strike! beat them down! Down with the
-          Capulets! down with the Montagues! Enter CAPULET in his gown, and LADY
-          CAPULET CAPULET What noise is this? Give me my long sword, ho! LADY
-          CAPULET A crutch, a crutch! why call you for a sword? CAPULET My
-          sword, I say! Old Montague is come, And flourishes his blade in spite
-          of me. Enter MONTAGUE and LADY MONTAGUE MONTAGUE Thou villain
-          Capulet,--Hold me not, let me go. LADY MONTAGUE Thou shalt not stir a
-          foot to seek a foe. Enter PRINCE, with Attendants PRINCE Rebellious
-          subjects, enemies to peace, Profaners of this neighbour-stained
-          steel,-- Will they not hear? What, ho! you men, you beasts, That
-          quench the fire of your pernicious rage With purple fountains issuing
-          from your veins, On pain of torture, from those bloody hands Throw
-          your mistemper`&apos;`d weapons to the ground, And hear the sentence
-          of your moved prince. Three civil brawls, bred of an airy word, By
-          thee, old Capulet, and Montague, Have thrice disturb`&apos;`d the
-          quiet of our streets, And made Verona`&apos;`s ancient citizens Cast
-          by their grave beseeming ornaments, To wield old partisans, in hands
-          as old, Canker`&apos;`d with peace, to part your canker`&apos;`d hate:
-          If ever you disturb our streets again, Your lives shall pay the
-          forfeit of the peace. For this time, all the rest depart away: You
-          Capulet; shall go along with me: And, Montague, come you this
-          afternoon, To know our further pleasure in this case, To old
-          Free-town, our common judgment-place. Once more, on pain of death, all
-          men depart. Exeunt all but MONTAGUE, LADY MONTAGUE, and BENVOLIO
-          MONTAGUE Who set this ancient quarrel new abroach? Speak, nephew, were
-          you by when it began? BENVOLIO Here were the servants of your
-          adversary, And yours, close fighting ere I did approach: I drew to
-          part them: in the instant came The fiery Tybalt, with his sword
-          prepared, Which, as he breathed defiance to my ears, He swung about
-          his head and cut the winds, Who nothing hurt withal hiss`&apos;`d him
-          in scorn: While we were interchanging thrusts and blows, Came more and
-          more and fought on part and part, Till the prince came, who parted
-          either part. LADY MONTAGUE O, where is Romeo? saw you him to-day?
-          Right glad I am he was not at this fray. BENVOLIO Madam, an hour
-          before the worshipp`&apos;`d sun Peer`&apos;`d forth the golden window
-          of the east, A troubled mind drave me to walk abroad; Where,
-          underneath the grove of sycamore That westward rooteth from the
-          city`&apos;`s side, So early walking did I see your son: Towards him I
-          made, but he was ware of me And stole into the covert of the wood: I,
-          measuring his affections by my own, That most are busied when
-          they`&apos;`re most alone, Pursued my humour not pursuing his, And
-          gladly shunn`&apos;`d who gladly fled from me. MONTAGUE Many a morning
-          hath he there been seen, With tears augmenting the fresh morning dew.
-          Adding to clouds more clouds with his deep sighs; But all so soon as
-          the all-cheering sun Should in the furthest east begin to draw The
-          shady curtains from Aurora`&apos;`s bed, Away from the light steals
-          home my heavy son, And private in his chamber pens himself, Shuts up
-          his windows, locks far daylight out And makes himself an artificial
-          night: Black and portentous must this humour prove, Unless good
-          counsel may the cause remove. BENVOLIO My noble uncle, do you know the
-          cause? MONTAGUE I neither know it nor can learn of him. BENVOLIO Have
-          you importuned him by any means? MONTAGUE Both by myself and many
-          other friends: But he, his own affections`&apos;` counsellor, Is to
-          himself--I will not say how true-- But to himself so secret and so
-          close, So far from sounding and discovery, As is the bud bit with an
-          envious worm, Ere he can spread his sweet leaves to the air, Or
-          dedicate his beauty to the sun. Could we but learn from whence his
-          sorrows grow. We would as willingly give cure as know. Enter ROMEO
-          BENVOLIO See, where he comes: so please you, step aside; I`&apos;`ll
-          know his grievance, or be much denied. MONTAGUE I would thou wert so
-          happy by thy stay, To hear true shrift. Come, madam, let`&apos;`s
-          away. Exeunt MONTAGUE and LADY MONTAGUE BENVOLIO Good-morrow, cousin.
-          ROMEO Is the day so young? BENVOLIO But new struck nine. ROMEO Ay me!
-          sad hours seem long. Was that my father that went hence so fast?
-          BENVOLIO It was. What sadness lengthens Romeo`&apos;`s hours? ROMEO
-          Not having that, which, having, makes them short. BENVOLIO In love?
-          ROMEO Out-- BENVOLIO Of love? ROMEO Out of her favour, where I am in
-          love. BENVOLIO Alas, that love, so gentle in his view, Should be so
-          tyrannous and rough in proof! ROMEO Alas, that love, whose view is
-          muffled still, Should, without eyes, see pathways to his will! Where
-          shall we dine? O me! What fray was here? Yet tell me not, for I have
-          heard it all. Here`&apos;`s much to do with hate, but more with love.
-          Why, then, O brawling love! O loving hate! O any thing, of nothing
-          first create! O heavy lightness! serious vanity! Mis-shapen chaos of
-          well-seeming forms! Feather of lead, bright smoke, cold fire, sick
-          health! Still-waking sleep, that is not what it is! This love feel I,
-          that feel no love in this. Dost thou not laugh? BENVOLIO No, coz, I
-          rather weep. ROMEO Good heart, at what? BENVOLIO
+          <h1 id="1-table-of-contents">1. Table of Contents</h1>
+          <ul>
+            <li>
+              <a href="#1-table-of-contents">1. Table of Contents</a>
+            </li>
+            <li>
+              <a href="#2-emurr-unit">2. EMURR Unit</a>
+              <ul>
+                <li>
+                  <a href="#21-itemized-list">2.1. Itemized List</a>
+                </li>
+                <li>
+                  <a href="#22-setup">2.2. Setup</a>
+                  <ul>
+                    <li>
+                      <a href="#221-battery-power">2.2.1. Battery Power</a>
+                    </li>
+                    <li>
+                      <a href="#222-connecting-ethernet--power-supply">
+                        2.2.2. Connecting Ethernet &amp; Power Supply
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#3-tour-site-builder">3. Tour Site Builder</a>
+              <ul>
+                <li>
+                  <a href="#31-making-a-site">3.1. Making a Site</a>
+                </li>
+                <li>
+                  <a href="#32-transferring-sites-to-the-pi">
+                    3.2. Transferring Sites to the Pi
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <br />
+          <h1 id="2-emurr-unit">2. EMURR Unit</h1>
+          <h2 id="21-itemized-list">2.1. Itemized List</h2>
+          <p>What is in an EMURR Unit?</p>
+          <ul>
+            <li>
+              Raspberry Pi
+              <ul>
+                <li>Power Cable</li>
+                <li>Micro SD Card Operating System</li>
+              </ul>
+            </li>
+            <li>Battery</li>
+            <li>
+              TP Link Router
+              <ul>
+                <li>Power Cable</li>
+                <li>Backpack Mount</li>
+                <li>Battery &amp; Rasbperry Pi Mount</li>
+              </ul>
+            </li>
+            <li>Ethernet Cable</li>
+          </ul>
+          <img
+            src={`${urlLocalPath}/images/userman/unit.jpg`}
+            alt="top down image of EMURR unit"
+            width="400"
+            height="400"
+          />
+          {/* <!-- TODO: CHDR contact --> */}
+          <p>
+            If any parts are missing, damaged, or malfunctioning please contact
+            CHDR labs.
+          </p>
+          <h2 id="22-setup">2.2. Setup</h2>
+          {/* <!-- TODO: Images at each step --> */}
+          <h3 id="221-battery-power">2.2.1. Battery Power</h3>
+          <ol>
+            <li>Turn on battery</li>
+            <li>
+              Ensure battery shows four solid green lights. This indicates a
+              full charge.
+              <ol>
+                <li>
+                  <img
+                    src={`${urlLocalPath}/images/userman/charge.jpg`}
+                    alt="top down image of EMURR unit"
+                    width="200"
+                    height="200"
+                  />
+                </li>
+              </ol>
+            </li>
+          </ol>
+          <br />
+          <h3 id="222-connecting-ethernet--power-supply">
+            2.2.2. Connecting Ethernet &amp; Power Supply
+          </h3>
+          <ol>
+            <li>
+              Ethernet from Pi to router. Ensure that the ethernet from the Pi
+              goes to one of the orange ethernet ports. <strong>Not</strong> the
+              blue internet port.
+              <ol>
+                <li>
+                  <img
+                    src={`${urlLocalPath}/images/userman/ethernet.jpg`}
+                    alt="top down image of EMURR unit"
+                    width="200"
+                    height="200"
+                  />
+                </li>
+              </ol>
+            </li>
+            <li>
+              Power from battery to router
+              <ol>
+                <li>Connect power supply from battery to router</li>
+                <li>
+                  Turn on router by pressing the power button on the back side.
+                  <ol>
+                    <li>
+                      <img
+                        src={`${urlLocalPath}/images/userman/router-back-power.jpg`}
+                        alt="back of the router when powered"
+                        width="200"
+                        height="200"
+                      />
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  Verify the router is powered by all lights turning on followed
+                  by a blinking green power light.
+                </li>
+                <li>
+                  Wait ~15 seconds for the two wi-fi lights. This indicates
+                  wi-fi is being provided at <code>TP-Link_EMURR_5G</code>.
+                  <ol>
+                    <li>
+                      <img
+                        src={`${urlLocalPath}/images/userman/router-front-power.jpg`}
+                        alt="front of the router when powered"
+                        width="200"
+                        height="200"
+                      />
+                    </li>
+                    <li>
+                      <img
+                        src={`${urlLocalPath}/images/userman/wifi-screenshot.png`}
+                        alt="screenshot of wifi name"
+                        width="200"
+                        height="300"
+                      />
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+              <blockquote>
+                <p>
+                  Note: You can also use <code>TP-Link_EMURR</code> but we have
+                  seen less issues when using the 5G counterpart.
+                </p>
+              </blockquote>
+            </li>
+            <li>
+              Power from battery to Pi
+              <ol>
+                <li>Connect battery USB to Pi micro USB</li>
+                <li>
+                  Ensure the Pi is powered on by seeing a solid red LED light in
+                  the front
+                  <ol>
+                    <li>
+                      <img
+                        src={`${urlLocalPath}/images/userman/pi-back-power.jpg`}
+                        alt="raspberry pi cables when powered"
+                        width="200"
+                        height="200"
+                      />
+                    </li>
+                    <li>
+                      <img
+                        src={`${urlLocalPath}/images/userman/pi-front-power.jpg`}
+                        alt="raspberry pi LEDS when powered"
+                        width="200"
+                        height="200"
+                      />
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+              <blockquote>
+                <p>
+                  Note: if the red (right, closest to micro USB port) LED is
+                  blinking this implies a low voltage.
+                </p>
+              </blockquote>
+            </li>
+          </ol>
+          <br />
+          <h1 id="3-tour-site-builder">3. Tour Site Builder</h1>
+          <h2 id="31-making-a-site">3.1. Making a Site</h2>
+          <ol>
+            <li>
+              Navigate to the EMURR website{" "}
+              <a href="https://chdr.cs.ucf.edu/emurr">chdr.cs.ucf.edu/emurr</a>
+            </li>
+            <li>
+              Click <code>Login</code> at the top right if not already logged in
+              <ol>
+                <li>
+                  If this is your first time, either register on the left hand
+                  side or authenticate on the right
+                </li>
+                <li>
+                  Otherwise you can login on the left or also authenticate on
+                  the right
+                </li>
+              </ol>
+            </li>
+            <li>
+              Click profile picture at the top right
+              <ol>
+                <li>
+                  Select <code>dashboard</code> in the drop down
+                </li>
+              </ol>
+            </li>
+            <li>
+              Click <code>Create a New Tour</code>
+            </li>
+            <li>
+              You should be brought to the tour editor
+              <ol>
+                <li>
+                  If not, click <code>Edit</code> on the new tour's card
+                </li>
+              </ol>
+            </li>
+            <li>Change the tour name as desired at the top left</li>
+            <li>
+              Add new pages on the sidebar by clicking{" "}
+              <code>Create New Page</code>
+            </li>
+            <li>
+              Edit pages by clicking on the name <code>Untitled</code>
+            </li>
+            <li>
+              Edit page names as desired by hovering the page and clicking{" "}
+              <code>Edit</code>. When done click <code>Save</code>
+            </li>
+            <li>
+              To change the URL that pages will be displayed at select the{" "}
+              <code>link icon</code> on the page
+              <ol>
+                <li>
+                  Note: This is only the end of the url. See{" "}
+                  <a href="#transferring-sites-to-the-pi">
+                    Transferring Sites to the Pi
+                  </a>{" "}
+                  for more detail
+                </li>
+                <li>
+                  If there is no custsom URL one will be assigned based on the
+                  page's hidden ID. See{" "}
+                  <a href="#transferring-sites-to-the-pi">
+                    Transferring Sites to the Pi
+                  </a>{" "}
+                  for more detail
+                </li>
+              </ol>
+            </li>
+            <li>Create your pages as desired in the editor</li>
+            <li>
+              Ensure to save pages at the top <code>Save</code> button regularly
+              to not lose changes
+            </li>
+          </ol>
+          <br />
+          <p>Editor Features List</p>
+          <p>
+            <strong>From Left to Right</strong>
+          </p>
+          <ul>
+            <li>Heading</li>
+            <li>Font</li>
+            <li>Table</li>
+            <li>
+              Common Text Edits
+              <ul>
+                <li>Bold</li>
+                <li>Italic</li>
+                <li>Underline</li>
+                <li>Strikethrough</li>
+                <li>Subscript</li>
+                <li>Superscript</li>
+                <li>Highlight</li>
+              </ul>
+            </li>
+            <li>
+              Text Placement
+              <ul>
+                <li>Left</li>
+                <li>Center</li>
+                <li>Right</li>
+                <li>Inline</li>
+              </ul>
+            </li>
+            <li>Code Block</li>
+            <li>Unordered List</li>
+            <li>Ordered List</li>
+            <li>Block Quote</li>
+            <li>Horizontal Rule</li>
+            <li>Custom URL</li>
+            <li>Insert Image</li>
+            <li>Remove Styling</li>
+            <li>Undo</li>
+            <li>Redo</li>
+          </ul>
+          <br />
+          <h2 id="32-transferring-sites-to-the-pi">
+            3.2. Transferring Sites to the Pi
+          </h2>
+          <ol>
+            <li>
+              To perform transfer move the downloaded folder to a USB stick
+            </li>
+          </ol>
+          {/* <!-- TODO: explain why toursite --> */}
+          <ol start="2">
+            <li>Ensure the folder downloaded is named &quot;toursite&quot;</li>
+            <li>Plug the USB into the Rasbperry Pi</li>
+            <li>Wait until the green LED stops flashing</li>
+            <li>
+              When the LED stays lit the tours are transferred. Unplug the USB.
+              <ol>
+                <li>
+                  If the LED does not stop blinking or does not stay lit there
+                  has been an error. Try Again.
+                </li>
+              </ol>
+            </li>
+            <li>
+              Tours are now accessible on the <code>TP-LINK_EMURR_5G</code>{" "}
+              wi-fi. Connect to it to test.
+            </li>
+            <li>
+              To find the directory of all pages go to the URL{" "}
+              <code>emurr.local/toursite</code>
+            </li>
+            <li>
+              Pages will be accessible at the URL{" "}
+              <code>emurr.local/toursite/&lt;custom-url&gt;</code> without{" "}
+              <code>&lt;</code> and <code>&gt;</code>.
+            </li>
+            <li>
+              If using NFC tags ensure they point to the correct URL formatted
+              in the previous step
+              <ol>
+                <li>
+                  Visiting institutions should set their NFC tags before
+                  arrival. Request their EMURR NFC Tag URLs to ensure you have
+                  the correct URLs for your tour.
+                </li>
+              </ol>
+            </li>
+          </ol>
         </div>
       </div>
     </>
