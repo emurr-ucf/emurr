@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import React from "react";
-import { urlPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/util/Loading";
 import { toast } from "react-toastify";
 import { useUserStore } from "../../lib/store/user";
@@ -70,7 +70,7 @@ const DashboardPage: NextPage = () => {
     );
   }
   if (status === "unauthenticated") {
-    Router.push("/");
+    Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">

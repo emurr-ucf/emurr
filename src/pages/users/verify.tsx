@@ -4,7 +4,7 @@ import { OAuth } from "../../components/login/OAuth";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { VerifyEmail } from "../../components/login/VerifyEmail";
-import { urlPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/util/Loading";
 
 const VerifyEmailPage: NextPage = () => {
@@ -21,7 +21,7 @@ const VerifyEmailPage: NextPage = () => {
   }
 
   if (session) {
-    Router.push("/tours");
+    Router.push(`${urlLocalPath}/tours`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">

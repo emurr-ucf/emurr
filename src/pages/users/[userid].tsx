@@ -15,7 +15,7 @@ import { getToken } from "next-auth/jwt";
 import { prisma } from "../../lib/prisma";
 import { useEffect, useState } from "react";
 import Error from "next/error";
-import { urlPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/util/Loading";
 import { TourExtend } from "../../lib/types/tour-extend";
 
@@ -62,7 +62,7 @@ const ViewOtherPage: NextPage = ({
     );
   } else if (status === "unauthenticated" && !changing) {
     setChanging(true);
-    Router.push("/");
+    Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">
@@ -72,7 +72,7 @@ const ViewOtherPage: NextPage = ({
     );
   } else if (session?.user.id === userid && !changing) {
     setChanging(true);
-    Router.push("/tours");
+    Router.push(`${urlLocalPath}/tours`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">

@@ -60,6 +60,12 @@ const video = Node.create<VideoOptions>({
       disablePictureInPicture: {
         default: true,
       },
+      style: {
+        default: "display: block; margin: 0 auto;",
+      },
+      width: {
+        default: "80%",
+      },
     };
   },
 

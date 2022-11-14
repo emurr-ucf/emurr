@@ -7,6 +7,7 @@ import { ManageAccount } from "../../components/profile/ManageAccount";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import { Loading } from "../../components/util/Loading";
+import { urlLocalPath } from "../../lib/urlPath";
 
 const ProfilePage: NextPage = () => {
   const { data: session, status } = useSession();
@@ -21,7 +22,7 @@ const ProfilePage: NextPage = () => {
     );
   }
   if (status === "unauthenticated") {
-    Router.push("/");
+    Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">

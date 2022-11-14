@@ -4,7 +4,7 @@ import { OAuth } from "../../components/login/OAuth";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import { ForgotPasswordReset } from "../../components/login/ForgotPasswordReset";
-import { urlPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/util/Loading";
 
 const ForgotPasswordResetPage: NextPage = () => {
@@ -21,7 +21,7 @@ const ForgotPasswordResetPage: NextPage = () => {
   }
 
   if (session) {
-    Router.push("/tours");
+    Router.push(`${urlLocalPath}/tours`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">

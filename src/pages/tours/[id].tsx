@@ -18,7 +18,7 @@ import {
 } from "../../components/tour/EditorMenu";
 import React, { useCallback, useRef } from "react";
 import { unzip } from "unzipit";
-import { urlPath } from "../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { Loading } from "../../components/util/Loading";
 import { Id, toast } from "react-toastify";
 import { formatCreatedAt, formatUpdatedAt } from "../../lib/formatDate";
@@ -50,6 +50,8 @@ const TiptapPage: NextPage = ({
 
   const getImages = useCallback(
     async (alert?: Id) => {
+      if (!tour.id) return;
+
       try {
         const tours = await fetch(
           `${urlPath}/api/tour/image?tourId=${tour.id}`,
@@ -100,7 +102,7 @@ const TiptapPage: NextPage = ({
         });
       }
     },
-    [tour.id]
+    [tour]
   );
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const TiptapPage: NextPage = ({
     );
   }
   if (status === "unauthenticated") {
-    Router.push("/");
+    Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
         <div className="flex flex-col justify-center items-center mt-2">
