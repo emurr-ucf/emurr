@@ -52,12 +52,7 @@ export interface DeleteTourResponseType {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<
-    | GetTourResponseType
-    | CreateTourResponseType
-    | UpdateTourResponseType
-    | DeleteTourResponseType
-  >
+  res: NextApiResponse<GetTourResponseType | CreateTourResponseType | UpdateTourResponseType | DeleteTourResponseType>
   // context
 ) {
   // Checks JWT token.
@@ -128,13 +123,12 @@ export default async function handler(
     else return res.status(400).json({ error: "Tour could not be created." });
   }
 
-  // Updates a Tour's Title.
+  // Updates a Tour's Title and Description.
   else if (req.method === "PUT") {
-    const { tourId, tourTitle, published } = req.body;
+    const { tourId, tourTitle, tourDescription, published } = req.body;
 
     // Error: TourID was not sent.
-    if (!tourId)
-      return res.status(400).json({ error: "Tour ID cannot be blank." });
+    if (!tourId) return res.status(400).json({ error: "Tour ID cannot be blank." });
 
     if (published && token.role === Role.ADMIN) {
       // Updates pages with the published status.
@@ -148,10 +142,7 @@ export default async function handler(
         },
       });
 
-      if (!updatePages)
-        return res
-          .status(400)
-          .json({ error: "Page published status could not be updated." });
+      if (!updatePages) return res.status(400).json({ error: "Page published status could not be updated." });
     }
 
     // If all checks are passed.
@@ -163,6 +154,7 @@ export default async function handler(
       },
       data: {
         tourTitle,
+        tourDescription,
         published,
         tourUpdatedAt: new Date(),
       },
@@ -179,8 +171,7 @@ export default async function handler(
     const { tourId } = req.body;
 
     // Error: TourID was not sent.
-    if (!tourId)
-      return res.status(400).json({ error: "Tour ID cannot be blank." });
+    if (!tourId) return res.status(400).json({ error: "Tour ID cannot be blank." });
 
     // If all checks are passed.
     // Delete Tour.

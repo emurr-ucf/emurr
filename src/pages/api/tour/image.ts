@@ -103,8 +103,6 @@ export default async function handler(
 
       const tour = await returnTour(tourId, token.id);
 
-      console.log(tour);
-
       return res.status(200).json({ tour });
     });
   }

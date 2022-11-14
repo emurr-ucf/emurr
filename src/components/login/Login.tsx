@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FormType } from "../pages/login";
+import { FormType } from "../../pages/login";
 
 import {
   getProviders,

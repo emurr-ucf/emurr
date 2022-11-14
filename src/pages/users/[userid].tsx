@@ -3,12 +3,12 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { Navbar } from "../../components/Navbar";
+import { Navbar } from "../../components/navigation/Navbar";
 import { useSession } from "next-auth/react";
 import {
   TourSiteCard,
   TourSiteCardTemplate,
-} from "../../components/TourSiteCard";
+} from "../../components/tour/TourSiteCard";
 import Router, { useRouter } from "next/router";
 import { Tour } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
@@ -16,7 +16,7 @@ import { prisma } from "../../lib/prisma";
 import { useEffect, useState } from "react";
 import Error from "next/error";
 import { urlPath } from "../../lib/urlPath";
-import { Loading } from "../../components/Loading";
+import { Loading } from "../../components/util/Loading";
 import { TourExtend } from "../../lib/types/tour-extend";
 
 const ViewOtherPage: NextPage = ({
