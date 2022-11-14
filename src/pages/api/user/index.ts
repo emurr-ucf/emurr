@@ -5,6 +5,7 @@ import generateRandString from "../../../lib/generateRandString";
 import comparePass from "../../../lib/comparePassword";
 import hashPass from "../../../lib/hashPassword";
 import sendEmail from "../../../lib/sendEmail";
+import fs from "fs";
 
 // Post API Inputs.
 export interface PostUserRequestType {
@@ -192,6 +193,24 @@ export default async function handler(
 
     if (user) {
       if (user.password && comparePass(password, user.password)) {
+        const tours = await prisma.tour.findMany({
+          where: {
+            tourAuthorId:user.id,
+          }
+        });
+
+        if (tours) {
+          for (let i = 0; i < tours.length; i++) {
+            fs.rm("./websites/" + tours[i].id, { recursive: true, force: true }, (err) => {
+              if (err) {
+                throw err;
+              }
+      
+              console.log(`${tours[i].id} is deleted!`);
+            });
+          }
+        }
+        
         // Deletes User.
         const deleteUser = await prisma.user.delete({
           where: {

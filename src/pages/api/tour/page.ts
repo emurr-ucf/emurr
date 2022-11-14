@@ -84,11 +84,28 @@ export default async function handler(
       // Creates page.
       /// @ts-ignore-start
       createPage.any()(req, res, (err) => {
-        if(multer.MulterError)
-          return res.status(409).json({ error: "Error uploading file." });
-
-        else if (err)
-            return res.status(409).json({ error: err });
+        if(multer.MulterError) {
+          const deletepage = prisma.page.delete({
+            where:{
+              id: savedPage.id,
+            }
+          })
+          if(!deletepage)            
+            return res.status(409).json({ error: "Page could not be deleted." });
+          else
+            return res.status(409).json({ error: "Error uploading file." });
+        }
+        else if (err) {
+          const deletepage = prisma.page.delete({
+            where:{
+              id: savedPage.id,
+            }
+          })
+          if(!deletepage)            
+            return res.status(409).json({ error: "Page could not be deleted." });
+          else
+            return res.status(409).json({ error: err.message });
+        }
 
         return res.status(200).json({ tour });
       });
@@ -114,26 +131,38 @@ export default async function handler(
         filename: (req, file, cb) =>
           cb(null, pageId + /\.[0-9a-z]+$/i.exec(file.originalname)),
       }),
+      fileFilter: (req, file, callback) => {
+        const filetypes = ["text/html"];
+        if(!filetypes.includes(file.mimetype)) {
+          return callback(new Error('Incorrect file type sent.'));
+        }
+        callback(null, true);
+      },
     });
 
     // Replaces page in new position.
     /// @ts-ignore-start
-    updatedPage.any()(req, res, () => {});
-    // @ts-ignore-end
+    updatedPage.any()(req, res, async (err) => {
+      if(multer.MulterError)
+          return res.status(409).json({ error: "Error uploading file." });
+      else if (err)
+        return res.status(409).json({ error: err.message });
+      
+      // Updates the last modified date.
+      const updatePage = await prisma.page.updateMany({
+        where: {
+          id: pageId,
+          authorId: token.id,
+        },
+        data: {
+          pageUpdatedAt: new Date(),
+        },
+      });
 
-    // Updates the last modified date.
-    const updatePage = await prisma.page.updateMany({
-      where: {
-        id: pageId,
-        authorId: token.id,
-      },
-      data: {
-        pageUpdatedAt: new Date(),
-      },
+      if (updatePage) return res.status(200).json({ error: "Page updated." });
+      else return res.status(200).json({ error: "Page could not be updated." });
     });
-
-    if (updatePage) return res.status(200).json({ error: "Page updated." });
-    else return res.status(200).json({ error: "Page could not be updated." });
+    // @ts-ignore-end
   }
 
   // Gets file.

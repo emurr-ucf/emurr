@@ -95,12 +95,25 @@ export default async function handler(
     });
 
     if (page) {
-      fs.rm("./websites/" + tourId + "/" + pageId + ".html", (err) => {
+      fs.unlink("./websites/" + tourId + "/" + pageId + ".html", async (err) => {
         if (err)
           return res.status(409).json({ error: "Page could not be removed." });
 
         console.log(pageId + "has been deleted.");
-        return res.status(200).json({});
+
+        const deletePage = await prisma.page.deleteMany({
+          where: {
+            id: pageId,
+            authorId: token.id,
+          },
+        });
+
+        const tour = await returnTour(tourId, token.id);
+
+        if (deletePage)
+          return res.status(200).json({tour});
+        else
+          return res.status(409).json({error: "Page could not be deleted." });
       });
     } else return res.status(404).json({ error: "Page was not found." });
   }
