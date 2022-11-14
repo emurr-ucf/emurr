@@ -10,13 +10,18 @@ const HomePage: NextPage = () => (
       <div className="flex flex-col px-28 mt-10">
         <div className="text-5xl font-light">Welcome to EMURR</div>
         <div className="flex justify-between mt-5">
-          <div className="w-3/5 text-xl font-light text-justify">
-            EMURR? I do not even know her! Ok, ok. I will put some lorem ipsum
-            here or whatever. Cupcake ipsum dolor sit amet muffin donut bonbon
-            cake. Cheesecake tiramisu dragée cotton candy wafer icing
-            gingerbread. Jujubes jelly I love ice cream I love croissant
-            pudding. Dragée I love jelly beans I love macaroon marzipan candy
-            dragée.
+          <div className="flex flex-col">
+            <div className="w-3/5 text-2xl font-light text-justify">
+              The Exhibit Marker Uniform Resource Router (EMURR) aims to bridge
+              the gap between digital infrastructure and interpretive
+              information in public spaces. Through our extensive tour site
+              builder you can create the best tour for any situation. Download
+              onto the EMURR unit hardware and you're ready to go anywhere.
+            </div>
+            <div className="w-3/5 text-xl text-center font-bold mt-1">
+              Get started by logging in and accessing your dashboard at the top
+              right of the page.
+            </div>
           </div>
           <div className="flex justify-center w-2/5 items-center">
             <Logo />
