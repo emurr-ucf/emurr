@@ -6,6 +6,7 @@ import { HeadingMenu } from "./menu/HeadingMenu";
 import { FontFamilyMenu } from "./menu/FontFamilyMenu";
 import { TableMenu } from "./menu/TableMenu";
 import { ImagePopover } from "./menu/ImagePopover";
+import { ColorMenu } from "./menu/ColorMenu";
 
 export interface TourSiteImageType {
   name: string;
@@ -19,10 +20,6 @@ interface EditorMenuProps {
   editor: Editor | null;
   images: TourSiteImageType[];
   getImages: (alert?: Id) => {};
-  heading: string;
-  setHeading: Dispatch<SetStateAction<string>>;
-  fontFamily: string;
-  setFontFamily: Dispatch<SetStateAction<string>>;
 }
 
 export const EditorMenu = ({
@@ -32,26 +29,14 @@ export const EditorMenu = ({
   editor,
   images,
   getImages,
-  heading,
-  setHeading,
-  fontFamily,
-  setFontFamily,
 }: EditorMenuProps) => {
   return (
     <>
       <div className="flex justify-left 2xl:justify-between z-10 px-2 border shadow-md shadow-slate-400 rounded-tr-md border-green-800 bg-background-200 overflow-x-auto">
         <div className="flex shrink-0 items-center">
-          <HeadingMenu
-            heading={heading}
-            setHeading={setHeading}
-            editor={editor}
-          />
+          <HeadingMenu editor={editor} />
           <div className="border-x h-3/5 border-green-200 mx-2" />
-          <FontFamilyMenu
-            fontFamily={fontFamily}
-            setFontFamily={setFontFamily}
-            editor={editor}
-          />
+          <FontFamilyMenu editor={editor} />
           <div className="border-x h-3/5 border-green-200 mx-2" />
           <img
             src={`${urlLocalPath}/images/bold.svg`}
@@ -126,6 +111,7 @@ export const EditorMenu = ({
             } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
           <div className="border-x h-3/5 border-green-200 mx-2" />
+          <ColorMenu editor={editor} />
           <img
             src={`${urlLocalPath}/images/mark-pen-line.svg`}
             alt="mark-pen-line"

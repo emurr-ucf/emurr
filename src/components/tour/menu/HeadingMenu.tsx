@@ -5,23 +5,25 @@ import { Fragment } from "react";
 import { urlLocalPath } from "../../../lib/urlPath";
 
 interface HeadingMenuProps {
-  heading: string;
-  setHeading: React.Dispatch<React.SetStateAction<string>>;
   editor: Editor | null;
 }
 
-export const HeadingMenu = ({
-  heading,
-  setHeading,
-  editor,
-}: HeadingMenuProps) => {
+export const HeadingMenu = ({ editor }: HeadingMenuProps) => {
   return (
     <>
       <Menu as="div" className="relative inline-block text-left my-2">
         <div>
           <Menu.Button className="inline-flex w-32 justify-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none">
             <div className="font-bold w-full flex justify-between">
-              <div>{heading}</div>
+              <div>
+                {editor?.getAttributes("paragraph").textAlign
+                  ? editor?.isActive("paragraph")
+                    ? "Paragraph"
+                    : ""
+                  : editor?.getAttributes("heading").level
+                  ? `Heading ${editor?.getAttributes("heading").level}`
+                  : ""}
+              </div>
               <ChevronDownIcon
                 className="h-5 w-5 text-gray-700 hover:bg-gray-50"
                 aria-hidden="true"
@@ -44,7 +46,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.toggleHeading({ level: 1 });
                   editor?.commands.focus();
-                  setHeading("Heading 1");
                 }}
               >
                 <Menu.Item>
@@ -68,7 +69,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.toggleHeading({ level: 2 });
                   editor?.commands.focus();
-                  setHeading("Heading 2");
                 }}
               >
                 <Menu.Item>
@@ -92,7 +92,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.toggleHeading({ level: 3 });
                   editor?.commands.focus();
-                  setHeading("Heading 3");
                 }}
               >
                 <Menu.Item>
@@ -116,7 +115,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.toggleHeading({ level: 4 });
                   editor?.commands.focus();
-                  setHeading("Heading 4");
                 }}
               >
                 <Menu.Item>
@@ -140,7 +138,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.toggleHeading({ level: 5 });
                   editor?.commands.focus();
-                  setHeading("Heading 5");
                 }}
               >
                 <Menu.Item>
@@ -164,7 +161,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.toggleHeading({ level: 6 });
                   editor?.commands.focus();
-                  setHeading("Heading 6");
                 }}
               >
                 <Menu.Item>
@@ -188,7 +184,6 @@ export const HeadingMenu = ({
                 onClick={(event) => {
                   editor?.commands.setParagraph();
                   editor?.commands.focus();
-                  setHeading("Paragraph");
                 }}
               >
                 <Menu.Item>

@@ -41,17 +41,11 @@ const TiptapPage: NextPage = ({
     []
   );
 
-  // Selection
-  const [heading, setHeading] = useState("Heading 1");
-  const [fontFamily, setFontFamily] = useState("Arial");
-
   const editor = useEditorHook({
     savingTour,
     tourImages,
     pageId,
     unsavedPages,
-    setHeading,
-    setFontFamily,
   });
 
   const getImages = useCallback(
@@ -287,10 +281,6 @@ const TiptapPage: NextPage = ({
                   editor={editor}
                   images={renderTourImages}
                   getImages={getImages}
-                  heading={heading}
-                  setHeading={setHeading}
-                  fontFamily={fontFamily}
-                  setFontFamily={setFontFamily}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />
