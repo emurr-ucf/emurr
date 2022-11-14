@@ -41,13 +41,13 @@ export default async function handler(
       }),
       fileFilter: (req, file, callback) => {
         const filetypes = ["image/jpg", "image/jpeg", "image/png"];
-        if(!filetypes.includes(file.mimetype)) {
-          return callback(new Error('Incorrect file type sent.'));
+        if (!filetypes.includes(file.mimetype)) {
+          return callback(new Error("Incorrect file type sent."));
         }
         callback(null, true);
       },
       limits: {
-        fileSize: 4000000
+        fileSize: 4000000,
       },
     });
 
@@ -55,10 +55,9 @@ export default async function handler(
     /// @ts-ignore-start
     updatedImage.any()(req, res, async (err) => {
       // @ts-ignore-end
-      if(multer.MulterError)
-          return res.status(409).json({ error: "Error uploading file." });
-      else if (err)
-        return res.status(409).json({ error: err.message });
+      if (err instanceof multer.MulterError)
+        return res.status(409).json({ error: "Error uploading file." });
+      else if (err) return res.status(409).json({ error: err.message });
 
       // Updates the last modified date.
       const user = await prisma.user.update({
@@ -77,20 +76,20 @@ export default async function handler(
       } else
         return res.status(200).json({ error: "Image could not be updated." });
     });
-  }
-
-  else if (req.method === "DELETE") {
+  } else if (req.method === "DELETE") {
     const user = await prisma.user.findFirst({
       where: {
         id: token.id,
-      }
+      },
     });
 
-    if(user?.image) {
+    if (user?.image) {
       fs.unlink("../public_html/pi/" + user.image, async (err) => {
-        if (err) 
-          return res.status(409).json({ error: "Profile image could not be deleted." });
-        
+        if (err)
+          return res
+            .status(409)
+            .json({ error: "Profile image could not be deleted." });
+
         console.log("Profile image has been deleted.");
 
         const image = await prisma.user.update({
@@ -101,15 +100,15 @@ export default async function handler(
             image: "",
           },
         });
-        
-        if(image)
-          return res.status(200).json({});
+
+        if (image) return res.status(200).json({});
         else
-          return res.status(409).json({ error: "Profile image could not be deleted." });
+          return res
+            .status(409)
+            .json({ error: "Profile image could not be deleted." });
       });
     }
   }
-
 }
 
 export const config = {

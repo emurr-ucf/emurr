@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
 import { Editor } from "@tiptap/react";
-import { Fragment } from "react";
+import { ChangeEvent, Fragment, useCallback } from "react";
 import { Id, toast } from "react-toastify";
 import { TourExtend } from "../../../lib/types/tour-extend";
 import { urlLocalPath } from "../../../lib/urlPath";
@@ -63,6 +63,39 @@ export const ImagePopover = ({
     else return <div>You have no images on this tour.</div>;
   };
 
+  const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+    const alert = toast.loading("Uploading...");
+    if (!event.target.files) return;
+
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+
+    const res = await fetch(`${urlLocalPath}/api/tour/image?tourId=${tourId}`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const json = await res.json();
+
+    if (res.status !== 200)
+      return toast.update(alert, {
+        render: json.error,
+        type: "error",
+        isLoading: false,
+        closeOnClick: true,
+        closeButton: true,
+        autoClose: 2000,
+      });
+
+    setTour(json.tour);
+
+    toast.update(alert, {
+      render: "Resyncing...",
+    });
+
+    getImages(alert);
+  };
+
   return (
     <>
       <Popover className="relative">
@@ -108,33 +141,7 @@ export const ImagePopover = ({
                       <input
                         id="media-file"
                         type="file"
-                        onChange={async (event) => {
-                          const alert = toast.loading("Uploading...");
-                          if (!event.target.files) return;
-
-                          const formData = new FormData();
-                          formData.append("file", event.target.files[0]);
-
-                          const res = await fetch(
-                            `${urlLocalPath}/api/tour/image?tourId=${tourId}`,
-                            {
-                              method: "POST",
-                              body: formData,
-                            }
-                          );
-
-                          const json = await res.json();
-
-                          if (res.status !== 200) toast.error(json.error);
-
-                          setTour(json.tour);
-
-                          toast.update(alert, {
-                            render: "Resyncing...",
-                          });
-
-                          getImages(alert);
-                        }}
+                        onChange={uploadImage}
                         className="hidden"
                       />
                     </label>

@@ -37,6 +37,9 @@ const TiptapPage: NextPage = ({
   const savingTour = useRef<number>(STATUS.DONE);
   const [isLoadingStartup, setIsLoadingStartup] = useState(true);
   const tourImages = useRef<TourSiteImageType[]>([]);
+  const [renderTourImages, setRenderTourImages] = useState<TourSiteImageType[]>(
+    []
+  );
 
   // Selection
   const [heading, setHeading] = useState("Heading 1");
@@ -85,6 +88,7 @@ const TiptapPage: NextPage = ({
         }
 
         tourImages.current = images;
+        setRenderTourImages(images);
         setIsLoadingStartup(false);
       } catch (err) {
         if (!alert)
@@ -196,7 +200,9 @@ const TiptapPage: NextPage = ({
                         continue;
                       }
 
-                      const file = new File([data], "blank.html");
+                      const file = new File([data], "blank.html", {
+                        type: "text/html",
+                      });
                       const formData = new FormData();
                       formData.append("file", file);
 
@@ -279,7 +285,7 @@ const TiptapPage: NextPage = ({
                   setTour={setTour}
                   mediaSize={tour.mediaSize}
                   editor={editor}
-                  images={tourImages.current}
+                  images={renderTourImages}
                   getImages={getImages}
                   heading={heading}
                   setHeading={setHeading}

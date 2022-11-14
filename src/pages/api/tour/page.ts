@@ -74,8 +74,8 @@ export default async function handler(
         }),
         fileFilter: (req, file, callback) => {
           const filetypes = ["text/html"];
-          if(!filetypes.includes(file.mimetype)) {
-            return callback(new Error('Incorrect file type sent.'));
+          if (!filetypes.includes(file.mimetype)) {
+            return callback(new Error("Incorrect file type sent."));
           }
           callback(null, true);
         },
@@ -83,28 +83,29 @@ export default async function handler(
 
       // Creates page.
       /// @ts-ignore-start
-      createPage.any()(req, res, (err) => {
-        if(multer.MulterError) {
-          const deletepage = prisma.page.delete({
-            where:{
+      createPage.any()(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+          const deletepage = await prisma.page.delete({
+            where: {
               id: savedPage.id,
-            }
-          })
-          if(!deletepage)            
-            return res.status(409).json({ error: "Page could not be deleted." });
-          else
-            return res.status(409).json({ error: "Error uploading file." });
-        }
-        else if (err) {
-          const deletepage = prisma.page.delete({
-            where:{
+            },
+          });
+          if (!deletepage)
+            return res
+              .status(409)
+              .json({ error: "Page could not be deleted." });
+          else return res.status(409).json({ error: "Error uploading file." });
+        } else if (err) {
+          const deletepage = await prisma.page.delete({
+            where: {
               id: savedPage.id,
-            }
-          })
-          if(!deletepage)            
-            return res.status(409).json({ error: "Page could not be deleted." });
-          else
-            return res.status(409).json({ error: err.message });
+            },
+          });
+          if (!deletepage)
+            return res
+              .status(409)
+              .json({ error: "Page could not be deleted." });
+          else return res.status(409).json({ error: err.message });
         }
 
         return res.status(200).json({ tour });
@@ -133,8 +134,8 @@ export default async function handler(
       }),
       fileFilter: (req, file, callback) => {
         const filetypes = ["text/html"];
-        if(!filetypes.includes(file.mimetype)) {
-          return callback(new Error('Incorrect file type sent.'));
+        if (!filetypes.includes(file.mimetype)) {
+          return callback(new Error("Incorrect file type sent."));
         }
         callback(null, true);
       },
@@ -143,11 +144,10 @@ export default async function handler(
     // Replaces page in new position.
     /// @ts-ignore-start
     updatedPage.any()(req, res, async (err) => {
-      if(multer.MulterError)
-          return res.status(409).json({ error: "Error uploading file." });
-      else if (err)
-        return res.status(409).json({ error: err.message });
-      
+      if (err instanceof multer.MulterError)
+        return res.status(409).json({ error: "Error uploading file." });
+      else if (err) return res.status(409).json({ error: err.message });
+
       // Updates the last modified date.
       const updatePage = await prisma.page.updateMany({
         where: {
@@ -197,8 +197,24 @@ export default async function handler(
       "Content-Disposition",
       'attachement; filename="' + pageId + '.html"'
     );
-    file.on("error", (err) => {
-      return res.status(400).json({ error: "Page does not exist." });
+    file.on("error", async (err) => {
+      /// @ts-ignore-start
+      if (err.errno === -2) {
+        //@ts-ignore-end
+        await prisma.page.delete({
+          where: {
+            id: pageId,
+          },
+        });
+
+        const tour = await returnTour(tourId, token.id);
+
+        return res.status(404).json({ tour, error: "Page does not exist." });
+      } else {
+        return res
+          .status(400)
+          .json({ error: "An error has occured please try again." });
+      }
     });
     file.pipe(res);
   }
