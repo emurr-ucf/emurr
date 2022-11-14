@@ -7,7 +7,7 @@ const AboutPage: NextPage = () => {
     <>
       <div>
         <Navbar page="about" />
-        <div className="px-20 text-justify">
+        <div className="my-5 px-20 text-justify">
           <h1 id="1-table-of-contents">1. Table of Contents</h1>
           <ul className="list-inside max-w-sm">
             <li>
@@ -109,7 +109,7 @@ const AboutPage: NextPage = () => {
           <h2 id="22-setup">2.2. Setup</h2>
           {/* <!-- TODO: Images at each step --> */}
           <h3 id="221-battery-power">2.2.1. Battery Power</h3>
-          <ol className="list-decimal list-inside">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
             <li>Turn on battery</li>
             <li>
               Ensure battery shows four solid green lights. This indicates a
@@ -129,12 +129,12 @@ const AboutPage: NextPage = () => {
           <h3 id="222-connecting-ethernet--power-supply">
             2.2.2. Connecting Ethernet &amp; Power Supply
           </h3>
-          <ol className="list-decimal list-inside">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
             <li>
               Ethernet from Pi to router. Ensure that the ethernet from the Pi
               goes to one of the orange ethernet ports. <strong>Not</strong> the
               blue internet port.
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
               <img
                     className="m-5"
                     src={`${urlLocalPath}/images/userman/ethernet.jpg`}
@@ -146,11 +146,11 @@ const AboutPage: NextPage = () => {
             </li>
             <li>
               Power from battery to router
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>Connect power supply from battery to router</li>
                 <li>
                   Turn on router by pressing the power button on the back side.
-                  <ol className="list-decimal list-inside">
+                  <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                   <img
                         className="m-5"
                         src={`${urlLocalPath}/images/userman/router-back-power.jpg`}
@@ -167,7 +167,7 @@ const AboutPage: NextPage = () => {
                 <li>
                   Wait ~15 seconds for the two wi-fi lights. This indicates
                   wi-fi is being provided at <code>TP-Link_EMURR_5G</code>.
-                  <ol className="list-decimal list-inside">
+                  <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                   <img
                         className="m-5"
                         src={`${urlLocalPath}/images/userman/router-front-power.jpg`}
@@ -194,12 +194,12 @@ const AboutPage: NextPage = () => {
             </li>
             <li>
               Power from battery to Pi
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>Connect battery USB to Pi micro USB</li>
                 <li>
                   Ensure the Pi is powered on by seeing a solid red LED light in
                   the front
-                  <ol className="list-decimal list-inside">
+                  <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                   <img
                         className="m-5"
                         src={`${urlLocalPath}/images/userman/pi-back-power.jpg`}
@@ -228,14 +228,14 @@ const AboutPage: NextPage = () => {
           <br />
           <h1 id="3-tour-site-builder">3. Tour Site Builder</h1>
           <h2 id="31-making-a-site">3.1. Making a Site</h2>
-          <ol className="list-decimal list-inside">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
             <li>
               Navigate to the EMURR website{" "}
               <a href="https://chdr.cs.ucf.edu/emurr">chdr.cs.ucf.edu/emurr</a>
             </li>
             <li>
               Click <code>Login</code> at the top right if not already logged in
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
                   If this is your first time, either register on the left hand
                   side or authenticate on the right
@@ -248,7 +248,7 @@ const AboutPage: NextPage = () => {
             </li>
             <li>
               Click profile picture at the top right
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
                   Select <code>dashboard</code> in the drop down
                 </li>
@@ -259,7 +259,7 @@ const AboutPage: NextPage = () => {
             </li>
             <li>
               You should be brought to the tour editor
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
                   If not, click <code>Edit</code> on the new tour's card
                 </li>
@@ -280,7 +280,7 @@ const AboutPage: NextPage = () => {
             <li>
               To change the URL that pages will be displayed at select the{" "}
               <code>link icon</code> on the page
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
                   Note: This is only the end of the url. See{" "}
                   <a href="#transferring-sites-to-the-pi">
@@ -349,19 +349,19 @@ const AboutPage: NextPage = () => {
           <h2 id="32-transferring-sites-to-the-pi">
             3.2. Transferring Sites to the Pi
           </h2>
-          <ol className="list-decimal list-inside">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
             <li>
               To perform transfer move the downloaded folder to a USB stick
             </li>
           </ol>
           {/* <!-- TODO: explain why toursite --> */}
-          <ol className="list-decimal list-inside"> start="2">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside"> start="2">
             <li>Ensure the folder downloaded is named &quot;toursite&quot;</li>
             <li>Plug the USB into the Rasbperry Pi</li>
             <li>Wait until the green LED stops flashing</li>
             <li>
               When the LED stays lit the tours are transferred. Unplug the USB.
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
                   If the LED does not stop blinking or does not stay lit there
                   has been an error. Try Again.
@@ -384,7 +384,7 @@ const AboutPage: NextPage = () => {
             <li>
               If using NFC tags ensure they point to the correct URL formatted
               in the previous step
-              <ol className="list-decimal list-inside">
+              <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
                   Visiting institutions should set their NFC tags before
                   arrival. Request their EMURR NFC Tag URLs to ensure you have
