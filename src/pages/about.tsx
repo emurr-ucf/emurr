@@ -355,7 +355,7 @@ const AboutPage: NextPage = () => {
             </li>
           </ol>
           {/* <!-- TODO: explain why toursite --> */}
-          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside"> start="2">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
             <li>Ensure the folder downloaded is named &quot;toursite&quot;</li>
             <li>Plug the USB into the Rasbperry Pi</li>
             <li>Wait until the green LED stops flashing</li>
