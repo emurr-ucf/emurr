@@ -261,7 +261,7 @@ const AboutPage: NextPage = () => {
               You should be brought to the tour editor
               <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
                 <li>
-                  If not, click <code>Edit</code> on the new tour's card
+                  If not, click <code>Edit</code> on the new tour&apos;s card
                 </li>
               </ol>
             </li>
@@ -290,7 +290,7 @@ const AboutPage: NextPage = () => {
                 </li>
                 <li>
                   If there is no custsom URL one will be assigned based on the
-                  page's hidden ID. See{" "}
+                  page&apos;s hidden ID. See{" "}
                   <a href="#transferring-sites-to-the-pi">
                     Transferring Sites to the Pi
                   </a>{" "}
@@ -355,7 +355,7 @@ const AboutPage: NextPage = () => {
             </li>
           </ol>
           {/* <!-- TODO: explain why toursite --> */}
-          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside"> start="2">
+          <ol className="pl-5 mt-2 space-y-1 list-decimal list-inside">
             <li>Ensure the folder downloaded is named &quot;toursite&quot;</li>
             <li>Plug the USB into the Rasbperry Pi</li>
             <li>Wait until the green LED stops flashing</li>
