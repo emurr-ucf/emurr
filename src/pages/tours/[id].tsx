@@ -41,6 +41,7 @@ const TiptapPage: NextPage = ({
   // Selection
   const [heading, setHeading] = useState("Heading 1");
   const [fontFamily, setFontFamily] = useState("Arial");
+  const [color, setColor] = useState("Black");
 
   const editor = useEditorHook({
     savingTour,
@@ -285,6 +286,8 @@ const TiptapPage: NextPage = ({
                   setHeading={setHeading}
                   fontFamily={fontFamily}
                   setFontFamily={setFontFamily}
+                  color={color}
+                  setColor={setColor}
                 />
                 <div className="h-screen bg-background-200 border-x border-green-900 overflow-y-auto">
                   <EditorContent editor={editor} />

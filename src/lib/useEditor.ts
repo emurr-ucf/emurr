@@ -27,6 +27,7 @@ import Image from "@tiptap/extension-image";
 import Video from "./extensions/video";
 import FontFamily from "@tiptap/extension-font-family";
 import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import Table from "@tiptap/extension-table";
@@ -101,6 +102,7 @@ export const useEditorHook = ({
       CharacterCount,
       Underline,
       TextStyle,
+      Color,
       FontFamily,
       Subscript,
       Superscript,

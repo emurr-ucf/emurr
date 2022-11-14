@@ -9,6 +9,7 @@ import { HeadingMenu } from "./menu/HeadingMenu";
 import { FontFamilyMenu } from "./menu/FontFamilyMenu";
 import { TableMenu } from "./menu/TableMenu";
 import { ImagePopover } from "./menu/ImagePopover";
+import { ColorMenu } from "./menu/ColorMenu";
 
 export interface TourSiteImageType {
   name: string;
@@ -26,6 +27,8 @@ interface EditorMenuProps {
   setHeading: Dispatch<SetStateAction<string>>;
   fontFamily: string;
   setFontFamily: Dispatch<SetStateAction<string>>;
+  color: string;
+  setColor: Dispatch<SetStateAction<string>>;
 }
 
 export const EditorMenu = ({
@@ -39,6 +42,8 @@ export const EditorMenu = ({
   setHeading,
   fontFamily,
   setFontFamily,
+  color,
+  setColor,
 }: EditorMenuProps) => {
   return (
     <>
@@ -92,6 +97,7 @@ export const EditorMenu = ({
               editor?.isActive("underline") ? "bg-background-500" : ""
             } w-7 h-7 p-1 hover:bg-background-400 rounded transition ease-in-out`}
           />
+          <ColorMenu color={color} setColor={setColor} editor={editor} />
           <img
             src={`${urlLocalPath}/images/strikethrough.svg`}
             alt="strikethrough"
