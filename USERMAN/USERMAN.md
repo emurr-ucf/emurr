@@ -36,8 +36,6 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 ## 2.2. Setup
 
-<!-- TODO: Images at each step -->
-
 ### 2.2.1. Battery Power
 
 1. Turn on battery
@@ -127,9 +125,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 ## 3.2. Transferring Sites to the Pi
 
 1.  To perform transfer move the downloaded folder to a USB stick
-
 <!-- TODO: explain why toursite -->
-
 2.  Ensure the folder downloaded is named "toursite"
 3.  Plug the USB into the Rasbperry Pi
 4.  Wait until the green LED stops flashing
