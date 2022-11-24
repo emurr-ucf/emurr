@@ -53,7 +53,8 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 3. Power from battery to Pi
 
    1. Connect the Pi to the battery using a USB to micro-USB cable <br><img src="./images/pi-back-power.jpg" alt="raspberry pi cables when powered" width="200" height="200"/><br>
-   2. Ensure the Pi is powered on by seeing a solid red LED light in the front <br><img src="./images/pi-front-power.jpg" alt="raspberry pi LEDS when powered" width="200" height="200"/><br> > Note: if the red (right, closest to micro-USB port) LED is blinking this implies a low voltage.
+   2. Ensure the Pi is powered on by seeing a solid red LED light in the front <br><img src="./images/pi-front-power.jpg" alt="raspberry pi LEDS when powered" width="200" height="200"/><br>
+      > Note: if the red (right, closest to micro-USB port) LED is blinking this implies a low voltage.
 
 <br>
 
@@ -94,7 +95,6 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
   - Strikethrough
   - Subscript
   - Superscript
-  - Font
   - Highlight
 - Text Placement
   - Left
@@ -116,15 +116,16 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 ## 2.3. Transferring Sites to the Pi
 
-1.  To perform a transfer, move the downloaded folder to a USB stick
+1. To perform a transfer, click profile picture at the top right and select `Download` in the drop down
 <!-- TODO: explain why toursite -->
-2.  Ensure the folder downloaded is named "toursite"
-3.  Plug the USB into the Raspberry Pi
-4.  Wait until the green LED stops flashing
-5.  When the LED stays lit the tours are transferred. Unplug the USB.
-    1.  If the LED does not stop blinking or does not stay lit there has been an error. Try Again.
-6.  Tours are now accessible on the `TP-LINK_EMURR_5G` wi-fi. Connect to it to test.
-7.  To find the directory of all pages go to the URL `emurr.local`
-8.  Pages will be accessible at the URL `emurr.local/<custom-url>` without `<` and `>`.
-9.  If using NFC tags, ensure they point to the correct URL formatted in the previous step
-    1.  Visiting institutions should set their NFC tags before arrival. Request their EMURR NFC Tag URLs to ensure you have the correct URLs for your tour.
+2. Move the downloaded folder to a USB stick
+3. Ensure the folder downloaded is named "toursite"
+4. Plug the USB into the Raspberry Pi
+5. Wait until the green LED stops flashing
+6. When the LED stays lit the tours are transferred. Unplug the USB.
+   1. If the LED does not stop blinking or does not stay lit there has been an error. Try Again.
+7. Tours are now accessible on the `TP-LINK_EMURR_5G` wi-fi. Connect to it to test.
+8. To find the directory of all pages go to the URL `emurr.local/toursite`
+9. Pages will be accessible at the URL `emurr.local/toursite/<custom-url>` without `<` and `>`.
+10. If using NFC tags, ensure they point to the correct URL formatted in the previous step
+    1. Visiting institutions should set their NFC tags before arrival. Request their EMURR NFC Tag URLs to ensure you have the correct URLs for your tour.
