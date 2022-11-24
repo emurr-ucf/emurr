@@ -8,7 +8,8 @@
     - [2.2.2. Connecting Ethernet \& Power Supply](#222-connecting-ethernet--power-supply)
 - [3. Tour Site Builder](#3-tour-site-builder)
   - [3.1. Making a Site](#31-making-a-site)
-  - [3.2. Transferring Sites to the Pi](#32-transferring-sites-to-the-pi)
+  - [3.2. Editor Features List](#32-editor-features-list)
+  - [3.3. Transferring Sites to the Pi](#33-transferring-sites-to-the-pi)
 
 <br>
 
@@ -20,7 +21,7 @@ What is in an EMURR Unit?
 
 - Raspberry Pi
   - Power Cable
-  - Micro SD Card Operating System
+  - MicroSD Card for Operating System
 - Battery
 - TP Link Router
   - Power Cable
@@ -70,19 +71,18 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 4. Click `Create a New Tour`
 5. You should be brought to the tour editor
    1. If not, click `Edit` on the new tour's card
-6. Change the tour name as desired at the top left
-7. Add new pages on the sidebar by clicking `Create New Page`
-8. Edit pages by clicking on the name `Untitled`
-9. Edit page names as desired by hovering the page and clicking `Edit`. When done click `Save`
-10. To change the URL that pages will be displayed at select the `link icon` on the page
-    1. Note: This is only the end of the URL. See [Transferring Sites to the Pi](#transferring-sites-to-the-pi) for more detail
-    2. If there is no custom URL one will be assigned based on the page's hidden ID. See [Transferring Sites to the Pi](#transferring-sites-to-the-pi) for more detail
-11. Create your pages as desired in the editor
-12. Ensure to save pages at the top `Save` button regularly to not lose changes
+6. Change the tour name as desired and add a brief tour description at the top left
+7. Add new pages on the sidebar by clicking the plus-add icon
+8. Edit pages by selecting the page and click on the `edit` icon. A modal pop ups on the screen to:
+   1. Edit page name.
+   2. Edit the URL that the page will be displayed at. Note this is only the end of the URL. If there is no custom URL one will be assigned based on the page's hidden ID. See [Transferring Sites to the Pi](#33-transferring-sites-to-the-pi) for more details
+   3. When done click `Save`
+9. Create your pages as desired in the editor
+10. Ensure to save pages at the top `Save` button regularly to not lose changes
 
 <br>
 
-## Editor Features List
+## 3.2. Editor Features List
 
 **From Left to Right**
 
@@ -115,7 +115,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 <br>
 
-## 3.2. Transferring Sites to the Pi
+## 3.3. Transferring Sites to the Pi
 
 1.  To perform a transfer, move the downloaded folder to a USB stick
 <!-- TODO: explain why toursite -->
@@ -125,7 +125,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 5.  When the LED stays lit the tours are transferred. Unplug the USB.
     1.  If the LED does not stop blinking or does not stay lit there has been an error. Try Again.
 6.  Tours are now accessible on the `TP-LINK_EMURR_5G` wi-fi. Connect to it to test.
-7.  To find the directory of all pages go to the URL `emurr.local/toursite`
-8.  Pages will be accessible at the URL `emurr.local/toursite/<custom-url>` without `<` and `>`.
+7.  To find the directory of all pages go to the URL `emurr.local`
+8.  Pages will be accessible at the URL `emurr.local/<custom-url>` without `<` and `>`.
 9.  If using NFC tags, ensure they point to the correct URL formatted in the previous step
     1.  Visiting institutions should set their NFC tags before arrival. Request their EMURR NFC Tag URLs to ensure you have the correct URLs for your tour.
