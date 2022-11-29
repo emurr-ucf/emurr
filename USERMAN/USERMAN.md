@@ -1,26 +1,26 @@
-# 1. Table of Contents
+# [Table of Contents](#1-table-of-contents)
 
-- [1. Table of Contents](#1-table-of-contents)
-- [2. EMURR Unit](#2-emurr-unit)
-  - [2.1. Itemized List](#21-itemized-list)
-  - [2.2. Setup](#22-setup)
-    - [2.2.1. Battery Power](#221-battery-power)
-    - [2.2.2. Connecting Ethernet \& Power Supply](#222-connecting-ethernet--power-supply)
-- [3. Tour Site Builder](#3-tour-site-builder)
-  - [3.1. Making a Site](#31-making-a-site)
-  - [3.2. Transferring Sites to the Pi](#32-transferring-sites-to-the-pi)
+- [1. EMURR Unit](#2-emurr-unit)
+  - [1.1. Itemized List](#11-itemized-list)
+  - [1.2. Setup](#12-setup)
+    - [1.2.1. Battery Power](#121-battery-power)
+    - [1.2.2. Connecting Ethernet \& Power Supply](#122-connecting-ethernet--power-supply)
+- [2. Tour Site Builder](#2-tour-site-builder)
+  - [2.1. Making a Site](#21-making-a-site)
+  - [2.2. Editor Features List](#22-editor-features-list)
+  - [2.3. Transferring Sites to the Pi](#23-transferring-sites-to-the-pi)
 
 <br>
 
-# 2. EMURR Unit
+# 1. EMURR Unit
 
-## 2.1. Itemized List
+## 1.1. Itemized List
 
 What is in an EMURR Unit?
 
 - Raspberry Pi
   - Power Cable
-  - Micro SD Card Operating System
+  - MicroSD Card for Operating System
 - Battery
 - TP Link Router
   - Power Cable
@@ -34,14 +34,14 @@ What is in an EMURR Unit?
 
 If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
-## 2.2. Setup
+## 1.2. Setup
 
-### 2.2.1. Battery Power
+### 1.2.1. Battery Power
 
 1. Turn on battery
 2. Ensure battery shows four solid green lights. This indicates a full charge. <br> <img src="./images/charge.jpg" alt="top down image of EMURR unit" width="200" height="200"/> <br>
 
-### 2.2.2. Connecting Ethernet & Power Supply
+### 1.2.2. Connecting Ethernet & Power Supply
 
 1. Ethernet cable from Pi to the router. Ensure that the ethernet cable from the Pi goes to one of the orange ethernet ports and **Not** the blue internet port. <br> <img src="./images/ethernet.jpg" alt="top down image of EMURR unit" width="200" height="200"/> <br>
 2. Power from battery to router
@@ -53,13 +53,14 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 3. Power from battery to Pi
 
    1. Connect the Pi to the battery using a USB to micro-USB cable <br><img src="./images/pi-back-power.jpg" alt="raspberry pi cables when powered" width="200" height="200"/><br>
-   2. Ensure the Pi is powered on by seeing a solid red LED light in the front <br><img src="./images/pi-front-power.jpg" alt="raspberry pi LEDS when powered" width="200" height="200"/><br> > Note: if the red (right, closest to micro-USB port) LED is blinking this implies a low voltage.
+   2. Ensure the Pi is powered on by seeing a solid red LED light in the front <br><img src="./images/pi-front-power.jpg" alt="raspberry pi LEDS when powered" width="200" height="200"/><br>
+      > Note: if the red (right, closest to micro-USB port) LED is blinking this implies a low voltage.
 
 <br>
 
-# 3. Tour Site Builder
+# 2. Tour Site Builder
 
-## 3.1. Making a Site
+## 2.1. Making a Site
 
 1. Navigate to the EMURR website [chdr.cs.ucf.edu/emurr](https://chdr.cs.ucf.edu/emurr)
 2. Click `Login` at the top right if not already logged in
@@ -70,19 +71,18 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 4. Click `Create a New Tour`
 5. You should be brought to the tour editor
    1. If not, click `Edit` on the new tour's card
-6. Change the tour name as desired at the top left
-7. Add new pages on the sidebar by clicking `Create New Page`
-8. Edit pages by clicking on the name `Untitled`
-9. Edit page names as desired by hovering the page and clicking `Edit`. When done click `Save`
-10. To change the URL that pages will be displayed at select the `link icon` on the page
-    1. Note: This is only the end of the URL. See [Transferring Sites to the Pi](#transferring-sites-to-the-pi) for more detail
-    2. If there is no custom URL one will be assigned based on the page's hidden ID. See [Transferring Sites to the Pi](#transferring-sites-to-the-pi) for more detail
-11. Create your pages as desired in the editor
-12. Ensure to save pages at the top `Save` button regularly to not lose changes
+6. Change the tour name as desired and add a brief tour description at the top left
+7. Add new pages on the sidebar by clicking the plus-add icon
+8. Edit pages by selecting the page and click on the `edit` icon. A modal pop ups on the screen to:
+   1. Edit page name.
+   2. Edit the URL that the page will be displayed at. Note this is only the end of the URL. If there is no custom URL one will be assigned based on the page's hidden ID. See [Transferring Sites to the Pi](#23-transferring-sites-to-the-pi) for more details
+   3. When done click `Save`
+9. Create your pages as desired in the editor
+10. Ensure to save pages at the top `Save` button regularly to not lose changes
 
 <br>
 
-## Editor Features List
+## 2.2. Editor Features List
 
 **From Left to Right**
 
@@ -95,7 +95,6 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
   - Strikethrough
   - Subscript
   - Superscript
-  - Font
   - Highlight
 - Text Placement
   - Left
@@ -115,17 +114,18 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 <br>
 
-## 3.2. Transferring Sites to the Pi
+## 2.3. Transferring Sites to the Pi
 
-1.  To perform a transfer, move the downloaded folder to a USB stick
+1. To perform a transfer, click profile picture at the top right and select `Download` in the drop down
 <!-- TODO: explain why toursite -->
-2.  Ensure the folder downloaded is named "toursite"
-3.  Plug the USB into the Raspberry Pi
-4.  Wait until the green LED stops flashing
-5.  When the LED stays lit the tours are transferred. Unplug the USB.
-    1.  If the LED does not stop blinking or does not stay lit there has been an error. Try Again.
-6.  Tours are now accessible on the `TP-LINK_EMURR_5G` wi-fi. Connect to it to test.
-7.  To find the directory of all pages go to the URL `emurr.local/toursite`
-8.  Pages will be accessible at the URL `emurr.local/toursite/<custom-url>` without `<` and `>`.
-9.  If using NFC tags, ensure they point to the correct URL formatted in the previous step
-    1.  Visiting institutions should set their NFC tags before arrival. Request their EMURR NFC Tag URLs to ensure you have the correct URLs for your tour.
+2. Move the downloaded folder to a USB stick
+3. Ensure the folder downloaded is named "toursite"
+4. Plug the USB into the Raspberry Pi
+5. Wait until the green LED stops flashing
+6. When the LED stays lit the tours are transferred. Unplug the USB.
+   1. If the LED does not stop blinking or does not stay lit there has been an error. Try Again.
+7. Tours are now accessible on the `TP-LINK_EMURR_5G` wi-fi. Connect to it to test.
+8. To find the directory of all pages go to the URL `emurr.local/toursite`
+9. Pages will be accessible at the URL `emurr.local/toursite/<custom-url>` without `<` and `>`.
+10. If using NFC tags, ensure they point to the correct URL formatted in the previous step
+    1. Visiting institutions should set their NFC tags before arrival. Request their EMURR NFC Tag URLs to ensure you have the correct URLs for your tour.

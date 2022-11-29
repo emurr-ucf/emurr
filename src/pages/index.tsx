@@ -59,7 +59,7 @@ const HomePage: NextPage = () => (
               <div className="text-center font-light text-gray-800">Database | Server Admin</div>
             </div>
             <div className="flex flex-col items-center w-52">
-              <img src={`${urlLocalPath}/images/logo_vert_5.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black" />
+              <img src={`${urlLocalPath}/images/team/omar.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black object-cover" />
               <div className="text-center font-semibold">Omar Mosa</div>
               <div className="text-center font-light text-gray-800">Frontend Developer</div>
             </div>
