@@ -20,16 +20,6 @@ export const TourUserMenuChildren = ({ tour }: TourUserMenuChildrenProps) => {
         {({ active }) => <DownloadButton tour={tour} />}
       </Menu.Item>
       <Menu.Item>
-        {/* Publish button */}
-        {({ active }) => (
-          <button
-            className={`flex items-center justify-between w-full px-4 py-2 text-sm hover:bg-background-500`}
-          >
-            Publish
-          </button>
-        )}
-      </Menu.Item>
-      <Menu.Item>
         {/* Delete Button */}
         {({ active }) => <ConfirmDeleteModal tour={tour} />}
       </Menu.Item>
