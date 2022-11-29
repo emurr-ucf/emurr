@@ -23,7 +23,7 @@ export const Logo = () => {
             alt=""
             onClick={clicked}
           />
-          <div className="bg-green-700 rounded-full h-36 absolute w-36 animate-ping"></div>
+          <div className="bg-green-500 rounded-full h-36 absolute w-36 hover:animate-ping"></div>
         </div>
       </div>
     </>
