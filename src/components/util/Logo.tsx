@@ -16,10 +16,10 @@ export const Logo = () => {
   return (
     <>
       <div>
-        <div className="rounded-full flex items-center justify-center relative border-2 border-red-300">
-          <div className="border-2 border-sky-500 rounded-full h-36 absolute w-36 animate-ping hover:bg-green-500 hover:z-0" />
+        <div className="rounded-full flex items-center justify-center relative">
+          <div className="rounded-full h-36 absolute w-36 animate-ping hover:bg-green-500 hover:z-0" />
           <img
-            className="border-2 border-emerald-300 rounded-full w-28 h-28 self-center cursor-pointer m-0 z-50"
+            className="rounded-full w-28 h-28 self-center cursor-pointer m-0 z-50"
             src={setImagePrefix()}
             alt="outline of an NFC tag. when clicked becomes a pie."
             onClick={clicked}
