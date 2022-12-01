@@ -23,7 +23,7 @@ const HomePage: NextPage = () => (
         </div>
         <div className="text-5xl mt-40 font-light">Meet the team</div>
         <div className="flex flex-col justify-between mt-5">
-          <div className="text-2xl text-center font-light">Royal Court of House CHDR</div>
+          <div className="text-2xl text-center font-light">CHDR Faculty Members</div>
           <div className="flex justify-center my-10 gap-2 w-full">
             <div className="flex flex-col items-center w-52">
               <img src={`${urlLocalPath}/images/team/amy.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black" />
@@ -33,20 +33,20 @@ const HomePage: NextPage = () => (
             <div className="flex flex-col items-center w-52">
               <img src={`${urlLocalPath}/images/team/evan.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black" />
               <div className="text-center font-semibold">Evan Wallace</div>
-              <div className="text-center font-light text-gray-800">Ph.D student under Dr. Giroux of house CHDR. 3D Printing & CAD Wizard.</div>
+              <div className="text-center font-light text-gray-800">Ph.D student under Dr. Giroux. 3D Printing & CAD Specialist.</div>
             </div>
             <div className="flex flex-col items-center w-52">
               <img src={`${urlLocalPath}/images/team/connie.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black" />
               <div className="text-center font-semibold">Connie Harper</div>
-              <div className="text-center font-light text-gray-800">Software developing extraordinaire. Defender of the UCF CHDR Server.</div>
+              <div className="text-center font-light text-gray-800">CHDR Server Admin.</div>
             </div>
             <div className="flex flex-col items-center w-52">
               <img src={`${urlLocalPath}/images/team/brook.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black" />
               <div className="text-center font-semibold">Brook Miller</div>
-              <div className="text-center font-light text-gray-800">Applications Programmer. Sponsor Inception.</div>
+              <div className="text-center font-light text-gray-800">Applications Programmer.</div>
             </div>
           </div>
-          <div className="text-2xl text-center font-light">Knights of House CHDR</div>
+          <div className="text-2xl text-center font-light">EMURR Team</div>
           <div className="flex justify-center my-10 gap-10">
             <div className="flex flex-col items-center w-52">
               <img src={`${urlLocalPath}/images/team/braedon.png`} alt="EMURR-Logo" className="max-w-40 max-h-40 rounded-full shadow-md shadow-black" />
