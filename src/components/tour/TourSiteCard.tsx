@@ -21,9 +21,9 @@ export const TourSiteCard = (props: TourSiteCardProps) => {
       <Link href={`${urlLocalPath}/tours/${props.id}`}>
         <div className="flex justify-center h-40 w-11/12 align-middle rounded-lg bg-white shadow-md shadow-slate-400 border-2 border-stone-500 sm:rounded-md transition ease-in-out hover:bg-grey hover:cursor-pointer hover:scale-110 hover:animate-pulse select-none">
           <div className="flex flex-col h-full w-full justify-between p-2">
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full overflow-y-auto">
               <div className="text-2xl">{props.title}</div>
-              <div className="text-sm overflow-y-hidden">
+              <div className="text-sm">
                 {props.description}
               </div>
             </div>

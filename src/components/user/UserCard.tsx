@@ -24,11 +24,18 @@ export const UserCard = (props: UserCardProps) => {
               </div>
             </div>
             <div className="flex justify-between items-center w-full text-sm">
-              {user.role === "ADMIN" ? "Administrator" : "User"}
               {user.role === "ADMIN" ? 
-              <img src={`${urlLocalPath}/images/profile/shield.svg`} height={32} width={32} title="Administrator" alt="Administrator" />
-              :
-              <></>
+                <>
+                  Administrator
+                  <img src={`${urlLocalPath}/images/profile/shield.svg`}
+                    height={32}
+                    width={32}
+                    title="Administrator"
+                    alt="Administrator"
+                  />
+                </>
+                :
+                <>User</>
               }
             </div>
           </div>
