@@ -139,7 +139,6 @@ const ViewOtherPage: NextPage = ({
                     <div className="py-1">
                       <form
                         onClick={async (event) => {
-                          console.log("User ID: " + pageUserId)
                           const res = await fetch(
                             `${urlPath}/api/user/super`,
                             {
@@ -150,7 +149,6 @@ const ViewOtherPage: NextPage = ({
                             }
                           );
                           const json = await res.json();
-                          console.log(JSON.stringify(json));
                         }}
                       >
                         <Menu.Item>
