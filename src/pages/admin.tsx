@@ -1,65 +1,56 @@
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
-import { Navbar } from "../../components/navigation/Navbar";
+import type { NextPage } from "next";
+import { Navbar } from "../components/navigation/Navbar";
 import { useSession } from "next-auth/react";
-import {
-  TourSiteCard,
-  TourSiteCardTemplate,
-} from "../../components/tour/TourSiteCard";
-import Router, { useRouter } from "next/router";
+import {  TourSiteCardTemplate } from "../components/tour/TourSiteCard";
+import Router from "next/router";
 import { Tour, User } from "@prisma/client";
-import { getToken } from "next-auth/jwt";
-import { prisma } from "../../lib/prisma";
 import { useEffect, useState } from "react";
-import Error from "next/error";
-import { urlLocalPath, urlPath } from "../../lib/urlPath";
-import { Loading } from "../../components/util/Loading";
-import { TourExtend } from "../../lib/types/tour-extend";
+
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import React from "react";
+import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { Loading } from "../components/util/Loading";
+import { toast } from "react-toastify";
+import { useUserStore } from "../lib/store/user";
+import { UserCard } from "../components/user/UserCard";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const ViewOtherPage: NextPage = ({
-  userid,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const AdminPage: NextPage = () => {
   const { data: session, status } = useSession();
-  const [tours, setTours] = useState<TourExtend[] | undefined>([]);
+  const [users, setUsers] = useState<User[] | undefined>(undefined);
   const [query, setQuery] = useState("");
-  const [changing, setChanging] = useState(false);
-  const [pageUserId, setPageUserId] = useState("");
+  const [sortQuery, setSortQuery] = useState({
+    type: "Name",
+    asc: "asc",
+  });
+  const userName = useUserStore((state) => state.name);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    const queryTours = () => {
+    const queryUsers = () => {
       if (!session) return clearTimeout(timer);
       clearTimeout(timer);
 
       timer = setTimeout(async () => {
         const res = await fetch(
-          `${urlPath}/api/tour?query=${query}&userid=${userid}`,
+          `${urlPath}/api/user/query?sortQuery=${sortQuery.type}&query=${query}&asc=${sortQuery.asc}`,
           {
             method: "GET",
           }
         );
-
         const json = await res.json();
 
-        if (json) setTours(json.tours);
+        if (json) setUsers(json.users);
       }, 500);
-      setPageUserId(userid);
     };
+    queryUsers();
+  }, [query, sortQuery, session]);
 
-    queryTours();
-  }, [query, userid, session]);
-
-  // routing for: status, if changing, and if query (userid) is session id
   if (status === "loading") {
     return (
       <Loading>
@@ -68,8 +59,8 @@ const ViewOtherPage: NextPage = ({
         </div>
       </Loading>
     );
-  } else if (status === "unauthenticated" && !changing) {
-    setChanging(true);
+  }
+  if (status === "unauthenticated") {
     Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
@@ -78,18 +69,6 @@ const ViewOtherPage: NextPage = ({
         </div>
       </Loading>
     );
-  } else if (session?.user.id === userid && !changing) {
-    setChanging(true);
-    Router.push(`${urlLocalPath}/tours`);
-    return (
-      <Loading>
-        <div className="flex flex-col justify-center items-center mt-2">
-          <div>Redirecting...</div>
-        </div>
-      </Loading>
-    );
-  } else if (!userid && !changing) {
-    return <Error statusCode={404}></Error>;
   }
 
   return (
@@ -99,30 +78,28 @@ const ViewOtherPage: NextPage = ({
         <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
-              <div>Users Pages</div>
+              <div>Administrator</div>
             </div>
             <div className="flex justify-between">
               <div className="flex w-3/5 h-auto items-center rounded-md border border-green-800 bg-white shadow-sm shadow-black">
                 <img
-                  src={`${urlPath}/images/search.png`}
+                  src={urlPath + "/images/search.png"}
                   alt=""
                   className="w-5 h-5 m-2"
                 />
                 <input
                   type="text"
-                  placeholder="Search by Title, Tour Pack, or Page Contents"
+                  placeholder="Search Users by Name or Email Address"
                   onChange={(event) => setQuery(event.target.value)}
                   className="w-full bg-transparent rounded-r-sm text-base focus:outline-none placeholder:italic placeholder:text-slate-400"
                 />
               </div>
-
-
-
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
                     <div className="font-bold">
-                      User actions ▼
+                      Sort By: {sortQuery.type}
+                      {sortQuery.asc === "asc" ? " ▲" : " ▼"}
                     </div>
                   </Menu.Button>
                 </div>
@@ -138,20 +115,17 @@ const ViewOtherPage: NextPage = ({
                   <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       <form
-                        onClick={async (event) => {
-                          console.log("User ID: " + pageUserId)
-                          const res = await fetch(
-                            `${urlPath}/api/user/super`,
-                            {
-                              method: "POST",
-                              body: JSON.stringify({
-                                userID: pageUserId,
-                              }),
-                            }
-                          );
-                          const json = await res.json();
-                          console.log(JSON.stringify(json));
-                        }}
+                        onClick={(event) =>
+                          setSortQuery({
+                            type: "Name",
+                            asc:
+                              sortQuery.type !== "Name"
+                                ? "asc"
+                                : sortQuery.asc === "asc"
+                                ? "desc"
+                                : "asc",
+                          })
+                        }
                       >
                         <Menu.Item>
                           {({ active }) => (
@@ -164,13 +138,23 @@ const ViewOtherPage: NextPage = ({
                                 "block px-4 py-2 text-sm"
                               )}
                             >
-                              {"Promote to Administrator"}
+                              Name
                             </a>
                           )}
                         </Menu.Item>
                       </form>
                       <form
-                        onClick={(event) => {}}
+                        onClick={(event) =>
+                          setSortQuery({
+                            type: "Account Created",
+                            asc:
+                              sortQuery.type !== "Account Created"
+                                ? "desc"
+                                : sortQuery.asc === "asc"
+                                ? "desc"
+                                : "asc",
+                          })
+                        }
                       >
                         <Menu.Item>
                           {({ active }) => (
@@ -183,7 +167,7 @@ const ViewOtherPage: NextPage = ({
                                 "block px-4 py-2 text-sm"
                               )}
                             >
-                              Delete account
+                              Account Created
                             </a>
                           )}
                         </Menu.Item>
@@ -192,28 +176,12 @@ const ViewOtherPage: NextPage = ({
                   </Menu.Items>
                 </Transition>
               </Menu>
-
-
-
             </div>
             <div className="inline-grid grid-cols-3 justify-items-center gap-6">
-              {tours !== undefined ? (
-                tours.map((tour: TourExtend) => {
+              {users ? (
+                users.map((user: User) => {
                   return (
-                    <TourSiteCard
-                      id={tour.id}
-                      isVisitor={session?.user.id != userid}
-                      key={tour.id}
-                      title={tour.tourTitle}
-                      description={
-                        tour.tourDescription
-                          ? tour.tourDescription
-                          : "No description..."
-                      }
-                      createdAt={tour.tourCreatedAt}
-                      updatedAt={tour.tourUpdatedAt}
-                      mediaSize={tour.mediaSize}
-                    />
+                    <UserCard user={user} />
                   );
                 })
               ) : (
@@ -231,13 +199,6 @@ const ViewOtherPage: NextPage = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { userid } = context.query;
-  return {
-    props: { userid },
-  };
-};
+AdminPage.displayName = "Administrator";
 
-ViewOtherPage.displayName = "Profile";
-
-export default ViewOtherPage;
+export default AdminPage;
