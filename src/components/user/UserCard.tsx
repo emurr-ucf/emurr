@@ -28,7 +28,7 @@ export const UserCard = (props: UserCardProps) => {
           </div>
           <div>
             {props.user.role === "ADMIN" ? 
-              <img src={`${urlLocalPath}/images/profile/shield.svg`} height={64} width={64} title="Administrator" />
+              <img src={`${urlLocalPath}/images/profile/shield.svg`} height={64} width={64} title="Administrator" alt="Administrator" />
               :
               <></>
             }

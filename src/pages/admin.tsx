@@ -181,7 +181,7 @@ const AdminPage: NextPage = () => {
               {users ? (
                 users.map((user: User) => {
                   return (
-                    <UserCard user={user} />
+                    <UserCard user={user} key={user.id} />
                   );
                 })
               ) : (
