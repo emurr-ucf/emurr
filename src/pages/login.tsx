@@ -39,8 +39,10 @@ const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
       clearTimeout(timer.current);
 
       timer.current = setTimeout(async () => {
-        if (error) toast.error(error);
-        signOut();
+        if (error) {
+          toast.error(error);
+          signOut();
+        }
       }, 500);
     };
     displayError();
