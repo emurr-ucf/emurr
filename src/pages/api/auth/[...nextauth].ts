@@ -74,6 +74,8 @@ export default NextAuth({
         },
       });
 
+      console.log(userAccount);
+
       if (userAccount && account.provider != userAccount.provider) return false;
       return true;
     },
