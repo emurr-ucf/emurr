@@ -28,7 +28,7 @@ export const OAuth = () => {
       <div className="flex flex-col items-center justify-center w-64 gap-6">
         {providers?.google && (
           <button
-            onClick={() => signIn(providers.github.id, { redirect: false })}
+            onClick={() => signIn(providers.github.id, {})}
             className="flex items-center justify-center gap-2 py-3 px-4 w-52 shadow-sm text-sm font-medium rounded-md text-white bg-slate-900 hover:bg-slate-700"
           >
             <div>Login with GitHub</div>
@@ -41,7 +41,9 @@ export const OAuth = () => {
         )}
         {providers?.github && (
           <button
-            onClick={() => signIn(providers.google.id, { redirect: false })}
+            onClick={() =>
+              signIn(providers.google.id, {}).catch(() => console.log("Test"))
+            }
             className="flex items-center justify-center gap-2 py-3 px-4 w-52 shadow-sm text-sm font-medium border border-slate-200 rounded-md text-black hover:bg-neutral-100"
           >
             <div>Login with Google</div>
@@ -56,3 +58,4 @@ export const OAuth = () => {
     </>
   );
 };
+

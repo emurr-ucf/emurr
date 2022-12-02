@@ -31,7 +31,9 @@ export const Logo = () => {
           <div
             className={
               "cursor-pointer rounded-full h-36 absolute w-36" +
-              (anim ? " bg-green-500 animate-ping" : " bg-transparent")
+              (anim
+                ? " bg-green-500 animate-ping"
+                : " bg-transparent animate-ping:paused")
             }
             onClick={animClicked}
           />

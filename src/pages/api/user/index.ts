@@ -115,8 +115,29 @@ export default async function handler(
       resPassToken: "",
     };
     const savedUser = await prisma.user.create({ data: userData });
-    if (savedUser) return res.status(200).json({});
-    else return res.status(409).json({ error: "User was not registered." });
+
+    if (!savedUser)
+      return res.status(409).json({ error: "User was not registered." });
+
+    const accountData = {
+      userId: savedUser.id,
+      type: "credentials",
+      provider: "credentials",
+      providerAccountId: "none",
+    };
+
+    const savedAccount = await prisma.account.create({
+      data: accountData,
+    });
+
+    if (!savedAccount)
+      return res
+        .status(409)
+        .json({
+          error:
+            "Account could not be generated. Please contact support with an account error.",
+        });
+    return res.status(200).json({});
   }
 
   // Updates User Information.
@@ -195,22 +216,26 @@ export default async function handler(
       if (user.password && comparePass(password, user.password)) {
         const tours = await prisma.tour.findMany({
           where: {
-            tourAuthorId:user.id,
-          }
+            tourAuthorId: user.id,
+          },
         });
 
         if (tours) {
           for (let i = 0; i < tours.length; i++) {
-            fs.rm("./websites/" + tours[i].id, { recursive: true, force: true }, (err) => {
-              if (err) {
-                throw err;
+            fs.rm(
+              "./websites/" + tours[i].id,
+              { recursive: true, force: true },
+              (err) => {
+                if (err) {
+                  throw err;
+                }
+
+                console.log(`${tours[i].id} is deleted!`);
               }
-      
-              console.log(`${tours[i].id} is deleted!`);
-            });
+            );
           }
         }
-        
+
         // Deletes User.
         const deleteUser = await prisma.user.delete({
           where: {
@@ -224,3 +249,4 @@ export default async function handler(
     } else return res.status(409).json({ error: "User was not found." });
   }
 }
+
