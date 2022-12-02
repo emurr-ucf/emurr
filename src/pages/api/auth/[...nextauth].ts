@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../lib/prisma";
-import { urlPath } from "../../../lib/urlPath";
+import { urlLocalPath, urlPath } from "../../../lib/urlPath";
 import { redirect } from "next/dist/server/api-utils";
 
 export default NextAuth({
@@ -40,7 +40,7 @@ export default NextAuth({
       async authorize(credentials, req) {
         // API Request.
         if (credentials) {
-          const res = await fetch(`${urlPath}/api/user/login`, {
+          const res: any = await fetch(`${urlPath}/api/user/login`, {
             method: "POST",
             body: JSON.stringify(credentials),
             headers: { "Content-Type": "application/json" },
@@ -60,13 +60,24 @@ export default NextAuth({
   // Lets us replace built-in Next-Auth pages with custom ones.
   pages: {
     signIn: "/login",
+    error: `${urlLocalPath}/login`,
   },
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    redirect: async ({ url, baseUrl }) => {
-      return url;
+    signIn: async ({ user, account, profile, email, credentials }) => {
+      const userAccount = await prisma.account.findFirst({
+        where: {
+          user: {
+            email: user.email,
+          },
+        },
+      });
+
+      if (userAccount && account.provider != userAccount.provider) return false;
+
+      return true;
     },
     jwt: async ({ token, user }) => {
       if (user) {
@@ -87,3 +98,4 @@ export default NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
+
