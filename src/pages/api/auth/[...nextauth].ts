@@ -74,10 +74,11 @@ export default NextAuth({
         },
       });
 
-      console.log(userAccount);
-
       if (userAccount && account.provider != userAccount.provider) return false;
       return true;
+    },
+    redirect: async ({ url, baseUrl }) => {
+      return url;
     },
     jwt: async ({ token, user }) => {
       if (user) {
