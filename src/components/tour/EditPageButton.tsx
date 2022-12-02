@@ -106,7 +106,7 @@ export const EditPageButton = ({
                     />
                   </div>
                   <div className="flex items-center mt-2">
-                    emurr.local/
+                    http://emurr/
                     <input
                       defaultValue={customURL}
                       onChange={(event) => setCustomURL(event.target.value)}
