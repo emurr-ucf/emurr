@@ -3,7 +3,7 @@ import { Login } from "../components/login/Login";
 import { Navbar } from "../components/navigation/Navbar";
 import { OAuth } from "../components/login/OAuth";
 import Router from "next/router";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { Register } from "../components/login/Register";
 import { ForgotPassword } from "../components/login/ForgotPassword";
@@ -40,6 +40,7 @@ const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
 
       timer.current = setTimeout(async () => {
         if (error) toast.error(error);
+        signOut();
       }, 500);
     };
     displayError();
@@ -100,4 +101,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 LoginPage.displayName = "Login";
 
 export default LoginPage;
-
