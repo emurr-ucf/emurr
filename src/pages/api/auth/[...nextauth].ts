@@ -74,10 +74,12 @@ export default NextAuth({
         },
       });
 
+      return false;
+
       console.log(userAccount);
 
-      if (userAccount && account.provider != userAccount.provider) return false;
-      return true;
+      //if (userAccount && account.provider != userAccount.provider) return false;
+      //return true;
     },
     jwt: async ({ token, user }) => {
       if (user) {
