@@ -66,19 +66,18 @@ export default NextAuth({
   },
   callbacks: {
     signIn: async ({ user, account, profile, email, credentials }) => {
-      return await prisma.account
-        .findFirst({
-          where: {
-            user: {
-              email: user.email,
-            },
+      const userAccount = await prisma.account.findFirst({
+        where: {
+          user: {
+            email: user.email,
           },
-        })
-        .then((userAccount) => {
-          if (userAccount && account.provider != userAccount.provider)
-            return false;
-          return true;
-        });
+        },
+      });
+
+      console.log(userAccount);
+
+      if (userAccount && account.provider != userAccount.provider) return false;
+      return true;
     },
     jwt: async ({ token, user }) => {
       if (user) {
