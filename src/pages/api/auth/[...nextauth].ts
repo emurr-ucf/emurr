@@ -69,10 +69,13 @@ export default NextAuth({
       const userAccount = await prisma.account.findFirst({
         where: {
           user: {
-            id: user.id,
+            email: user.email,
           },
         },
       });
+
+      console.log("account provider" + account.provider);
+      console.log("database provider" + userAccount?.provider);
 
       if (userAccount && account.provider !== userAccount.provider)
         return false;
