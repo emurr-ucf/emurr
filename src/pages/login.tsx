@@ -26,6 +26,7 @@ const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
   const [formType, setFormType] = useState(FormType.LOGIN);
   const { data: session, status } = useSession();
   const userUpdate = useUserStore((state) => state.update);
+  const [errorState, setErrorState] = useState<string | undefined>(error);
 
   const loggedIn = async () => {
     await userUpdate();
@@ -35,17 +36,19 @@ const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
   const timer = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
-    const displayError = () => {
-      clearTimeout(timer.current);
+    clearTimeout(timer.current);
 
-      timer.current = setTimeout(async () => {
-        if (error) {
-          toast.error(error);
-          signOut();
-        }
-      }, 500);
-    };
-    displayError();
+    timer.current = setTimeout(() => {
+      if (errorState === "AccessDenied") {
+        signOut({ callbackUrl: `${urlPath}/login?error=Redirect` });
+        setErrorState(undefined);
+      }
+
+      if (errorState === "Redirect") {
+        toast.error("User can only login with a singular provider.");
+        setErrorState(undefined);
+      }
+    }, 500);
   });
 
   if (status === "loading") {
@@ -92,9 +95,9 @@ const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { error } = context.query;
 
-  if (error === "AccessDenied")
+  if (error === "AccessDenied" || error === "Redirect")
     return {
-      props: { error: "User can only login with a singular provider." },
+      props: { error },
     };
 
   return { props: {} };

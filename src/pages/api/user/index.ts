@@ -123,7 +123,7 @@ export default async function handler(
       userId: savedUser.id,
       type: "credentials",
       provider: "credentials",
-      providerAccountId: "none",
+      providerAccountId: savedUser.id,
     };
 
     const savedAccount = await prisma.account.create({
@@ -131,12 +131,10 @@ export default async function handler(
     });
 
     if (!savedAccount)
-      return res
-        .status(409)
-        .json({
-          error:
-            "Account could not be generated. Please contact support with an account error.",
-        });
+      return res.status(409).json({
+        error:
+          "Account could not be generated. Please contact support with an account error.",
+      });
     return res.status(200).json({});
   }
 
@@ -249,4 +247,3 @@ export default async function handler(
     } else return res.status(409).json({ error: "User was not found." });
   }
 }
-

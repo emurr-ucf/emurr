@@ -5,7 +5,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../lib/prisma";
 import { urlLocalPath, urlPath } from "../../../lib/urlPath";
-import { redirect } from "next/dist/server/api-utils";
 
 export default NextAuth({
   // Lets our Providers Work with Prisma.
@@ -60,7 +59,7 @@ export default NextAuth({
   // Lets us replace built-in Next-Auth pages with custom ones.
   pages: {
     signIn: "/login",
-    error: `${urlLocalPath}/login`,
+    error: `/emurr/login`,
   },
   session: {
     strategy: "jwt",
@@ -76,7 +75,6 @@ export default NextAuth({
       });
 
       if (userAccount && account.provider != userAccount.provider) return false;
-
       return true;
     },
     jwt: async ({ token, user }) => {
@@ -98,4 +96,3 @@ export default NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
-
