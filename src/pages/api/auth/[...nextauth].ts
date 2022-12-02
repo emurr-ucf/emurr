@@ -66,7 +66,7 @@ export default NextAuth({
   },
   callbacks: {
     signIn: async ({ user, account, profile, email, credentials }) => {
-      return prisma.account
+      return await prisma.account
         .findFirst({
           where: {
             user: {
