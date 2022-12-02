@@ -66,20 +66,22 @@ export default NextAuth({
   },
   callbacks: {
     signIn: async ({ user, account, profile, email, credentials }) => {
-      return false;
       const userAccount = await prisma.account.findFirst({
         where: {
           user: {
-            email: user.email,
+            id: user.id,
           },
         },
       });
 
-      //if (userAccount && account.provider != userAccount.provider) return false;
+      if (userAccount && account.provider !== userAccount.provider)
+        return false;
       return true;
     },
     redirect: async ({ url, baseUrl }) => {
-      return url;
+      if (url.startsWith(baseUrl)) return url;
+      else if (url.startsWith("/")) return new URL(url, baseUrl).toString();
+      return baseUrl;
     },
     jwt: async ({ token, user }) => {
       if (user) {
