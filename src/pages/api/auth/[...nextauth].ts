@@ -66,6 +66,7 @@ export default NextAuth({
   },
   callbacks: {
     signIn: async ({ user, account, profile, email, credentials }) => {
+      return false;
       const userAccount = await prisma.account.findFirst({
         where: {
           user: {
@@ -74,7 +75,7 @@ export default NextAuth({
         },
       });
 
-      if (userAccount && account.provider != userAccount.provider) return false;
+      //if (userAccount && account.provider != userAccount.provider) return false;
       return true;
     },
     redirect: async ({ url, baseUrl }) => {
