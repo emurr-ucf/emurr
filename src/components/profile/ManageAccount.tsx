@@ -4,6 +4,7 @@ import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
+import { signOut } from "next-auth/react";
 
 export const ManageAccount = () => {
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ export const ManageAccount = () => {
 
     toast.success("Your account has been deleted!");
     setShow(false);
-    Router.push("/");
+    await signOut({ callbackUrl: `${urlPath}/` });
   };
 
   return (

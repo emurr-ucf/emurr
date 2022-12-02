@@ -59,7 +59,7 @@ export default NextAuth({
   // Lets us replace built-in Next-Auth pages with custom ones.
   pages: {
     signIn: "/login",
-    error: `/emurr/login`,
+    error: `${urlLocalPath}/login`,
   },
   session: {
     strategy: "jwt",
@@ -73,9 +73,6 @@ export default NextAuth({
           },
         },
       });
-
-      console.log("account provider" + account.provider);
-      console.log("database provider" + userAccount?.provider);
 
       if (userAccount && account.provider !== userAccount.provider)
         return false;
