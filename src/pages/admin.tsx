@@ -3,7 +3,7 @@ import { Navbar } from "../components/navigation/Navbar";
 import { useSession } from "next-auth/react";
 import {  TourSiteCardTemplate } from "../components/tour/TourSiteCard";
 import Router from "next/router";
-import { Tour, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 import { Fragment } from "react";
@@ -11,8 +11,6 @@ import { Menu, Transition } from "@headlessui/react";
 import React from "react";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
 import { Loading } from "../components/util/Loading";
-import { toast } from "react-toastify";
-import { useUserStore } from "../lib/store/user";
 import { UserCard } from "../components/user/UserCard";
 
 function classNames(...classes: string[]) {

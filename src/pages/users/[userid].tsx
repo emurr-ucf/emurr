@@ -20,6 +20,8 @@ import { Loading } from "../../components/util/Loading";
 import { TourExtend } from "../../lib/types/tour-extend";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { toast } from "react-toastify";
+import { ConfirmDeleteUser } from "../../components/user/ConfirmDeleteUser";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -170,11 +172,12 @@ const ViewOtherPage: NextPage = ({
                             }
                           );
                           if (res.status === 200) {
-                            // TODO show success
                             setRole(role === "ADMIN" ? "USER" : "ADMIN");
+                            toast.success("Updated user role");
                           }
                           else {
-                            // TODO show error
+                            const json = await res.json();
+                            toast.error(json.error);
                           }
                         }}
                       >
@@ -202,19 +205,7 @@ const ViewOtherPage: NextPage = ({
                         onClick={(event) => {}}
                       >
                         <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active
-                                  ? "bg-gray-100 text-gray-900"
-                                  : "text-gray-700",
-                                "block px-4 py-2 text-sm"
-                              )}
-                            >
-                              Delete account
-                            </a>
-                          )}
+                          <ConfirmDeleteUser userID={userid} />
                         </Menu.Item>
                       </form>
                     </div>
