@@ -57,9 +57,6 @@ const video = Node.create<VideoOptions>({
       type: {
         default: "video/mp4",
       },
-      disablePictureInPicture: {
-        default: true,
-      },
       style: {
         default: "display: block; margin: 0 auto;",
       },
@@ -112,3 +109,4 @@ const video = Node.create<VideoOptions>({
 });
 
 export default video;
+

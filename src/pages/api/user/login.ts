@@ -19,7 +19,27 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
+    const { email, provider } = req.query;
+
+    if (typeof email != "string")
+      return res.status(400).json({ error: "Not a valid email." });
+
+    const account = await prisma.account.findFirst({
+      where: {
+        user: {
+          email,
+        },
+      },
+    });
+
+    if (account && account.provider != provider)
+      return res.status(400).json({
+        error: `User can only login with provider ${account.provider}.`,
+      });
+
+    return res.status(200).json({});
+  } else if (req.method === "POST") {
     const { email, password } = req.body;
 
     // Error: Not all fields are filled out.
@@ -60,3 +80,4 @@ export default async function handler(
     } else return res.status(409).send({ error: "User doesn't exist." });
   }
 }
+

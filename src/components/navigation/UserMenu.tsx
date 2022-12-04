@@ -85,7 +85,7 @@ export const UserMenu = ({ children }: UserMenuProps) => {
                 <div
                   onClick={async () => {
                     userRemove();
-                    await signOut();
+                    await signOut({ callbackUrl: `${urlPath}/` });
                   }}
                   className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500 cursor-pointer`}
                 >

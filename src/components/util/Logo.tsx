@@ -3,9 +3,14 @@ import { urlLocalPath } from "../../lib/urlPath";
 
 export const Logo = () => {
   const [logo, setLogo] = useState(true);
+  const [anim, setAnim] = useState(true);
 
-  const clicked = () => {
+  const logoClicked = () => {
     setLogo(!logo);
+  };
+
+  const animClicked = () => {
+    setAnim(!anim);
   };
 
   function setImagePrefix() {
@@ -16,16 +21,25 @@ export const Logo = () => {
   return (
     <>
       <div>
-        <div className="flex items-center justify-center relative">
+        <div className="rounded-full flex items-center justify-center relative">
           <img
-            className="z-40 w-28 h-28 self-center cursor-pointer"
+            className="rounded-full w-28 h-28 self-center cursor-pointer m-0 z-50"
             src={setImagePrefix()}
-            alt=""
-            onClick={clicked}
+            alt="outline of an NFC tag. when clicked becomes a pie."
+            onClick={logoClicked}
           />
-          <div className="bg-green-700 rounded-full h-36 absolute w-36 animate-ping"></div>
+          <div
+            className={
+              "cursor-pointer rounded-full h-36 absolute w-36" +
+              (anim
+                ? " bg-green-500 animate-ping"
+                : " bg-transparent animate-ping:paused")
+            }
+            onClick={animClicked}
+          />
         </div>
       </div>
     </>
   );
 };
+

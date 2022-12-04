@@ -1,15 +1,16 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { Login } from "../components/login/Login";
 import { Navbar } from "../components/navigation/Navbar";
 import { OAuth } from "../components/login/OAuth";
 import Router from "next/router";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { useEffect, useRef, useState } from "react";
 import { Register } from "../components/login/Register";
 import { ForgotPassword } from "../components/login/ForgotPassword";
 import { Loading } from "../components/util/Loading";
 import { useUserStore } from "../lib/store/user";
-import { urlLocalPath } from "../lib/urlPath";
+import { urlLocalPath, urlPath } from "../lib/urlPath";
+import { toast } from "react-toastify";
 
 export enum FormType {
   LOGIN = 1,
@@ -17,15 +18,38 @@ export enum FormType {
   FORGOT_PASSWORD,
 }
 
-const LoginPage: NextPage = () => {
+export interface LoginPageProps {
+  error?: string;
+}
+
+const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
   const [formType, setFormType] = useState(FormType.LOGIN);
   const { data: session, status } = useSession();
   const userUpdate = useUserStore((state) => state.update);
+  const [errorState, setErrorState] = useState<string | undefined>(error);
 
   const loggedIn = async () => {
     await userUpdate();
     Router.push(`${urlLocalPath}/tours`);
   };
+
+  const timer = useRef<NodeJS.Timeout | undefined>();
+
+  useEffect(() => {
+    clearTimeout(timer.current);
+
+    timer.current = setTimeout(() => {
+      if (errorState === "AccessDenied") {
+        signOut({ callbackUrl: `${urlPath}/login?error=Redirect` });
+        setErrorState(undefined);
+      }
+
+      if (errorState === "Redirect") {
+        toast.error("User can only login with a singular provider.");
+        setErrorState(undefined);
+      }
+    }, 500);
+  });
 
   if (status === "loading") {
     return (
@@ -66,6 +90,17 @@ const LoginPage: NextPage = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { error } = context.query;
+
+  if (error === "AccessDenied" || error === "Redirect")
+    return {
+      props: { error },
+    };
+
+  return { props: {} };
 };
 
 LoginPage.displayName = "Login";

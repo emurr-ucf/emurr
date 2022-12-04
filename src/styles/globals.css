@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .pause {
+    animation-play-state: paused;
+  }
+}
+
 /* override tiptap nonsense with headers... this is probably a bad way of doing this */
 h1 {
   font-size: 2em;
@@ -27,3 +33,4 @@ h6 {
     @apply py-3 px-4 w-3/4 shadow-sm text-sm font-medium rounded-md text-background-200 bg-green-700 hover:bg-green-800;
   }
 }
+
