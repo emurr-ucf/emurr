@@ -22,9 +22,9 @@ export const UserMenu = ({ children }: UserMenuProps) => {
               src={
                 process.env.NODE_ENV === "production"
                   ? userImage === ""
-                    ? `${urlLocalPath}/images/google.png`
+                    ? `${urlLocalPath}/images/default-user.png`
                     : userImage
-                  : `${urlLocalPath}/images/google.png`
+                  : `${urlLocalPath}/images/default-user.png`
               }
               alt="User profile image"
               referrerPolicy="no-referrer"
