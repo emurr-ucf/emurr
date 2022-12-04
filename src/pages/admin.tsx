@@ -59,7 +59,13 @@ const AdminPage: NextPage = () => {
       </Loading>
     );
   }
-  if (status === "unauthenticated") {
+
+  let role;
+  if (users && session) {
+    const self = users.find((user) => user.id === session.user.id);
+    role = self?.role;
+  }
+  if (status === "unauthenticated" || role === "USER") {
     Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
