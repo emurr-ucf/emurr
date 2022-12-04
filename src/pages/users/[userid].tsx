@@ -20,6 +20,8 @@ import { Loading } from "../../components/util/Loading";
 import { TourExtend } from "../../lib/types/tour-extend";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { toast } from "react-toastify";
+import { ConfirmDeleteUser } from "../../components/user/ConfirmDeleteUser";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -33,6 +35,9 @@ const ViewOtherPage: NextPage = ({
   const [query, setQuery] = useState("");
   const [changing, setChanging] = useState(false);
   const [pageUserId, setPageUserId] = useState("");
+  const [role, setRole] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [foundUser, setFoundUser] = useState(false);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -92,6 +97,20 @@ const ViewOtherPage: NextPage = ({
     return <Error statusCode={404}></Error>;
   }
 
+  if (!foundUser) {
+    // set value to avoid duplicate requests
+    setFoundUser(true);
+    const findUser = async () => {
+      const res = await fetch(`${urlLocalPath}/api/user/role?userID=${userid}`, {
+        method: "GET",
+      });
+      const json = await res.json();
+      setRole(json.role);
+      setFirstName(json.name);
+    }
+    findUser();
+  }
+
   return (
     <>
       <div className="w-full min-h-screen">
@@ -99,7 +118,7 @@ const ViewOtherPage: NextPage = ({
         <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
-              <div>Users Pages</div>
+              <div>{firstName}&apos;s Tours</div>
             </div>
             <div className="flex justify-between">
               <div className="flex w-3/5 h-auto items-center rounded-md border border-green-800 bg-white shadow-sm shadow-black">
@@ -139,19 +158,31 @@ const ViewOtherPage: NextPage = ({
                     <div className="py-1">
                       <form
                         onClick={async (event) => {
+                          if (role === "")
+                            return;
                           const res = await fetch(
                             `${urlPath}/api/user/super`,
                             {
-                              method: "POST",
+                              // "PUT" demotes to user
+                              // "POST" promotes to admin
+                              method: role === "ADMIN" ? "PUT" : "POST",
+                              headers: { "Content-Type": "application/json" },
                               body: JSON.stringify({
-                                userID: pageUserId,
+                                userID: userid,
                               }),
                             }
                           );
-                          const json = await res.json();
+                          if (res.status === 200) {
+                            setRole(role === "ADMIN" ? "USER" : "ADMIN");
+                            toast.success("Updated user role");
+                          }
+                          else {
+                            const json = await res.json();
+                            toast.error(json.error);
+                          }
                         }}
                       >
-                        <Menu.Item>
+                        <Menu.Item disabled={role === ""}>
                           {({ active }) => (
                             <a
                               href="#"
@@ -162,7 +193,11 @@ const ViewOtherPage: NextPage = ({
                                 "block px-4 py-2 text-sm"
                               )}
                             >
-                              {"Promote to Administrator"}
+                              {
+                                role === "ADMIN" ? "Demote to User" :
+                                role === "USER" ? "Promote to Administrator" :
+                                "Loading..."
+                              }
                             </a>
                           )}
                         </Menu.Item>
@@ -171,19 +206,7 @@ const ViewOtherPage: NextPage = ({
                         onClick={(event) => {}}
                       >
                         <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active
-                                  ? "bg-gray-100 text-gray-900"
-                                  : "text-gray-700",
-                                "block px-4 py-2 text-sm"
-                              )}
-                            >
-                              Delete account
-                            </a>
-                          )}
+                          <ConfirmDeleteUser userID={userid} />
                         </Menu.Item>
                       </form>
                     </div>

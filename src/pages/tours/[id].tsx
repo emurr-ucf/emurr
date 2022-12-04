@@ -314,7 +314,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const propTour: any = await prisma.tour.findFirst({
       where: {
         id,
-        tourAuthorId: token.id,
+        tourAuthorId: token.role === "ADMIN" ? undefined : token.id,
       },
       select: {
         id: true,
@@ -333,8 +333,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     });
 
-    propTour.tourUpdatedAt = formatUpdatedAt(propTour.tourUpdatedAt);
-    propTour.tourCreatedAt = formatCreatedAt(propTour.tourCreatedAt);
+    if (propTour) {
+      propTour.tourUpdatedAt = formatUpdatedAt(propTour.tourUpdatedAt);
+      propTour.tourCreatedAt = formatCreatedAt(propTour.tourCreatedAt);
+    }
 
     return {
       props: { propTour },

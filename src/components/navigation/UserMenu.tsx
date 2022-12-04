@@ -1,4 +1,4 @@
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import { Menu, Transition } from "@headlessui/react";
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { HeadlessLink } from "../util/HeadlessLink";
@@ -12,6 +12,7 @@ export interface UserMenuProps {
 export const UserMenu = ({ children }: UserMenuProps) => {
   const userImage = useUserStore((state) => state.image);
   const userRemove = useUserStore((state) => state.remove);
+  const { data: session, status } = useSession();
 
   return (
     <>
@@ -22,9 +23,9 @@ export const UserMenu = ({ children }: UserMenuProps) => {
               src={
                 process.env.NODE_ENV === "production"
                   ? userImage === ""
-                    ? `${urlLocalPath}/images/google.png`
+                    ? `${urlLocalPath}/images/default-user.png`
                     : userImage
-                  : `${urlLocalPath}/images/google.png`
+                  : `${urlLocalPath}/images/default-user.png`
               }
               alt="User profile image"
               referrerPolicy="no-referrer"
@@ -64,6 +65,21 @@ export const UserMenu = ({ children }: UserMenuProps) => {
                 </HeadlessLink>
               )}
             </Menu.Item>
+            {session?.user.role === "ADMIN" ?
+            <Menu.Item>
+              {({ active }) => (
+                <HeadlessLink href={`${urlLocalPath}/admin`}>
+                  <div
+                    className={`flex items-center justify-between px-4 py-2 text-sm hover:bg-background-500`}
+                  >
+                    Admin Portal
+                  </div>
+                </HeadlessLink>
+              )}
+            </Menu.Item>
+            :
+            <></>
+            }
             <Menu.Item>
               {({ active }) => (
                 <div

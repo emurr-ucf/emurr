@@ -96,9 +96,9 @@ export const EditProfile = () => {
                           src={
                             process.env.NODE_ENV === "production"
                               ? userImage === ""
-                                ? `${urlLocalPath}/images/google.png`
+                                ? `${urlLocalPath}/images/default-user.png`
                                 : userImage
-                              : `${urlLocalPath}/images/google.png`
+                              : `${urlLocalPath}/images/default-user.png`
                           }
                           alt="User profile image"
                           className="filter hover:contrast-200 m-auto w-20 h-20 hover:bg-"

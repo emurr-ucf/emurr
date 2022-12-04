@@ -3,7 +3,7 @@ import { Navbar } from "../components/navigation/Navbar";
 import { useSession } from "next-auth/react";
 import {  TourSiteCardTemplate } from "../components/tour/TourSiteCard";
 import Router from "next/router";
-import { Tour, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 import { Fragment } from "react";
@@ -11,8 +11,6 @@ import { Menu, Transition } from "@headlessui/react";
 import React from "react";
 import { urlLocalPath, urlPath } from "../lib/urlPath";
 import { Loading } from "../components/util/Loading";
-import { toast } from "react-toastify";
-import { useUserStore } from "../lib/store/user";
 import { UserCard } from "../components/user/UserCard";
 
 function classNames(...classes: string[]) {
@@ -27,7 +25,6 @@ const AdminPage: NextPage = () => {
     type: "Name",
     asc: "asc",
   });
-  const userName = useUserStore((state) => state.name);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -60,7 +57,13 @@ const AdminPage: NextPage = () => {
       </Loading>
     );
   }
-  if (status === "unauthenticated") {
+
+  let role;
+  if (users && session) {
+    const self = users.find((user) => user.id === session.user.id);
+    role = self?.role;
+  }
+  if (status === "unauthenticated" || role === "USER") {
     Router.push(`${urlLocalPath}/`);
     return (
       <Loading>
@@ -74,11 +77,11 @@ const AdminPage: NextPage = () => {
   return (
     <>
       <div className="w-full min-h-screen">
-        <Navbar page="dashboard" />
+        <Navbar />
         <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
-              <div>Administrator</div>
+              <div>Admin Portal</div>
             </div>
             <div className="flex justify-between">
               <div className="flex w-3/5 h-auto items-center rounded-md border border-green-800 bg-white shadow-sm shadow-black">
@@ -199,6 +202,6 @@ const AdminPage: NextPage = () => {
   );
 };
 
-AdminPage.displayName = "Administrator";
+AdminPage.displayName = "Admin Portal";
 
 export default AdminPage;
