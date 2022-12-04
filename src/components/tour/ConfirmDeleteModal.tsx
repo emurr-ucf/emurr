@@ -76,7 +76,7 @@ export const ConfirmDeleteModal = forwardRef(
 
                           const json = await res.json();
 
-                          if (res.status === 200) Router.push("/tours");
+                          if (res.status === 200) Router.push(`${urlLocalPath}/tours`);
                           else toast.error(json.error);
                         }}
                       >

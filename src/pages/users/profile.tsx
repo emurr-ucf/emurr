@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import { EditLogin } from "../../components/profile/EditLogin";
 import { EditPassword } from "../../components/profile/EditPassword";
 import { EditProfile } from "../../components/profile/EditProfile";
 import { Navbar } from "../../components/navigation/Navbar";
@@ -36,7 +35,7 @@ const ProfilePage: NextPage = () => {
     <>
       <div className="w-full h-full">
         <Navbar page="profile" />
-        <div className="flex flex-wrap px-28 mt-10 text-green-700 justify-center w-4/5 m-auto">
+        <div className="flex flex-col px-28 mt-10 text-green-700 items-center w-4/5 m-auto">
           <EditPassword />
           <EditProfile />
           <ManageAccount />

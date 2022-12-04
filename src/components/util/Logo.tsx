@@ -23,7 +23,7 @@ export const Logo = () => {
       <div>
         <div className="rounded-full flex items-center justify-center relative">
           <img
-            className="rounded-full w-28 h-28 self-center cursor-pointer m-0 z-50"
+            className="rounded-full w-28 h-28 self-center cursor-pointer m-0 z-10"
             src={setImagePrefix()}
             alt="outline of an NFC tag. when clicked becomes a pie."
             onClick={logoClicked}
