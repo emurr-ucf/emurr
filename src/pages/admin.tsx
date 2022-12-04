@@ -73,11 +73,11 @@ const AdminPage: NextPage = () => {
   return (
     <>
       <div className="w-full min-h-screen">
-        <Navbar page="dashboard" />
+        <Navbar />
         <div className="flex w-full h-full mt-16 align-center justify-center pb-20">
           <div className="flex flex-col w-4/5 text-3xl gap-6">
             <div className="flex justify-between">
-              <div>Administrator</div>
+              <div>Admin Portal</div>
             </div>
             <div className="flex justify-between">
               <div className="flex w-3/5 h-auto items-center rounded-md border border-green-800 bg-white shadow-sm shadow-black">
@@ -198,6 +198,6 @@ const AdminPage: NextPage = () => {
   );
 };
 
-AdminPage.displayName = "Administrator";
+AdminPage.displayName = "Admin Portal";
 
 export default AdminPage;

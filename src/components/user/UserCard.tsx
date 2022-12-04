@@ -23,7 +23,7 @@ export const UserCard = (props: UserCardProps) => {
           <div className={"flex flex-col h-full w-full justify-between p-2 min-width-0" + bold}>
             <div className="flex flex-col w-full">
               <div className="text-2xl">
-                {user.name + (user.lastName ? " " + user.lastName : "")}
+                {user.name + (user.lastName ? ` ${user.lastName}` : "")}
               </div>
               <div className="text-sm overflow-y-hidden overflow-x-hidden">
                 {user.email || ""}
