@@ -43,7 +43,7 @@ export default async function handler(
 
   // Updates Role to Admin.
   if (req.method === "POST") {
-    const { userID } = JSON.parse(req.body); // TODO idk why parsing this is required. check out what's the deal here. -omar
+    const { userID } = req.body;
 
     // Error: UserID is not valid.
     if (!userID || typeof userID !== "string")
@@ -67,7 +67,7 @@ export default async function handler(
 
   // Updates Role to User.
   if (req.method === "PUT") {
-    const { userID } = JSON.parse(req.body); // TODO idk why parsing this is required. check out what's the deal here. -omar
+    const { userID } = req.body;
 
     // Error: UserID is not valid.
     if (!userID || typeof userID !== "string")

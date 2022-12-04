@@ -166,6 +166,7 @@ const ViewOtherPage: NextPage = ({
                               // "PUT" demotes to user
                               // "POST" promotes to admin
                               method: role === "ADMIN" ? "PUT" : "POST",
+                              headers: { "Content-Type": "application/json" },
                               body: JSON.stringify({
                                 userID: userid,
                               }),
