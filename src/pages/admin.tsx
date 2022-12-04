@@ -27,7 +27,6 @@ const AdminPage: NextPage = () => {
     type: "Name",
     asc: "asc",
   });
-  const userName = useUserStore((state) => state.name);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
