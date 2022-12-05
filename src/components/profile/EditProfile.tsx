@@ -130,10 +130,8 @@ export const EditProfile = () => {
                               return toast.error(json.error);
 
                             alert("json.image: " + json.image);
+                            setImage(json.image);
                             await userUpdate();
-                            const newImage = useUserStore((state) => state.image);
-                            alert("state.image: " + newImage);
-                            setImage(newImage);
 
                             toast.success("Updated profile image.");
                           }}
