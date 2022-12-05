@@ -129,8 +129,8 @@ export const EditProfile = () => {
                             if (res.status !== 200)
                               return toast.error(json.error);
 
-                            alert("json.image: " + json.image);
                             setImage(json.image);
+                            alert("json.image: " + json.image);
                             await userUpdate();
 
                             toast.success("Updated profile image.");
