@@ -23,6 +23,7 @@ export const EditProfile = () => {
   const [lastName, setLastName] = useState(userLastName);
   const [show, setShow] = useState(false);
   const [image, setImage] = useState(userImage);
+  const [imageVersion, setImageVersion] = useState(1);
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -129,11 +130,11 @@ export const EditProfile = () => {
                             if (res.status !== 200)
                               return toast.error(json.error);
 
-                            const res2 = await fetch(`${urlPath}/api/user`);
-                            const json2 = await res2.json();
-                            setImage(json2.image);
-                            alert("json2.image: " + json2.image);
                             await userUpdate();
+                            // json.image might be the same url as before
+                            // use a version number to get around browser cache
+                            setImage(`${json.image}?${imageVersion}`);
+                            setImageVersion(imageVersion + 1);
 
                             toast.success("Updated profile image.");
                           }}
