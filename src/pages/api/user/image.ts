@@ -60,20 +60,19 @@ export default async function handler(
       else if (err) return res.status(409).json({ error: err.message });
 
       // Updates the last modified date.
-      /// @ts-ignore-start
-      const newUrl = `https://chdr.cs.ucf.edu/~emurr/pi/${req.files[0].filename}`
-      /// @ts-ignore-end
       const user = await prisma.user.update({
         where: {
           id: token.id,
         },
         data: {
-          image: newUrl,
+          /// @ts-ignore-start
+          image: `https://chdr.cs.ucf.edu/~emurr/pi/${req.files[0].filename}`,
+          // @ts-ignore-end
         },
       });
 
       if (user) {
-        return res.status(200).json({ image: newUrl });
+        return res.status(200).json({ image: user.image });
       } else
         return res.status(409).json({ error: "Image could not be updated." });
     });

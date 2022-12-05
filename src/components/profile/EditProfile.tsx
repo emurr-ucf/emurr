@@ -129,8 +129,10 @@ export const EditProfile = () => {
                             if (res.status !== 200)
                               return toast.error(json.error);
 
-                            setImage(json.image);
-                            alert("json.image: " + json.image);
+                            const res2 = await fetch(`${urlPath}/api/user`);
+                            const json2 = await res2.json();
+                            setImage(json2.image);
+                            alert("json2.image: " + json2.image);
                             await userUpdate();
 
                             toast.success("Updated profile image.");
