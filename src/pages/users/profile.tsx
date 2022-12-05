@@ -7,9 +7,21 @@ import { useSession } from "next-auth/react";
 import Router from "next/router";
 import { Loading } from "../../components/util/Loading";
 import { urlLocalPath } from "../../lib/urlPath";
+import { useState } from "react";
+import { useUserStore } from "../../lib/store/user";
 
 const ProfilePage: NextPage = () => {
   const { data: session, status } = useSession();
+  const userImage = useUserStore((state) => state.image);
+  const [avatar, setAvatar] = useState(
+    process.env.NODE_ENV === "production" && userImage !== ""
+      ? userImage : `${urlLocalPath}/images/default-user.png`
+  );
+  const [avatarVersion, setAvatarVersion] = useState(1);
+  const updateAvatar = (newAvatar: string) => {
+    setAvatar(`${newAvatar}?${avatarVersion}`);
+    setAvatarVersion(avatarVersion + 1);
+  };
 
   if (status === "loading") {
     return (
@@ -34,10 +46,10 @@ const ProfilePage: NextPage = () => {
   return (
     <>
       <div className="w-full h-full">
-        <Navbar page="profile" />
+        <Navbar page="profile" avatar={avatar} />
         <div className="flex flex-col px-28 mt-10 text-green-700 items-center w-4/5 m-auto">
           <EditPassword />
-          <EditProfile />
+          <EditProfile avatar={avatar} updateAvatar={updateAvatar} />
           <ManageAccount />
         </div>
       </div>

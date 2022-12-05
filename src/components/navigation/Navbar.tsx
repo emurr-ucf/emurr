@@ -2,15 +2,22 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { UserMenu } from "./UserMenu";
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
+import { useUserStore } from "../../lib/store/user";
 
 export interface NavbarProps {
   page?: string;
   children?: JSX.Element;
   userMenuChildren?: JSX.Element;
+  avatar?: string;
 }
 
-export const Navbar = ({ page, children, userMenuChildren }: NavbarProps) => {
+export const Navbar = ({ page, children, userMenuChildren, avatar }: NavbarProps) => {
   const { data: session, status } = useSession();
+  if (avatar === undefined) {
+    const userImage = useUserStore((state) => state.image);
+    avatar = process.env.NODE_ENV === "production" && userImage !== ""
+      ? userImage : `${urlLocalPath}/images/default-user.png`
+  }
 
   if (status === "loading") {
     return (
@@ -48,7 +55,7 @@ export const Navbar = ({ page, children, userMenuChildren }: NavbarProps) => {
               )}
             </div>
             <div className="flex flex-row justify-center items-center text-xl text-brown gap-2">
-              <UserMenu>{userMenuChildren}</UserMenu>
+              <UserMenu avatar={avatar}>{userMenuChildren}</UserMenu>
             </div>
           </div>
         </nav>

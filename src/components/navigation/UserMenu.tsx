@@ -7,9 +7,10 @@ import { useUserStore } from "../../lib/store/user";
 
 export interface UserMenuProps {
   children?: JSX.Element;
+  avatar: string;
 }
 
-export const UserMenu = ({ children }: UserMenuProps) => {
+export const UserMenu = ({ children, avatar }: UserMenuProps) => {
   const userImage = useUserStore((state) => state.image);
   const userRemove = useUserStore((state) => state.remove);
   const { data: session, status } = useSession();
@@ -20,13 +21,7 @@ export const UserMenu = ({ children }: UserMenuProps) => {
         <div>
           <Menu.Button className="flex items-center justify-center rounded-full border border-gray-300 text-sm font-medium text-gray-700 shadow-sm hover:outline-none hover:ring-2 hover:ring-green-400 hover:ring-offset-2 hover:ring-offset-gray-100">
             <img
-              src={
-                process.env.NODE_ENV === "production"
-                  ? userImage === ""
-                    ? `${urlLocalPath}/images/default-user.png`
-                    : userImage
-                  : `${urlLocalPath}/images/default-user.png`
-              }
+              src={avatar}
               alt="User profile image"
               referrerPolicy="no-referrer"
               className="w-7 h-7 rounded-full cursor-pointer"

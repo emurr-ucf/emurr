@@ -1,14 +1,17 @@
 import { Fragment, useState } from "react";
 import { ProfileCard } from "./ProfileCard";
-import { getSession, signIn, useSession } from "next-auth/react";
 import { urlLocalPath, urlPath } from "../../lib/urlPath";
 import { toast } from "react-toastify";
 import { Dialog, Transition } from "@headlessui/react";
-import { Session } from "next-auth";
 import { useUserStore } from "../../lib/store/user";
 import shallow from "zustand/shallow";
 
-export const EditProfile = () => {
+export interface EditProfileProps {
+  avatar: string;
+  updateAvatar: (newAvatar: string) => void;
+}
+
+export const EditProfile = (props: EditProfileProps) => {
   const { userName, userLastName, userImage, userUpdate } = useUserStore(
     (state) => ({
       userName: state.name,
@@ -22,8 +25,6 @@ export const EditProfile = () => {
   const [firstName, setFirstName] = useState(userName);
   const [lastName, setLastName] = useState(userLastName);
   const [show, setShow] = useState(false);
-  const [image, setImage] = useState(userImage);
-  const [imageVersion, setImageVersion] = useState(1);
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -95,13 +96,7 @@ export const EditProfile = () => {
                     <div className="flex flex-col gap-6 mt-4">
                       <label>
                         <img
-                          src={
-                            process.env.NODE_ENV === "production"
-                              ? image === ""
-                                ? `${urlLocalPath}/images/default-user.png`
-                                : image
-                              : `${urlLocalPath}/images/default-user.png`
-                          }
+                          src={props.avatar}
                           alt="User profile image"
                           className="filter hover:contrast-200 m-auto w-20 h-20 hover:bg-"
                         />
@@ -131,10 +126,8 @@ export const EditProfile = () => {
                               return toast.error(json.error);
 
                             await userUpdate();
-                            // json.image might be the same url as before
-                            // use a version number to get around browser cache
-                            setImage(`${json.image}?${imageVersion}`);
-                            setImageVersion(imageVersion + 1);
+                            // update avatar
+                            props.updateAvatar(json.image);
 
                             toast.success("Updated profile image.");
                           }}
