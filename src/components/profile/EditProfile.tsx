@@ -131,10 +131,9 @@ export const EditProfile = () => {
 
                             alert("json.image: " + json.image);
                             await userUpdate();
-                            useUserStore((state) => {
-                              alert("state.image: " + state.image);
-                              setImage(state.image);
-                            });
+                            const newImage = useUserStore((state) => state.image);
+                            alert("state.image: " + newImage);
+                            setImage(newImage);
 
                             toast.success("Updated profile image.");
                           }}
