@@ -22,6 +22,7 @@ export const EditProfile = () => {
   const [firstName, setFirstName] = useState(userName);
   const [lastName, setLastName] = useState(userLastName);
   const [show, setShow] = useState(false);
+  const [image, setImage] = useState(userImage);
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -95,9 +96,9 @@ export const EditProfile = () => {
                         <img
                           src={
                             process.env.NODE_ENV === "production"
-                              ? userImage === ""
+                              ? image === ""
                                 ? `${urlLocalPath}/images/default-user.png`
-                                : userImage
+                                : image
                               : `${urlLocalPath}/images/default-user.png`
                           }
                           alt="User profile image"
@@ -105,6 +106,7 @@ export const EditProfile = () => {
                         />
                         <input
                           type="file"
+                          accept="image/jpeg, image/png"
                           onChange={async (event) => {
                             if (!event.target.files) return;
 
@@ -128,6 +130,7 @@ export const EditProfile = () => {
                               return toast.error(json.error);
 
                             await userUpdate();
+                            setImage(userImage);
 
                             toast.success("Updated profile image.");
                           }}
