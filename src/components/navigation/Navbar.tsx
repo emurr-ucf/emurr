@@ -13,8 +13,8 @@ export interface NavbarProps {
 
 export const Navbar = ({ page, children, userMenuChildren, avatar }: NavbarProps) => {
   const { data: session, status } = useSession();
+  const userImage = useUserStore((state) => state.image);
   if (avatar === undefined) {
-    const userImage = useUserStore((state) => state.image);
     avatar = process.env.NODE_ENV === "production" && userImage !== ""
       ? userImage : `${urlLocalPath}/images/default-user.png`
   }
