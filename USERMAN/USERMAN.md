@@ -1,20 +1,35 @@
-# [Table of Contents](#1-table-of-contents)
+# 1. [Table of Contents](#1-table-of-contents)
 
-- [1. EMURR Unit](#2-emurr-unit)
-  - [1.1. Itemized List](#11-itemized-list)
-  - [1.2. Setup](#12-setup)
-    - [1.2.1. Battery Power](#121-battery-power)
-    - [1.2.2. Connecting Ethernet \& Power Supply](#122-connecting-ethernet--power-supply)
-- [2. Tour Site Builder](#2-tour-site-builder)
-  - [2.1. Making a Site](#21-making-a-site)
-  - [2.2. Editor Features List](#22-editor-features-list)
-  - [2.3. Transferring Sites to the Pi](#23-transferring-sites-to-the-pi)
+- [1. Table of Contents](#1-table-of-contents)
+- [2. EMURR Unit](#2-emurr-unit)
+  - [2.1. Itemized List](#21-itemized-list)
+  - [2.2. Setup](#22-setup)
+    - [2.2.1. Battery Power](#221-battery-power)
+    - [2.2.2. Connecting Ethernet \& Power Supply](#222-connecting-ethernet--power-supply)
+- [3. Tour Site Builder](#3-tour-site-builder)
+  - [3.1. Making a Site](#31-making-a-site)
+  - [3.2. Editor Features List](#32-editor-features-list)
+  - [3.3. Transferring Sites to the Pi](#33-transferring-sites-to-the-pi)
+- [4. NFC Tags](#4-nfc-tags)
+  - [4.1. General NFC Knowledge](#41-general-nfc-knowledge)
+    - [4.1.1. Recommended NFC Application](#411-recommended-nfc-application)
+    - [4.1.2. How to Set an NFC Tag](#412-how-to-set-an-nfc-tag)
+      - [4.1.2.1. Prep](#4121-prep)
+      - [4.1.2.2. Setting](#4122-setting)
+    - [4.1.3. How to Read an NFC Tag](#413-how-to-read-an-nfc-tag)
+      - [4.1.3.1. Prep](#4131-prep)
+      - [4.1.3.2. Reading](#4132-reading)
+  - [4.2. Visting Institution Tags](#42-visting-institution-tags)
+  - [4.3. User Setup Tags](#43-user-setup-tags)
+  - [4.4. Notes: NFC Alternatives](#44-notes-nfc-alternatives)
+    - [4.4.1. Exposed Filesystem](#441-exposed-filesystem)
+    - [4.4.2. QR Codes](#442-qr-codes)
 
 <br>
 
-# 1. EMURR Unit
+# 2. EMURR Unit
 
-## 1.1. Itemized List
+## 2.1. Itemized List
 
 What is in an EMURR Unit?
 
@@ -32,16 +47,16 @@ What is in an EMURR Unit?
 
 <!-- TODO: CHDR contact -->
 
-If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
+If any parts are missing, damaged, or malfunctioning please contact CHDR labs `chdr@ucf.edu`
 
-## 1.2. Setup
+## 2.2. Setup
 
-### 1.2.1. Battery Power
+### 2.2.1. Battery Power
 
 1. Turn on battery
 2. Ensure battery shows four solid green lights. This indicates a full charge. <br> <img src="./images/charge.jpg" alt="top down image of EMURR unit" width="200" height="200"/> <br>
 
-### 1.2.2. Connecting Ethernet & Power Supply
+### 2.2.2. Connecting Ethernet & Power Supply
 
 1. Ethernet cable from Pi to the router. Ensure that the ethernet cable from the Pi goes to one of the orange ethernet ports and **Not** the blue internet port. <br> <img src="./images/ethernet.jpg" alt="top down image of EMURR unit" width="200" height="200"/> <br>
 2. Power from battery to router
@@ -58,9 +73,9 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 <br>
 
-# 2. Tour Site Builder
+# 3. Tour Site Builder
 
-## 2.1. Making a Site
+## 3.1. Making a Site
 
 1. Navigate to the EMURR website [chdr.cs.ucf.edu/emurr](https://chdr.cs.ucf.edu/emurr)
 2. Click `Login` at the top right if not already logged in
@@ -82,7 +97,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 <br>
 
-## 2.2. Editor Features List
+## 3.2. Editor Features List
 
 **From Left to Right**
 
@@ -114,7 +129,7 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 
 <br>
 
-## 2.3. Transferring Sites to the Pi
+## 3.3. Transferring Sites to the Pi
 
 1. To perform a transfer, click profile picture at the top right and select `Download` in the drop down
 <!-- TODO: explain why toursite -->
@@ -129,3 +144,135 @@ If any parts are missing, damaged, or malfunctioning please contact CHDR labs.
 9. Pages will be accessible at the URL `emurr.local/toursite/<custom-url>` without `<` and `>`.
 10. If using NFC tags, ensure they point to the correct URL formatted in the previous step
     1. Visiting institutions should set their NFC tags before arrival. Request their EMURR NFC Tag URLs to ensure you have the correct URLs for your tour.
+
+# 4. NFC Tags
+
+Near Field Communication (NFC) tags are compatible with EMURR and are meant to act as a convenience to students and other end users to access EMURR URLs more readily.
+Depending on the scenario either the instituion visted or the user with the EMURR unit will have NFC tags.
+We will discuss instantiation of NFCs for both scenarios but first we will discuss general use NFC of tags.
+Finally, we will touch on NFC alternatives as some owners of an EMURR unit may find they have preference to them instead.
+
+## 4.1. General NFC Knowledge
+
+If you are visiting an institution with NFC tags please skip to (Insitution )
+
+In order to both set and read an NFC tag you will need an NFC enabled device. If you are unsure if your device is NFC enabled check [this](https://en.wikipedia.org/wiki/List_of_NFC-enabled_mobile_devices) wiki article listing NFC enabled devices. If you are still unsure manually test with an NFC tag.
+
+### 4.1.1. Recommended NFC Application
+
+Depending on your use case you may or may not need an NFC application.
+
+The NFC application recommended by EMURR is NFC Tools on the [Google Play Store](https://play.google.com/store/apps/dev?id=6943435756825055171&hl=en_US&gl=US) or [App Store](https://apps.apple.com/us/app/nfc-tools/id1252962749) by wakdev. It will be able to assist in setting NFC tags.
+
+### 4.1.2. How to Set an NFC Tag
+
+#### 4.1.2.1. Prep
+
+In order to set an NFC tag you will need:
+
+1. NFC enabled device
+2. [NFC application](###-4.1.1.-Recommended-NFC-Application)
+
+#### 4.1.2.2. Setting
+
+Now that we have everything we need let's get started setting the tag.
+
+<!-- TODO: Fix `???`'s -->
+
+1. Open NFC Tools and navigate to where it says `Write`
+2. ???
+3. Choose `URL`
+4. Choose an `http://` prefix
+5. Format the remaining URL in the form of `emurr/toursite/[pagename].html` without brackets
+   1. **NOTE:** Be _very_ careful that the URL of this is set properly
+   2. If formatted correctly the resulting url will be `http://emurr/toursite/[pagename].html` without brackets
+6. Once done formatting your URL choose ??? to begin writing to the tag
+7. Hold your NFC enabled device close to the tag (less than 4cm away).
+   1. If it is not recognizing the tag, ensure the tag is not resting on a metallic surface as this may interfere with the signal
+   2. If you still have issues pull the device away and approach it again
+   3. If you still have issues try a different tag, as the current one may be malfunctioning
+   4. If you still have issues please check that your device is NFC enabled and capable of writing to tags
+8. Your tag should now be written. You can check by reading the tag to ensure this is the case.
+
+### 4.1.3. How to Read an NFC Tag
+
+#### 4.1.3.1. Prep
+
+In order to read an NFC tag you will need:
+
+1. An NFC Enabled Device
+   1. If the device is _not_ an iPhone 8 or higher you will most likely need an [NFC application](###_4.1.1._Recommended_NFC_Application)
+
+#### 4.1.3.2. Reading
+
+In order to read an NFC tag this process will depend on the device
+
+**DISCLAIMER:** We reference devices as "newer" or "older" but we do not have an exhaustive list of which devices are which. We include specific names where we can.
+
+**For Newer iPhones & Androids:**
+
+<!-- TODO: Update with known versions -->
+
+1. Simply tap your phone to the NFC tag. Your phone will have a built in scanner passively listening for NFC technology, typically towards the top and back of the phone.
+
+<br>
+
+**For Most iPhones:**
+
+- At least as old as iPhone 8
+
+1. Go to Settings
+2. Scroll down and select Control Center
+3. Add `NFC Tag Reader` to Included Controls
+4. Confirm by swiping from the bottom of the screen and selecting the NFC symbol
+5. Simply tap your phone against the NFC tag
+
+<br>
+
+**For Most Androids:**
+
+1. You will need to read your tags through an [NFC application](###_4.1.1._Recommended_NFC_Application)
+2. Once you enter the app you can select `Read`
+3. Simply tap your phone against the NFC tag
+
+## 4.2. Visting Institution Tags
+
+We anticipate this to be the primary method of interacting with NFC tags. In this scenario the owner of the EMURR unit does not own nor sets the NFC tags.
+
+What is required of the owner of the EMURR unit is:
+
+1. Confirm with the institution you are visiting that they have NFC tags set up
+2. Ensure they are of the format `http://emurr/toursite/[pagename].html` without brackets
+3. In the toursite editor web app navigate to the left hand side
+4. Rename the pages and note the custom URL
+5. Ensure that the `[pagename]` in your custom URL and the NFC tag are the same
+6. Download your pages as needed!
+
+## 4.3. User Setup Tags
+
+If you are setting up your own tags simply ensure that you [set](###_4.1.2._How_to_Set_an_NFC_Tag) your tags. Once finished ensure that they match with the page's custom URL:
+
+1. Ensure the NFC tags are of the format `http://emurr/toursite/[pagename].html` without brackets
+2. In the toursite editor web app navigate to the left hand side
+3. Rename the pages and note the custom URL
+4. Ensure that the `[pagename]` in your custom URL and the NFC tag are the same
+5. Download your pages as needed!
+
+## 4.4. Notes: NFC Alternatives
+
+We understand NFC tags are not a catch-all solution. They are sometimes inconsistent and require a bit of setup for users. So we wanted to make sure we talked about alternatives that we provide for users.
+
+### 4.4.1. Exposed Filesystem
+
+First we expose the filesystem. This is not only a failsafe for malfunctioning NFC tags but also a reliable option for those that do not like NFC tags. Here's how users can connect:
+
+1. Have the user connect to the EMURR wi-fi
+2. Once connected navigate to `http://emurr/toursite/`
+3. From here the user should see all of the pages hosted, no NFC necessary
+
+### 4.4.2. QR Codes
+
+A fun alternative to NFC tags are QR codes. Most people have gotten accustomed to QR code menus and the like, so why not EMURR?
+
+Simply generate a QR code with a URL of the format `http://emurr/toursite/[pagename].html` without the brackets,like NFC tags. This will serve the same purpose as an NFC tag. User interaction with QR codes will vary by device but most smartphones have a built-in way of detecting them.
+
