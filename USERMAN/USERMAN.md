@@ -175,18 +175,16 @@ In order to set an NFC tag you will need:
 
 #### 4.1.2.2. Setting
 
-Now that we have everything we need let's get started setting the tag.
-
-<!-- TODO: Fix `???`'s -->
+Now that we have everything we need let's get started setting the tag:
 
 1. Open NFC Tools and navigate to where it says `Write`
-2. ???
-3. Choose `URL`
-4. Choose an `http://` prefix
+2. Select `Add a Record`
+3. Select `URL/URI`
+4. Select `Edit` and choose an `http://` prefix
 5. Format the remaining URL in the form of `emurr/toursite/[pagename].html` without brackets
    1. **NOTE:** Be _very_ careful that the URL of this is set properly
    2. If formatted correctly the resulting url will be `http://emurr/toursite/[pagename].html` without brackets
-6. Once done formatting your URL choose ??? to begin writing to the tag
+6. Once done formatting your URL select `Write` to begin writing to the tag
 7. Hold your NFC enabled device close to the tag (less than 4cm away).
    1. If it is not recognizing the tag, ensure the tag is not resting on a metallic surface as this may interfere with the signal
    2. If you still have issues pull the device away and approach it again
