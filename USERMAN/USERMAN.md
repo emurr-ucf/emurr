@@ -160,7 +160,7 @@ In order to both set and read an NFC tag you will need an NFC enabled device. If
 
 Depending on your use case you may or may not need an NFC application.
 
-The NFC application recommended by EMURR is NFC Tools on the [Google Play Store](https://play.google.com/store/apps/dev?id=6943435756825055171&hl=en_US&gl=US) or [App Store](https://apps.apple.com/us/app/nfc-tools/id1252962749) by wakdev. It assist with interacting with NFC tags for students and tour guides.
+The NFC application recommended by EMURR is NFC Tools on the [Google Play Store](https://play.google.com/store/apps/dev?id=6943435756825055171&hl=en_US&gl=US) or [App Store](https://apps.apple.com/us/app/nfc-tools/id1252962749) by wakdev. It will assist with interacting with NFC tags for students and tour guides.
 
 ### 4.1.2. How to Set an NFC Tag
 
