@@ -154,8 +154,6 @@ Finally, we will touch on NFC alternatives as some owners of an EMURR unit may f
 
 ## 4.1. General NFC Knowledge
 
-If you are visiting an institution with NFC tags please skip to (Insitution )
-
 In order to both set and read an NFC tag you will need an NFC enabled device. If you are unsure if your device is NFC enabled check [this](https://en.wikipedia.org/wiki/List_of_NFC-enabled_mobile_devices) wiki article listing NFC enabled devices. If you are still unsure manually test with an NFC tag.
 
 ### 4.1.1. Recommended NFC Application
@@ -165,6 +163,8 @@ Depending on your use case you may or may not need an NFC application.
 The NFC application recommended by EMURR is NFC Tools on the [Google Play Store](https://play.google.com/store/apps/dev?id=6943435756825055171&hl=en_US&gl=US) or [App Store](https://apps.apple.com/us/app/nfc-tools/id1252962749) by wakdev. It will be able to assist in setting NFC tags.
 
 ### 4.1.2. How to Set an NFC Tag
+
+**Note:** You will only need to do this if you are visiting an institution that will not set tags for you. If you are visiting such an institution skip this section.
 
 #### 4.1.2.1. Prep
 
