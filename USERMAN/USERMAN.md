@@ -171,7 +171,7 @@ The NFC application recommended by EMURR is NFC Tools on the [Google Play Store]
 In order to set an NFC tag you will need:
 
 1. NFC enabled device
-2. [NFC application](###-4.1.1.-Recommended-NFC-Application)
+2. [NFC Application](#411-recommended-nfc-application)
 
 #### 4.1.2.2. Setting
 
@@ -199,7 +199,7 @@ Now that we have everything we need let's get started setting the tag:
 In order to read an NFC tag you will need:
 
 1. An NFC Enabled Device
-   1. If the device is _not_ an iPhone 8 or higher you will most likely need an [NFC application](###_4.1.1._Recommended_NFC_Application)
+   1. If the device is _not_ an iPhone 8 or higher you will most likely need an [NFC Application](#411-recommended-nfc-application)
 
 #### 4.1.3.2. Reading
 
@@ -229,7 +229,7 @@ In order to read an NFC tag this process will depend on the device
 
 **For Most Androids:**
 
-1. You will need to read your tags through an [NFC application](###_4.1.1._Recommended_NFC_Application)
+1. You will need to read your tags through an [NFC Application](#411-recommended-nfc-application)
 2. Once you enter the app you can select `Read`
 3. Simply tap your phone against the NFC tag
 
