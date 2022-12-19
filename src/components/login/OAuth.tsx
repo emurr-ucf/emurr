@@ -25,7 +25,8 @@ export const OAuth = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-64 gap-6">
+      <div className="flex flex-col items-center justify-center w-64 gap-5 my-5">
+        <div className="text-2xl">Authenticate</div>
         {providers?.google && (
           <button
             onClick={() => signIn(providers.github.id, {})}
