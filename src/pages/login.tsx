@@ -74,18 +74,10 @@ const LoginPage: NextPage<LoginPageProps> = ({ error }) => {
 
   return (
     <>
-      <div className="min-h-screen">
-        <Navbar page="login" />
-        <div className="flex justify-center text-green-800">
-          <div className="flex justify-center h-fit p-5 mt-28 rounded-lg bg-background-200 border-2 border-l-4 border-b-4 border-brown sm:rounded-md">
-            {formType === FormType.LOGIN && <Login hook={setFormType} />}
-            {formType === FormType.REGISTER && <Register hook={setFormType} />}
-            {formType === FormType.FORGOT_PASSWORD && (
-              <ForgotPassword hook={setFormType} />
-            )}
-            <div className="mx-10 border-l-2 rounded border-brown"></div>
-            <OAuth />
-          </div>
+      <Navbar page="login" />
+      <div className="flex flex-col items-center justify-center mt-12">
+        <div className="flex flex-col items-center w-96 h-64 rounded-lg bg-background-200 border-2 border-l-4 border-b-4 border-brown sm:rounded-md">
+          <OAuth />
         </div>
       </div>
     </>
@@ -106,3 +98,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 LoginPage.displayName = "Login";
 
 export default LoginPage;
+
